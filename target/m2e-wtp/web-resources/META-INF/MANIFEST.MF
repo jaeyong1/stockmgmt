@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: ex
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: User
+Implementation-Vendor-Id: com.lgit
+Build-Jdk: 1.8.0_101
+Implementation-URL: http://projects.spring.io/spring-boot/stockmgmt/
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+
