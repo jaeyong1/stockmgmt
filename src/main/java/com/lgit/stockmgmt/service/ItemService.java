@@ -1,4 +1,4 @@
-package com.lgit.stockmgmt.service;
+/*package com.lgit.stockmgmt.service;
 
 import java.util.List;
 
@@ -19,3 +19,4 @@ public class ItemService {
 		return itemDao.queryItems();
 	}
 }
+*/

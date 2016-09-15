@@ -1,3 +1,4 @@
+/*
 package com.lgit.stockmgmt.dao;
 
 import java.util.ArrayList;
@@ -19,3 +20,4 @@ public class ItemDao {
 		
 	}
 }
+*/

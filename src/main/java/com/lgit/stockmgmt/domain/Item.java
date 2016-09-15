@@ -1,4 +1,4 @@
-package com.lgit.stockmgmt.domain;
+/*package com.lgit.stockmgmt.domain;
 
 public class Item {
 	private String devId;
@@ -21,3 +21,4 @@ public class Item {
 	}
 
 }
+*/

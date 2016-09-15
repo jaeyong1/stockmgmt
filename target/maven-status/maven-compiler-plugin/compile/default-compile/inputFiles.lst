@@ -1,4 +1,8 @@
-C:\spring3.8.1\jyjob\ex\src\main\java\com\lgit\stockmgmt\ServletInitializer.java
-C:\spring3.8.1\jyjob\ex\src\main\java\com\lgit\stockmgmt\ExApplication.java
-C:\spring3.8.1\jyjob\ex\src\main\java\com\lgit\stockmgmt\WebController.java
-C:\spring3.8.1\jyjob\ex\src\main\java\com\lgit\stockmgmt\WebConfig.java
+C:\www\stockmgmt\src\main\java\com\lgit\config\WebConfig.java
+C:\www\stockmgmt\src\main\java\com\lgit\stockmgmt\controller\WebController.java
+C:\www\stockmgmt\src\main\java\com\lgit\stockmgmt\service\ItemService.java
+C:\www\stockmgmt\src\main\java\com\lgit\stockmgmt\dao\ItemDao.java
+C:\www\stockmgmt\src\main\java\com\lgit\stockmgmt\config\StockMgmtConfig.java
+C:\www\stockmgmt\src\main\java\com\lgit\stockmgmt\ServletInitializer.java
+C:\www\stockmgmt\src\main\java\com\lgit\stockmgmt\domain\Item.java
+C:\www\stockmgmt\src\main\java\com\lgit\stockmgmt\ExApplication.java

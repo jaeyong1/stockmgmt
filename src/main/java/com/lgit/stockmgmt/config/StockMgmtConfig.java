@@ -1,4 +1,4 @@
-package com.lgit.stockmgmt.config;
+/*package com.lgit.stockmgmt.config;
 
 import javax.sql.DataSource;
 
@@ -11,7 +11,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 @Configuration
 public class StockMgmtConfig {
-	/* Databse: MyBatis */
+	/* Databse: MyBatis * /
 	@Bean
 	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
 		SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
@@ -26,3 +26,4 @@ public class StockMgmtConfig {
 		return new SqlSessionTemplate(sqlSessionFactory);
 	}
 }
+*/
