@@ -1,9 +1,10 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <html>
 
 <head>
-<meta http-equiv="content-type" content="text/html; charset=euc-kr">
 <title>재고 조회</title>
-<meta name="generator" content="Namo WebEditor v5.0">
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
@@ -18,6 +19,20 @@
     </select> <input type="text" name="srchword"> <input type="submit" name="btnsrch" value="검색"> 
     <input type="submit" name="exportxls" value="선택엑셀받기"> <input type="submit" name="addshiplist" value="출고요청담기"></p>
 </form>
+<h2>Hello! ${name}</h2>
+
+<h2>Spring MVC and List Example</h2>
+
+<c:if test="${not empty lists}">
+
+	<ul>
+		<c:forEach var="listValue" items="${lists}">
+			<li>${listValue}</li>
+		</c:forEach>
+	</ul>
+
+</c:if>
+	
 <table border="1" width="1128">
     <tr>
         <td width="42">

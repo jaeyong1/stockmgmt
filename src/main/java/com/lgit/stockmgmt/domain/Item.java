@@ -1,4 +1,4 @@
-/*package com.lgit.stockmgmt.domain;
+package com.lgit.stockmgmt.domain;
 
 public class Item {
 	private String devId;
@@ -20,5 +20,10 @@ public class Item {
 		this.projecName = projecName;
 	}
 
+	public Item(String devId, String projecName) {
+		super();
+		this.devId = devId;
+		this.projecName = projecName;
+	}
+
 }
-*/

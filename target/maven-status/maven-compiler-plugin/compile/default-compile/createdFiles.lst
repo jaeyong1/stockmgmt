@@ -2,3 +2,5 @@ com\lgit\stockmgmt\ExApplication.class
 com\lgit\stockmgmt\config\WebConfig.class
 com\lgit\stockmgmt\controller\WebController.class
 com\lgit\stockmgmt\ServletInitializer.class
+com\lgit\stockmgmt\domain\Item.class
+com\lgit\stockmgmt\service\ItemService.class
