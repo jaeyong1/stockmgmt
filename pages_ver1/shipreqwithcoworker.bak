@@ -1,0 +1,87 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=euc-kr">
+<title>타개발자 자재 출고</title>
+<meta name="generator" content="Namo WebEditor v5.0">
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
+<p align="center">타개발자 자재 출고</p>
+<form name="form9">
+    <p align="center"><input type="submit" name="btnerase" value="선택삭제"> 
+    &nbsp;&nbsp;<input type="submit" name="btnxlsupload" value="출고요청리스트 엑셀업로드">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" name="btnsave" value="임시저장"> 
+    &nbsp;&nbsp;<input type="submit" name="btnshipreq" value="출고요청"></p>
+</form>
+<table align="center" border="1" width="813">
+    <tr>
+        <td width="55" height="25">
+            <p align="center">&nbsp;</p>
+        </td>
+        <td width="121" height="25">
+            <p align="center">프로젝트코드</p>
+        </td>
+        <td width="121" height="25">
+            <p align="center">개발담당자</p>
+        </td>
+        <td width="124" height="25">
+            <p align="center">LGIT P/N</p>
+        </td>
+        <td width="103" height="25">            <p align="center">재고수량</p>
+        </td>
+        <td width="119" height="25">            <p align="center">요청출고수량</p>
+        </td>
+        <td width="122" height="25">            <p align="center">비고</p>
+        </td>
+    </tr>
+    <tr>
+        <td width="55" height="25">            <form name="form7">
+                <p align="center"><input type="checkbox" name="formcheckbox1"></p>
+            </form>
+        </td>
+        <td width="121" height="25">
+            <p>&nbsp;</p>
+        </td>
+        <td width="121" height="25">
+            <p align="center">&nbsp;</p>
+        </td>
+        <td width="124" height="25">
+            <p align="center">&nbsp;</p>
+        </td>
+        <td width="103" height="25"><p align="center"><input type="text" name="formtext1"></p>
+        </td>
+        <td width="119" height="25">
+            <p align="center">&nbsp;</p>
+        </td>
+        <td width="122" height="25">
+            <p align="center">&nbsp;</p>
+        </td>
+    </tr>
+    <tr>
+        <td width="55" height="23">            <form name="form7">
+                <p align="center"><input type="checkbox" name="formcheckbox1"></p>
+            </form>
+        </td>
+        <td width="121" height="23">
+            <p>&nbsp;</p>
+        </td>
+        <td width="121" height="23">
+            <p align="center">&nbsp;</p>
+        </td>
+        <td width="124" height="23">
+            <p align="center">&nbsp;</p>
+        </td>
+        <td width="103" height="23"><p align="center"><input type="text" name="formtext1"></p>
+        </td>
+        <td width="119" height="23">
+            <p align="center">&nbsp;</p>
+        </td>
+        <td width="122" height="23">
+            <p align="center">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+<p align="center">&nbsp;</p>
+</body>
+
+</html>
