@@ -1,5 +1,5 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%> 
 
 <html>
 
@@ -23,16 +23,6 @@
 
 <h2>Spring MVC and List Example</h2>
 
-<c:if test="${not empty lists}">
-
-	<ul>
-		<c:forEach var="listValue" items="${lists}">
-			<li>${listValue}</li>
-		</c:forEach>
-	</ul>
-
-</c:if>
-	
 <table border="1" width="1128">
     <tr>
         <td width="42">
