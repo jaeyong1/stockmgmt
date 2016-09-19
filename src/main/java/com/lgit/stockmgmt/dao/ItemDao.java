@@ -1,7 +1,5 @@
-/*
 package com.lgit.stockmgmt.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -20,4 +18,3 @@ public class ItemDao {
 		
 	}
 }
-*/

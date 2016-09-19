@@ -6,12 +6,14 @@
 
 	<resultMap id="ItemMap"
 		type="com.lgit.stockmgmt.domain.Item">
-		<result property="devId" column="dev_id" />
+		<result property="devId" column="part_project_code" />
 		<result property="projectId" column="project_name" />
 	</resultMap>
 
 	<select id="selectItemList" resultMap="ItemMap">
-		SELECT *FROM ITEM
+	SELECT `part_project_code`, `part_name`
+	 FROM
+		tb_part
 	</select>
-
+<!--  	SELECT * FROM -->
 </mapper>
