@@ -52,19 +52,20 @@ public class WebController {
 			System.out.println(items.get(0).getDevId());
 			System.out.println(items.get(0).getProjecName());
 		}
-
-		return "itemlist"; /* itemlist.jsp */
-
+		model.addAttribute("items", items);  //오브젝트로 넘어가는데  jsp에서 출력??
+		return "itemlist"; /* itemlist.jsp */	
 	}
 
 	@RequestMapping("/listtest")
 	public ModelAndView listProcess() {
 
-		List<String> list = null;// = getList();
 		ModelAndView model = new ModelAndView("itemlist");
-		System.out.println(list.toString());
-
-		model.addObject("lists", list);
+		List<Item> items = itemService.getItems(); // 위에서 Autowired로 연결=객체생성
+		System.out.println("/listtest");
+		
+		
+		model.addObject("name", "Test Park");
+		model.addObject("items", items);
 
 		return model;
 	}
