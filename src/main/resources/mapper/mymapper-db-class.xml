@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="topologyMapper">
+
+
+	<!-- DB 쿼리결과 - 클래스 변수명 매칭 테이블 -->
+	<resultMap id="ItemMap" type="com.lgit.stockmgmt.domain.Item">
+		<result property="devId" column="part_project_code" />
+		<result property="projectId" column="project_name" />
+	</resultMap>
+
+	<resultMap id="ProjectItemMap" type="com.lgit.stockmgmt.domain.ProjectItem">
+		<result property="projectCode" column="project_code" />
+		<result property="projectName" column="project_name" />
+		<result property="projectOwnerId" column="project_owner_id" />
+		<result property="projectShipperId" column="project_shipper_id" />
+	</resultMap>
+
+	<resultMap id="PartsItemMap" type="com.lgit.stockmgmt.domain.PartsItem">
+		<result property="partId" column="part_id" />
+		<result property="partProjectCode" column="part_project_code" />
+		<result property="partName" column="part_name" />
+		<result property="partDesc" column="part_desc" />
+		<result property="partLocation" column="part_location" />
+		<result property="partCost" column="part_cost" />
+		<result property="partStock" column="part_stock" />
+		<result property="partMemo" column="part_memo" />
+	</resultMap>
+
+
+	<resultMap id="UserItemMap" type="com.lgit.stockmgmt.domain.UserItem">
+		<result property="userId" column="user_id" />
+		<result property="userPassword" column="user_password" />
+		<result property="userEmail" column="user_email" />
+		<result property="userTeamname" column="user_teamname" />
+		<result property="userLevel" column="user_level" />
+	</resultMap>
+</mapper>

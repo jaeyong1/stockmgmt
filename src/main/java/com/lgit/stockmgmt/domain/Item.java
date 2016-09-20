@@ -1,3 +1,9 @@
+/**
+ * Test Code
+ * 
+ * @author jaeyong1.park
+ */
+
 package com.lgit.stockmgmt.domain;
 
 public class Item {

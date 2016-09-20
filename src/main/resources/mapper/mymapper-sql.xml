@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="topologyMapper">
+
+	<!-- [Test code] -->
+	<select id="selectItemList" resultMap="ItemMap">
+		SELECT
+		`part_project_code`, `part_name`
+		FROM
+		tb_part
+	</select>
+
+
+	<!-- tb_project 전체를 받아옴 -->
+	<select id="selectProjectItemList" resultMap="ProjectItemMap">
+		SELECT
+		`project_code`, `project_name`, `project_owner_id`,	`project_shipper_id`
+		FROM
+		tb_project
+	</select>
+
+
+	<!-- tb_parts 전체를 받아옴 -->
+	<select id="selectPartsItemList" resultMap="PartsItemMap">
+		SELECT
+		`part_id`,
+		`part_project_code`, `part_name`, `part_desc`, `part_location`,
+		`part_cost`, `part_stock`, `part_memo`
+		FROM
+		tb_part
+	</select>
+
+	<!-- tb_parts 전체를 받아옴 -->
+	<select id="selectUserItemList" resultMap="UserItemMap">
+		SELECT
+		`user_id`,
+		`user_password`, `user_email`, `user_teamname`, `user_level`
+		FROM
+		tb_user
+	</select>
+
+</mapper>
