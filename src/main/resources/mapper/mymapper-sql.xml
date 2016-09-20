@@ -12,11 +12,16 @@
 		tb_part
 	</select>
 
+	<select id="getDBServerTime" resultType="string">
+		select now()
+	</select>
+
 
 	<!-- tb_project 전체를 받아옴 -->
 	<select id="selectProjectItemList" resultMap="ProjectItemMap">
 		SELECT
-		`project_code`, `project_name`, `project_owner_id`,	`project_shipper_id`
+		`project_code`, `project_name`, `project_owner_id`,
+		`project_shipper_id`
 		FROM
 		tb_project
 	</select>
@@ -36,9 +41,41 @@
 	<select id="selectUserItemList" resultMap="UserItemMap">
 		SELECT
 		`user_id`,
-		`user_password`, `user_email`, `user_teamname`, `user_level`
+		'user_name',
+		`user_password`, `user_email`, `user_teamname`,
+		`user_level`
 		FROM
 		tb_user
 	</select>
+
+	<insert id="insertUserItem">
+		INSERT INTO tb_user(
+		`user_id` , `user_name`,
+		`user_password` ,
+		`user_email` ,
+		`user_teamname` ,
+		`user_level`
+		)
+		VALUES (
+		#{userId}, #{userName},
+		#{userPassword}, #{userEmail}, #{userTeamname},
+		#{userLevel}
+		)
+	</insert>
+
+	<update id="updateUserItem">
+		UPDATE tb_user
+		SET
+		'user_name' = #{userName},
+		`user_email` = #{userEmail},
+		`user_teamname` = #{userTeamname},
+		`user_level` = #{userLevel}
+		WHERE
+		CONVERT(
+		`tb_user`.`user_id`
+		USING utf8
+		) =
+		#{userId} LIMIT 1 ;
+	</update>
 
 </mapper>

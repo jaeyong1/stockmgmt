@@ -52,4 +52,10 @@ public class ProjectItem {
 		this.projectShipperId = projectShipperId;
 	}
 
+	@Override
+	public String toString() {
+		return "ProjectItem [projectCode=" + projectCode + ", projectName=" + projectName + ", projectOwnerId="
+				+ projectOwnerId + ", projectShipperId=" + projectShipperId + "]";
+	}
+
 }

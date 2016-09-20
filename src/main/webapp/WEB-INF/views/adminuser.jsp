@@ -13,7 +13,81 @@
 
 <body bgcolor="white" text="black" link="blue" vlink="purple"
 	alink="red">
+	<h2>${reqresult}</h2>
+
+
 	<p>회원 관리</p>
+	<p>[신규추가]</p>
+	<form role="form" method="post">
+		<table border="1" width="487">
+			<tr>
+				<td width="143">
+					<p>user id</p>
+				</td>
+				<td width="328">
+					<p>
+						<input type="text" name='user-Id'>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td width="143">
+					<p>name</p>
+				</td>
+				<td width="328">
+					<p>
+						<input type="text" name='user-Name'>
+					</p>
+				</td>
+			</tr>
+
+			<tr>
+				<td width="143">
+					<p>email</p>
+				</td>
+				<td width="328">
+					<p>
+						<input type="text" name='user-Email'>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td width="143">
+					<p>team name</p>
+				</td>
+				<td width="328">
+					<p>
+						<input type="text" name='user-Teamname'>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td width="143">
+					<p>password</p>
+				</td>
+				<td width="328">
+					<p>
+						<input type="text" name='user-Password'>
+					</p>
+				</td>
+			</tr>			
+			<tr>
+				<td width="143">
+					<p>level(숫자로..)</p>
+				</td>
+				<td width="328">
+					<p>
+						<input type="text" name='user-Level'>
+					</p>
+				</td>
+			</tr>
+		</table>
+		<button type="submit">submit</button>
+	</form>
+
+
+	<p>&nbsp;</p>
+	<p>[회원정보 수정]</p>
 	<table border="1">
 		<tr>
 			<td width="199">

@@ -32,6 +32,7 @@
 
 	<resultMap id="UserItemMap" type="com.lgit.stockmgmt.domain.UserItem">
 		<result property="userId" column="user_id" />
+		<result property="userName" column="user_name" />		
 		<result property="userPassword" column="user_password" />
 		<result property="userEmail" column="user_email" />
 		<result property="userTeamname" column="user_teamname" />

@@ -8,6 +8,8 @@ package com.lgit.stockmgmt.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,40 +65,78 @@ public class WebController {
 
 	/*
 	 * /adminproject 프로젝트 관리 화면
-	 */	
-	@RequestMapping(value = "/adminproject", method = RequestMethod.GET)
+	 */
+	@RequestMapping(value = "/admin/project", method = RequestMethod.GET)
 	public String showAdminProject(Model model) {
-		List<ProjectItem> items = itemService.getProjectItems(); // 위에서 Autowired로 연결=객체생성
-		System.out.println("/adminproject process");		
+		List<ProjectItem> items = itemService.getProjectItems(); // 위에서
+																	// Autowired로
+																	// 연결=객체생성
+		System.out.println("/adminproject process");
 		model.addAttribute("items", items);
 		return "adminproj"; /* adminproj.jsp */
 	}
-	
 
 	/*
 	 * /adminparts Parts 관리 화면
-	 */	
-	@RequestMapping(value = "/adminparts", method = RequestMethod.GET)
+	 */
+	@RequestMapping(value = "/admin/parts", method = RequestMethod.GET)
 	public String showAdminParts(Model model) {
-		List<PartsItem> items = itemService.getPartsItems(); // 위에서 Autowired로 연결=객체생성
-		System.out.println("/adminparts process");		
+		List<PartsItem> items = itemService.getPartsItems(); // 위에서 Autowired로
+																// 연결=객체생성
+		System.out.println("/adminparts process");
 		model.addAttribute("items", items);
 		return "adminparts"; /* adminparts.jsp */
 	}
-	
 
 	/*
 	 * /adminuser 사용자관리 화면
-	 */	
-	@RequestMapping(value = "/adminuser", method = RequestMethod.GET)
+	 */
+	@RequestMapping(value = "/admin/user", method = RequestMethod.GET)
 	public String showAdminUser(Model model) {
-		List<UserItem> items = itemService.getUserItems(); // 위에서 Autowired로 연결=객체생성
-		System.out.println("/adminuser process");		
+		List<UserItem> items = itemService.getUserItems(); // 위에서 Autowired로
+															// 연결=객체생성
+		System.out.println("/adminuser process");
 		model.addAttribute("items", items);
 		return "adminuser"; /* adminuser.jsp */
 	}
-	
-	
-	
+
+	/*
+	 * Test Code
+	 */
+	@RequestMapping(value = "/newuser", method = RequestMethod.GET)
+	public String addUser(Model model) {
+		UserItem newUser = new UserItem("t1", "t2", "t3", "t4", "t5", 6);
+		itemService.setUserItem(newUser);
+
+		List<UserItem> items = itemService.getUserItems(); // 위에서 Autowired로
+															// 연결=객체생성
+		System.out.println("/adminuser process");
+		model.addAttribute("items", items);
+		return "adminuser"; /* adminuser.jsp */
+	}
+
+	/*
+	 * /adminuser 사용자 등록처리
+	 */
+	@RequestMapping(value = "/admin/user", method = RequestMethod.POST)
+	public String addAdminUser(UserItem userdata, Model model, HttpServletRequest request) {
+		// Get data from Webbrowser
+		userdata.setUserId(request.getParameter("user-Id"));
+		userdata.setUserName(request.getParameter("user-Name"));
+		userdata.setUserEmail(request.getParameter("user-Email"));
+		userdata.setUserPassword(request.getParameter("user-Password"));
+		userdata.setUserTeamname(request.getParameter("user-Teamname"));
+		userdata.setUserLevel(Integer.valueOf(request.getParameter("user-Level")));
+
+		// insert DB query
+		itemService.setUserItem(userdata);
+		model.addAttribute("reqresult", userdata.getUserId() + " is added");
+
+		// Get DB List
+		List<UserItem> items = itemService.getUserItems();
+		model.addAttribute("items", items);
+		System.out.println("/admin/user process");
+		return "adminuser"; /* adminuser.jsp */
+	}
 
 }

@@ -10,6 +10,7 @@ import com.lgit.stockmgmt.domain.Item;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ProjectItem;
 import com.lgit.stockmgmt.domain.UserItem;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 @Service("itemService")
 public class ItemService {
@@ -29,9 +30,17 @@ public class ItemService {
 		return itemDao.queryProjectItems();
 	}
 
-
 	public List<UserItem> getUserItems() {
+		System.out.println("[getUserItems] :"+ itemDao.getTime());
 		return itemDao.queryUserItems();
+	}
+
+	public int setUserItem(UserItem userdata) {
+		return itemDao.insertUserItem(userdata);
+	}
+
+	public int changeUserItem(UserItem userdata) {
+		return itemDao.updateUserItem(userdata);
 	}
 
 }

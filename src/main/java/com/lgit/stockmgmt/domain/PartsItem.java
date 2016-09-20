@@ -112,4 +112,11 @@ public class PartsItem {
 		this.partMemo = partMemo;
 	}
 
+	@Override
+	public String toString() {
+		return "PartsItem [partId=" + partId + ", partProjectCode=" + partProjectCode + ", partName=" + partName
+				+ ", partDesc=" + partDesc + ", partLocation=" + partLocation + ", partCost=" + partCost
+				+ ", partStock=" + partStock + ", partMemo=" + partMemo + "]";
+	}
+
 }

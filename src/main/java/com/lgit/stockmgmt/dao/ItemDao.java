@@ -14,16 +14,20 @@ import com.lgit.stockmgmt.domain.Item;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ProjectItem;
 import com.lgit.stockmgmt.domain.UserItem;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 @Repository("itemDao")
 public class ItemDao {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 
-	 /* Test Code */
+	/* Test Code */
 	public List<Item> queryItems() {
 		return sqlSession.selectList("selectItemList");
+	}
 
+	public String getTime() {
+		return sqlSession.selectOne("getDBServerTime");
 	}
 
 	public List<PartsItem> queryPartsItems() {
@@ -31,11 +35,20 @@ public class ItemDao {
 	}
 
 	public List<ProjectItem> queryProjectItems() {
-		return sqlSession.selectList("selectProjectItemList"); /* SQL 쿼리 선택, 실행 */
+		return sqlSession
+				.selectList("selectProjectItemList"); /* SQL 쿼리 선택, 실행 */
 	}
 
 	public List<UserItem> queryUserItems() {
 		return sqlSession.selectList("selectUserItemList"); /* SQL 쿼리 선택, 실행 */
+	}
+
+	public int insertUserItem(UserItem userdata) {
+		return sqlSession.insert("insertUserItem", userdata);
+	}
+
+	public int updateUserItem(UserItem userdata) {
+		return sqlSession.update("updateUserItem", userdata);
 	}
 
 }
