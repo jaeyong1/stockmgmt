@@ -55,4 +55,8 @@ public class ItemDao {
 		return sqlSession.update("updateUserItem4PwChange", userdata);
 	}
 
+	public String queryUserItemsRow() {
+		return sqlSession.selectOne("queryUserItemsRow");
+	}
+
 }

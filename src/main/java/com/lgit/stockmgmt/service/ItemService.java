@@ -47,4 +47,8 @@ public class ItemService {
 		return itemDao.updateUserItem4PwChange(userdata);
 	}
 
+	public String getUserItemsRow() {
+		return itemDao.queryUserItemsRow();
+	}
+
 }

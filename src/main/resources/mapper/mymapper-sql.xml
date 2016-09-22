@@ -62,8 +62,8 @@
 		#{userLevel}
 		)
 	</insert>
-	
-	<!-- tb_user 비밀번호 변경  -->
+
+	<!-- tb_user 비밀번호 변경 -->
 	<update id="updateUserItem4PwChange">
 		UPDATE tb_user
 		SET
@@ -75,8 +75,8 @@
 		) =
 		#{userId} LIMIT 1 ;
 	</update>
-	
-	<!-- tb_user 사용자 정보변경, 비밀번호 제외  -->
+
+	<!-- tb_user 사용자 정보변경, 비밀번호 제외 -->
 	<update id="updateUserItem">
 		UPDATE tb_user
 		SET
@@ -93,6 +93,11 @@
 	</update>
 
 
+	<!-- tb_user 전체 row 수를 받아옴 # 행(레코드): 10 SELECT SQL_CALC_FOUND_ROWS * FROM tb_user LIMIT 0, 10;
+		SELECT FOUND_ROWS();-->
+	<select id="queryUserItemsRow" resultType="string">
+	select count(*) as cnt from tb_user 
+	</select>
 
 
 </mapper>
