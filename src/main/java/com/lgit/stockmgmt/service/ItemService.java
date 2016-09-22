@@ -42,5 +42,9 @@ public class ItemService {
 	public int changeUserItem(UserItem userdata) {
 		return itemDao.updateUserItem(userdata);
 	}
+	
+	public int changeUserPassword(UserItem userdata) {
+		return itemDao.updateUserItem4PwChange(userdata);
+	}
 
 }

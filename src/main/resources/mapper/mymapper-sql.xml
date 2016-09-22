@@ -41,7 +41,7 @@
 	<select id="selectUserItemList" resultMap="UserItemMap">
 		SELECT
 		`user_id`,
-		'user_name',
+		`user_name`,
 		`user_password`, `user_email`, `user_teamname`,
 		`user_level`
 		FROM
@@ -62,11 +62,25 @@
 		#{userLevel}
 		)
 	</insert>
-
+	
+	<!-- tb_user 비밀번호 변경  -->
+	<update id="updateUserItem4PwChange">
+		UPDATE tb_user
+		SET
+		`user_password` = #{userPassword}
+		WHERE
+		CONVERT(
+		`tb_user`.`user_id`
+		USING utf8
+		) =
+		#{userId} LIMIT 1 ;
+	</update>
+	
+	<!-- tb_user 사용자 정보변경, 비밀번호 제외  -->
 	<update id="updateUserItem">
 		UPDATE tb_user
 		SET
-		'user_name' = #{userName},
+		`user_name` = #{userName},
 		`user_email` = #{userEmail},
 		`user_teamname` = #{userTeamname},
 		`user_level` = #{userLevel}
@@ -77,5 +91,8 @@
 		) =
 		#{userId} LIMIT 1 ;
 	</update>
+
+
+
 
 </mapper>

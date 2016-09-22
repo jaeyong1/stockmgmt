@@ -99,26 +99,12 @@ public class WebController {
 		model.addAttribute("items", items);
 		return "adminuser"; /* adminuser.jsp */
 	}
+	
 
 	/*
-	 * Test Code
+	 * /adminuser 사용자 신규 등록처리
 	 */
-	@RequestMapping(value = "/newuser", method = RequestMethod.GET)
-	public String addUser(Model model) {
-		UserItem newUser = new UserItem("t1", "t2", "t3", "t4", "t5", 6);
-		itemService.setUserItem(newUser);
-
-		List<UserItem> items = itemService.getUserItems(); // 위에서 Autowired로
-															// 연결=객체생성
-		System.out.println("/adminuser process");
-		model.addAttribute("items", items);
-		return "adminuser"; /* adminuser.jsp */
-	}
-
-	/*
-	 * /adminuser 사용자 등록처리
-	 */
-	@RequestMapping(value = "/admin/user", method = RequestMethod.POST)
+	@RequestMapping(value = "/admin/adduser", method = RequestMethod.POST)
 	public String addAdminUser(UserItem userdata, Model model, HttpServletRequest request) {
 		// Get data from Webbrowser
 		userdata.setUserId(request.getParameter("user-Id"));
@@ -135,8 +121,53 @@ public class WebController {
 		// Get DB List
 		List<UserItem> items = itemService.getUserItems();
 		model.addAttribute("items", items);
-		System.out.println("/admin/user process");
+		System.out.println("/admin/adduser process ID:" + userdata.getUserId());
 		return "adminuser"; /* adminuser.jsp */
 	}
+
+	/*
+	 * /admin/reqresetpassword 사용자 비밀번호 리셋
+	 */
+	@RequestMapping(value = "/admin/reqresetpassword", method = RequestMethod.POST)
+	public String adminResetPassword(UserItem userdata, Model model, HttpServletRequest request) {
+		// Get data from Webbrowser
+		userdata.setUserId(request.getParameter("user-Id"));
+		userdata.setUserPassword("defaultPassWord123");
+
+		// Change DB query
+		itemService.changeUserPassword(userdata);
+		model.addAttribute("reqresult", userdata.getUserId() + "'s Password Reseted.");
+		System.out.println("/admin/reqresetpassword processed.. Req ID:" + userdata.getUserId());
+
+		// Get DB List
+		List<UserItem> items = itemService.getUserItems();
+		model.addAttribute("items", items);
+		return "adminuser"; /* adminuser.jsp */
+	}
+	
+
+	/*
+	 * /admin/reqmodify 사용자 정보변경 
+	 */
+	@RequestMapping(value = "/admin/reqmodify", method = RequestMethod.POST)
+	public String addAdminUserModify(UserItem userdata, Model model, HttpServletRequest request) {
+		// Get data from Webbrowser
+		userdata.setUserId(request.getParameter("user-Id"));
+		userdata.setUserName(request.getParameter("user-Name"));
+		userdata.setUserEmail(request.getParameter("user-Email"));
+		userdata.setUserTeamname(request.getParameter("user-Teamname"));
+		userdata.setUserLevel(Integer.valueOf(request.getParameter("user-Level")));
+
+		// Change DB query
+		itemService.changeUserItem(userdata);
+		model.addAttribute("reqresult", userdata.getUserId() + "'s datas are changed");
+		System.out.println("/admin/reqmodify processed.. Req ID:" + userdata.getUserId());
+		
+		// Get DB List
+		List<UserItem> items = itemService.getUserItems();
+		model.addAttribute("items", items);
+		return "adminuser"; /* adminuser.jsp */
+	}
+	
 
 }
