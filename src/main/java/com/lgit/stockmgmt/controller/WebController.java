@@ -146,7 +146,7 @@ public class WebController {
 	}
 
 	/*
-	 * /admin/project 사용자 신규 등록처리
+	 * /admin/addproject 프로젝트 신규 등록
 	 */
 	@RequestMapping(value = "/admin/addproject", method = RequestMethod.POST)
 	public String addAdminProject(ProjectItem item, Model model, HttpServletRequest request) {
@@ -165,7 +165,7 @@ public class WebController {
 	}
 
 	/*
-	 * /admin/reqmodify 사용자 정보변경
+	 * /admin/reqprojectmodify 프로젝트 정보변경
 	 */
 	@RequestMapping(value = "/admin/reqprojectmodify", method = RequestMethod.POST)
 	public String modifyAdminProject(ProjectItem item, Model model, HttpServletRequest request) {
@@ -183,9 +183,9 @@ public class WebController {
 		// Get DB List
 		return showAdminProject1("1", model); /* adminuser.jsp */
 	}
-	
+
 	/*
-	 * /admin/reqmodify 사용자 정보변경
+	 * /admin/reqprojectremove 프로젝트 아이템 제거
 	 */
 	@RequestMapping(value = "/admin/reqprojectremove", method = RequestMethod.POST)
 	public String removeAdminProject(ProjectItem item, Model model, HttpServletRequest request) {
@@ -206,16 +206,148 @@ public class WebController {
 	 * ================================= PARTS =================================
 	 * /adminparts Parts 관리 화면
 	 */
+
 	@RequestMapping(value = "/admin/parts", method = RequestMethod.GET)
-	public String showAdminParts(Model model) {
-		List<PartsItem> items = itemService.getPartsItems(); // 위에서 Autowired로
-																// 연결=객체생성
+	public String showAdminParts2(Model model) {
+		return showAdminParts1("1", model);
+	}
+
+	@RequestMapping(value = "/admin/parts/{seq}", method = RequestMethod.GET)
+	public String showAdminParts1(@PathVariable String seq, Model model) {
+		if (seq.equalsIgnoreCase("")) {
+			seq = "1";
+		}
+		System.out.println("seq:" + seq);
+
+		model.addAttribute("pnum", seq);
+		int startPage = 0;
+		int endPage = 0;
+		int page = 0;
+		int rowsPer1Page = 15;
+
+		try {
+			// 시작페이지 설정 1~5 페이지 일경우 1​​
+			startPage = (Integer.parseInt(seq) - 1) / 5 * 5 + 1;
+			// ex) 현재 6페이지 일경우 (6-1) /5 * 5 +1 = 1 -> 6 페이지 부터 시작​​
+
+			endPage = startPage + 5 - 1;
+
+			if (seq != null && seq != "") {
+				if (!seq.equals("1")) {
+					// 첫페이지가 아닐경우 그 페이지에 맞는 목록 뽑아옴​
+					int temp = (Integer.parseInt(seq) - 1) * rowsPer1Page;
+					page = temp;
+
+				} else if (seq.equals("1")) {
+					// 페이지 번호가 1이면 처음부터 15개​(rowsPer1Page)
+					page = 0;
+				}
+
+			}
+		} catch (Exception e) {
+			// 이상한 페이지 번호 들어오면 해당 게시판 처음으로 리다이렉트​
+			System.out.println("=== admin parts , Page number error!! ===");
+			return "redirect:/admin/parts/1";
+		}
+		// 전체 게시물 갯수 뽑아옴 ​
+
+		String rownum = itemService.getPartsItemsRow();
+		System.out.println("item rows : " + rownum);
+		// pageNum 변수는 전체 페이지의 수​
+		int pageNum = Integer.parseInt(rownum) / rowsPer1Page + 1;
+		// 게시물이 딱 15개일 경우 다음페이지가 생기지 않게 -1 해줌​
+
+		if (Integer.parseInt(rownum) % rowsPer1Page == 0) {
+			pageNum--;
+		}
+
+		if (endPage > pageNum) {
+			// 예를 들어 마지막페이지가 12페이지인 경우 endPage가 15페이지(rowsPer1Page) 까지 출력되기때문에
+			// 12페이지로 바꿔줌​
+
+			endPage = pageNum;
+
+		}
+
+		model.addAttribute("pageNum", pageNum);
+		model.addAttribute("start", startPage);
+		model.addAttribute("end", endPage);
+		/////////////////// Page - Item class
+
+		/////////////////// List View
+		List<PartsItem> items = itemService.getPartsItems();
 		System.out.println("/adminparts process");
 		model.addAttribute("items", items);
 		return "adminparts"; /* adminparts.jsp */
 	}
 
 	/*
+	 * /admin/addparts 프로젝트 신규 등록
+	 */
+	@RequestMapping(value = "/admin/addparts", method = RequestMethod.POST)
+	public String addAdminParts(PartsItem item, Model model, HttpServletRequest request) {
+		// Get data from Webbrowser
+		item.setPartProjectCode(request.getParameter("part-Project-Code"));
+		item.setPartName(request.getParameter("part-Name"));
+		item.setPartDesc(request.getParameter("part-Desc"));
+		item.setPartLocation(request.getParameter("part-Location"));
+		item.setPartCost(Float.valueOf(request.getParameter("part-Cost")));
+		item.setPartStock(Integer.valueOf(request.getParameter("part-Stock")));
+		item.setPartMemo(request.getParameter("part-Memo"));
+
+		// insert DB query
+		itemService.setPartsItem(item);
+		model.addAttribute("reqresult", item.getPartName() + " is added");
+
+		// Get DB List
+
+		return showAdminParts1("1", model);/* adminparts.jsp */
+	}
+
+	/*
+	 * /admin/reqpartsmodify 파츠 정보변경
+	 */
+	@RequestMapping(value = "/admin/reqpartsmodify", method = RequestMethod.POST)
+	public String modifyAdminParts(PartsItem item, Model model, HttpServletRequest request) {
+		// Get data from Webbrowser
+		item.setPartId(Integer.valueOf(request.getParameter("part-Id")));
+		item.setPartProjectCode(request.getParameter("part-Project-Code"));
+		item.setPartName(request.getParameter("part-Name"));
+		item.setPartDesc(request.getParameter("part-Desc"));
+		item.setPartLocation(request.getParameter("part-Location"));
+		item.setPartCost(Float.valueOf(request.getParameter("part-Cost")));
+		item.setPartStock(Integer.valueOf(request.getParameter("part-Stock")));
+		item.setPartMemo(request.getParameter("part-Memo"));
+
+		// Change DB query
+		itemService.changePartsItem(item);
+		model.addAttribute("reqresult", item.getPartName() + "'s datas are changed");
+		System.out.println("/admin/reqprojectmodify processed.. Req:" + item.getPartName());
+
+		// Get DB List
+		return showAdminParts1("1", model);/* adminparts.jsp */
+	}
+
+	/*
+	 * /admin/reqprojectremove 프로젝트 아이템 제거
+	 */
+	@RequestMapping(value = "/admin/reqpartsremove", method = RequestMethod.POST)
+	public String removeAdminParts(PartsItem item, Model model, HttpServletRequest request) {
+		// Get data from Webbrowser
+		item.setPartId(Integer.valueOf(request.getParameter("part-Id")));
+		item.setPartName(request.getParameter("part-Name"));
+
+		// Change DB query
+		itemService.removePartsItem(item);
+		model.addAttribute("reqresult", item.getPartName() + " is removed");
+		System.out.println("/admin/reqprojectremove processed.. Req ID:" + item.getPartName());
+
+		// Get DB List
+		return showAdminParts1("1", model);/* adminparts.jsp */
+	}
+
+	/*
+	 * 
 	 * ================================= USER =================================
 	 * /adminuser 사용자 List, 가입, 수정 관리화면
 	 */

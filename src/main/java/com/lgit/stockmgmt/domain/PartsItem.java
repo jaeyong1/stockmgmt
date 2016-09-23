@@ -93,6 +93,7 @@ public class PartsItem {
 		this.partCost = partCost;
 		this.partStock = partStock;
 		this.partMemo = partMemo;
+
 	}
 
 	/*
@@ -110,6 +111,7 @@ public class PartsItem {
 		this.partCost = Float.valueOf(partCost);
 		this.partStock = Integer.valueOf(partStock);
 		this.partMemo = partMemo;
+
 	}
 
 	@Override
@@ -119,4 +121,16 @@ public class PartsItem {
 				+ ", partStock=" + partStock + ", partMemo=" + partMemo + "]";
 	}
 
+	public PartsItem() {
+		super();
+		this.partId = 0;
+		this.partProjectCode = "";
+		this.partName = "";
+		this.partDesc = "";
+		this.partLocation = "";
+		this.partCost = 0;
+		this.partStock = 0;
+		this.partMemo = "";
+
+	}
 }

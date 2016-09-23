@@ -44,7 +44,7 @@
 			//do no task
 		}
 	}
-	
+
 	function modifyCheck2(id) {
 		var nm = document.forms["form" + id].elements["project-Code"].value;
 		var response = confirm(nm + "데이터 수정할까요?")
@@ -69,8 +69,6 @@
 			//do no task
 		}
 	}
-	
-	
 </script>
 <!DOCTYPE html>
 <html>
@@ -164,45 +162,46 @@
 			</td>
 			<td width="240">
 				<p>출고담당자ID</p>
-			</td>			
+			</td>
 		</tr>
 		<!-- DB 데이터 채움 (클래스 변수사용) -->
 		<c:forEach var="i" items="${items}" varStatus="status">
 
 			<form name="form${status.index}">
-			<tr>
-				<td width="199">					
-						${i.projectCode} <input type=hidden name=project-Code value='${i.projectCode}'>
-				</td>
-				<td width="199">
-					<p>
-						<input name=project-Name value='${i.projectName}'>
-					</p>
-				</td>
-				<td width="199">
-					<p>
-						<input type=text name=project-Owner-Id value='${i.projectOwnerId}'>
-					</p>
-				</td>
-				<td width="199">
-					<p>
-						<input type=text name=project-shipper-Id size=30 maxlength=30
-							value='${i.projectShipperId}'>
-					</p>
-				</td>
+				<tr>
+					<td width="199">${i.projectCode} <input type=hidden
+						name=project-Code value='${i.projectCode}'>
+					</td>
+					<td width="199">
+						<p>
+							<input name=project-Name value='${i.projectName}'>
+						</p>
+					</td>
+					<td width="199">
+						<p>
+							<input type=text name=project-Owner-Id
+								value='${i.projectOwnerId}'>
+						</p>
+					</td>
+					<td width="199">
+						<p>
+							<input type=text name=project-shipper-Id size=30 maxlength=30
+								value='${i.projectShipperId}'>
+						</p>
+					</td>
 
-				<td width="199">
-					<p>
-						<input type="button" value="수정" name="submitbtn"
-							OnClick="javascript:modifyCheck2('${status.index}');"> 
-							<input type="button" value="삭제" name="submitbtn2"
-							OnClick="javascript:removeItem('${status.index}');"> 
-					</p>
+					<td width="199">
+						<p>
+							<input type="button" value="수정" name="submitbtn"
+								OnClick="javascript:modifyCheck2('${status.index}');"> <input
+								type="button" value="삭제" name="submitbtn2"
+								OnClick="javascript:removeItem('${status.index}');">
+						</p>
 
 
-				</td>
+					</td>
 
-			</tr>
+				</tr>
 
 			</form>
 		</c:forEach>
@@ -246,6 +245,8 @@
 			</c:if>
 		</ul>
 	</div>
+
+	<!-- FOOTER -->
 </body>
 
 </html>

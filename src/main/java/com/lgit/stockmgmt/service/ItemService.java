@@ -70,4 +70,22 @@ public class ItemService {
 		
 	}
 
+	public String getPartsItemsRow() {
+		return itemDao.queryPartsItemsRow(); 
+	}
+
+	public int setPartsItem(PartsItem item) {
+		return itemDao.insertPartsItem(item);
+		
+	}
+
+	public int changePartsItem(PartsItem item) {
+		return itemDao.updatePartsItem(item);
+		
+	}
+
+	public int removePartsItem(PartsItem item) {
+		return itemDao.deletePartsItem(item);
+	}
+
 }

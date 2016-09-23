@@ -17,17 +17,9 @@
 	</select>
 
 
-	<!-- tb_project 전체를 받아옴 -->
-	<select id="selectProjectItemList" resultMap="ProjectItemMap">
-		SELECT
-		`project_code`, `project_name`, `project_owner_id`,
-		`project_shipper_id`
-		FROM
-		tb_project
-	</select>
+	<!-- *************************** PARTS *************************** -->
 
-
-	<!-- tb_parts 전체를 받아옴 -->
+	<!-- tb_parts 전체를 받아옴 Limit #page, #rowsPerPage-->
 	<select id="selectPartsItemList" resultMap="PartsItemMap">
 		SELECT
 		`part_id`,
@@ -35,8 +27,70 @@
 		`part_cost`, `part_stock`, `part_memo`
 		FROM
 		tb_part
+		order by part_id desc		
 	</select>
 
+	<!-- tb_parts rows -->
+	<select id="queryPartsItemsRow" resultType="string">
+		select count(*) as
+		cnt
+		from tb_part
+	</select>
+
+	<insert id="insertPartsItem">
+		INSERT INTO tb_part (
+		`part_id` ,
+		`part_project_code` ,
+		`part_name` ,
+		`part_desc` ,
+		`part_location` ,
+		`part_cost` ,
+		`part_stock` ,
+		`part_memo`
+		)
+		VALUES (
+		NULL , #{partProjectCode},
+		#{partName},
+		#{partDesc},
+		#{partLocation}, #{partCost},
+		#{partStock}, #{partMemo}
+		);
+	</insert>
+
+	<!-- tb_project 정보변경 -->
+	<update id="updatePartsItem">
+		UPDATE tb_part
+		SET
+		`part_project_code` =
+		#{partProjectCode},
+		`part_name`= #{partName} ,
+		`part_desc`= #{partDesc}
+		,
+		`part_location`= #{partLocation} ,
+		`part_cost`= #{partCost} ,
+		`part_stock`= #{partStock} ,
+		`part_memo` = #{partMemo}
+		WHERE
+		CONVERT(
+		`tb_part`.`part_id`
+		USING utf8
+		) =
+		#{partId} LIMIT 1 ;
+	</update>
+
+	<delete id="deletePartsItem">
+		DELETE FROM tb_part
+		WHERE
+		CONVERT(
+		`tb_part`.`part_id`
+		USING utf8
+		) =
+		#{partId} LIMIT 1
+		;
+	</delete>
+
+
+	<!-- *************************** USER *************************** -->
 	<!-- tb_parts 전체를 받아옴 -->
 	<select id="selectUserItemList" resultMap="UserItemMap">
 		SELECT
@@ -46,6 +100,12 @@
 		`user_level`
 		FROM
 		tb_user
+	</select>
+
+	<!-- tb_user 전체 row -->
+	<select id="queryUserItemsRow" resultType="string">
+		select count(*) as cnt
+		from tb_user
 	</select>
 
 	<insert id="insertUserItem">
@@ -93,11 +153,15 @@
 	</update>
 
 
-	<!-- tb_user 전체 row 수를 받아옴 # 행(레코드): 10 SELECT SQL_CALC_FOUND_ROWS * FROM 
-		tb_user LIMIT 0, 10; SELECT FOUND_ROWS(); -->
-	<select id="queryUserItemsRow" resultType="string">
-		select count(*) as cnt
-		from tb_user
+	<!-- *************************** PROJECT *************************** -->
+
+	<!-- tb_project 전체를 받아옴 -->
+	<select id="selectProjectItemList" resultMap="ProjectItemMap">
+		SELECT
+		`project_code`, `project_name`, `project_owner_id`,
+		`project_shipper_id`
+		FROM
+		tb_project
 	</select>
 
 	<!-- tb_project row 갯수(페이징카운트) -->
@@ -120,7 +184,6 @@
 		)
 	</insert>
 
-
 	<!-- tb_project 정보변경 -->
 	<update id="updateProjectItem">
 		UPDATE tb_project
@@ -138,7 +201,6 @@
 	</update>
 
 	<!-- tb_project 정보삭제 -->
-
 	<delete id="deleteProjectItem">
 		DELETE FROM tb_project
 		WHERE
@@ -149,5 +211,6 @@
 		#{projectCode} LIMIT 1
 		;
 	</delete>
+	<!-- ********************************************* -->
 
 </mapper>

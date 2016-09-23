@@ -72,8 +72,24 @@ public class ItemDao {
 	}
 
 	public int deleteProjectItem(ProjectItem item) {
-		// TODO Auto-generated method stub
-		return  sqlSession.delete("deleteProjectItem", item);
+		return sqlSession.delete("deleteProjectItem", item);
+	}
+
+	public String queryPartsItemsRow() {
+		return sqlSession.selectOne("queryPartsItemsRow");
+	}
+
+	public int insertPartsItem(PartsItem item) {
+		return sqlSession.insert("insertPartsItem", item);
+	}
+
+
+	public int updatePartsItem(PartsItem item) {
+		return sqlSession.update("updatePartsItem", item);
+	}
+
+	public int deletePartsItem(PartsItem item) {
+		return sqlSession.delete("deletePartsItem", item);
 	}
 
 }
