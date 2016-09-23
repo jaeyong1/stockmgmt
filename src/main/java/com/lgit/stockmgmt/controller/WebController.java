@@ -133,6 +133,7 @@ public class WebController {
 			}
 		} catch (Exception e) {
 			// 이상한 페이지 번호 들어오면 해당 게시판 처음으로 리다이렉트​
+			System.out.println("=== admin user , Page number error!! ===");
 			return "redirect:/admin/user/1";
 		}
 		// 전체 게시물 갯수 뽑아옴 ​
