@@ -31,7 +31,7 @@ public class ItemService {
 	}
 
 	public List<UserItem> getUserItems() {
-		System.out.println("[getUserItems] :"+ itemDao.getTime());
+		System.out.println("[getUserItems] :" + itemDao.getTime());
 		return itemDao.queryUserItems();
 	}
 
@@ -42,13 +42,32 @@ public class ItemService {
 	public int changeUserItem(UserItem userdata) {
 		return itemDao.updateUserItem(userdata);
 	}
-	
+
 	public int changeUserPassword(UserItem userdata) {
 		return itemDao.updateUserItem4PwChange(userdata);
 	}
 
 	public String getUserItemsRow() {
 		return itemDao.queryUserItemsRow();
+	}
+
+	public String getPrjectsItemsRow() {
+		return itemDao.queryProjectItemsRow();
+	}
+
+	public int setProjectItem(ProjectItem item) {
+		return itemDao.insertProjectItem(item);
+
+	}
+
+	public int changeProjectItem(ProjectItem item) {
+		return itemDao.updateUserItem(item);
+
+	}
+
+	public int removeProjectItem(ProjectItem item) {
+		return itemDao.deleteProjectItem(item);
+		
 	}
 
 }

@@ -93,11 +93,61 @@
 	</update>
 
 
-	<!-- tb_user 전체 row 수를 받아옴 # 행(레코드): 10 SELECT SQL_CALC_FOUND_ROWS * FROM tb_user LIMIT 0, 10;
-		SELECT FOUND_ROWS();-->
+	<!-- tb_user 전체 row 수를 받아옴 # 행(레코드): 10 SELECT SQL_CALC_FOUND_ROWS * FROM 
+		tb_user LIMIT 0, 10; SELECT FOUND_ROWS(); -->
 	<select id="queryUserItemsRow" resultType="string">
-	select count(*) as cnt from tb_user 
+		select count(*) as cnt
+		from tb_user
 	</select>
 
+	<!-- tb_project row 갯수(페이징카운트) -->
+	<select id="queryProjectItemsRow" resultType="string">
+		select count(*) as
+		cnt from tb_project
+	</select>
+
+	<insert id="insertProjectItem">
+		INSERT INTO tb_project(
+		`project_code` ,
+		`project_name`,
+		`project_owner_id` ,
+		`project_shipper_id`
+		)
+		VALUES (
+		#{projectCode}, #{projectName},
+		#{projectOwnerId},
+		#{projectShipperId}
+		)
+	</insert>
+
+
+	<!-- tb_project 정보변경 -->
+	<update id="updateProjectItem">
+		UPDATE tb_project
+		SET
+		`project_name` = #{projectName},
+		`project_owner_id` = #{projectOwnerId},
+		`project_shipper_id` =
+		#{projectShipperId}
+		WHERE
+		CONVERT(
+		`tb_project`.`project_code`
+		USING utf8
+		) =
+		#{projectCode} LIMIT 1 ;
+	</update>
+
+	<!-- tb_project 정보삭제 -->
+
+	<delete id="deleteProjectItem">
+		DELETE FROM tb_project
+		WHERE
+		CONVERT(
+		`tb_project`.`project_code`
+		USING utf8
+		) =
+		#{projectCode} LIMIT 1
+		;
+	</delete>
 
 </mapper>

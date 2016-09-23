@@ -59,4 +59,21 @@ public class ItemDao {
 		return sqlSession.selectOne("queryUserItemsRow");
 	}
 
+	public String queryProjectItemsRow() {
+		return sqlSession.selectOne("queryProjectItemsRow");
+	}
+
+	public int insertProjectItem(ProjectItem item) {
+		return sqlSession.insert("insertProjectItem", item);
+	}
+
+	public int updateUserItem(ProjectItem item) {
+		return sqlSession.update("updateProjectItem", item);
+	}
+
+	public int deleteProjectItem(ProjectItem item) {
+		// TODO Auto-generated method stub
+		return  sqlSession.delete("deleteProjectItem", item);
+	}
+
 }

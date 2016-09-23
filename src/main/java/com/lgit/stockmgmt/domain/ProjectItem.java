@@ -6,6 +6,8 @@
  */
 package com.lgit.stockmgmt.domain;
 
+import java.util.Random;
+
 public class ProjectItem {
 	private String projectCode;
 	private String projectName;
@@ -50,6 +52,15 @@ public class ProjectItem {
 		this.projectName = projectName;
 		this.projectOwnerId = projectOwnerId;
 		this.projectShipperId = projectShipperId;
+	}
+
+	public ProjectItem() {
+		super();
+		Random rand = new Random();
+		this.projectCode = "test" + String.valueOf(rand.nextInt(10000) + 1);
+		this.projectName = "test" + String.valueOf(rand.nextInt(10000) + 1);
+		this.projectOwnerId = "test" + String.valueOf(rand.nextInt(10000) + 1);
+		this.projectShipperId = "test" + String.valueOf(rand.nextInt(10000) + 1);
 	}
 
 	@Override

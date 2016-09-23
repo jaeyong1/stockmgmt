@@ -66,19 +66,144 @@ public class WebController {
 	}
 
 	/*
+	 * 
+	 * =============================== PROJECT ===============================
 	 * /adminproject 프로젝트 관리 화면
 	 */
 	@RequestMapping(value = "/admin/project", method = RequestMethod.GET)
-	public String showAdminProject(Model model) {
-		List<ProjectItem> items = itemService.getProjectItems(); // 위에서
-																	// Autowired로
-																	// 연결=객체생성
-		System.out.println("/adminproject process");
+	public String showAdminProject2(Model model) {
+		return showAdminProject1("1", model);
+	}
+
+	@RequestMapping(value = "/admin/project/{seq}", method = RequestMethod.GET)
+	public String showAdminProject1(@PathVariable String seq, Model model) {
+
+		if (seq.equalsIgnoreCase("")) {
+			seq = "1";
+
+		}
+		System.out.println("seq:" + seq);
+
+		model.addAttribute("pnum", seq);
+		int startPage = 0;
+		int endPage = 0;
+		int page = 0;
+		int rowsPer1Page = 15;
+
+		try {
+			// 시작페이지 설정 1~5 페이지 일경우 1​​
+			startPage = (Integer.parseInt(seq) - 1) / 5 * 5 + 1;
+			// ex) 현재 6페이지 일경우 (6-1) /5 * 5 +1 = 1 -> 6 페이지 부터 시작​​
+
+			endPage = startPage + 5 - 1;
+
+			if (seq != null && seq != "") {
+				if (!seq.equals("1")) {
+					// 첫페이지가 아닐경우 그 페이지에 맞는 목록 뽑아옴​
+					int temp = (Integer.parseInt(seq) - 1) * rowsPer1Page;
+					page = temp;
+
+				} else if (seq.equals("1")) {
+					// 페이지 번호가 1이면 처음부터 15개​(rowsPer1Page)
+					page = 0;
+				}
+
+			}
+		} catch (Exception e) {
+			// 이상한 페이지 번호 들어오면 해당 게시판 처음으로 리다이렉트​
+			System.out.println("=== admin project , Page number error!! ===");
+			return "redirect:/admin/project/1";
+		}
+		// 전체 게시물 갯수 뽑아옴 ​
+
+		String rownum = itemService.getPrjectsItemsRow();
+		System.out.println("item rows : " + rownum);
+		// pageNum 변수는 전체 페이지의 수​
+		int pageNum = Integer.parseInt(rownum) / rowsPer1Page + 1;
+		// 게시물이 딱 15개일 경우 다음페이지가 생기지 않게 -1 해줌​
+
+		if (Integer.parseInt(rownum) % rowsPer1Page == 0) {
+			pageNum--;
+		}
+
+		if (endPage > pageNum) {
+			// 예를 들어 마지막페이지가 12페이지인 경우 endPage가 15페이지(rowsPer1Page) 까지 출력되기때문에
+			// 12페이지로 바꿔줌​
+
+			endPage = pageNum;
+
+		}
+
+		model.addAttribute("pageNum", pageNum);
+		model.addAttribute("start", startPage);
+		model.addAttribute("end", endPage);
+		///////////////////
+		List<ProjectItem> items = itemService.getProjectItems();
+
+		System.out.println("/admin/project process");
 		model.addAttribute("items", items);
 		return "adminproj"; /* adminproj.jsp */
 	}
 
 	/*
+	 * /admin/project 사용자 신규 등록처리
+	 */
+	@RequestMapping(value = "/admin/addproject", method = RequestMethod.POST)
+	public String addAdminProject(ProjectItem item, Model model, HttpServletRequest request) {
+		// Get data from Webbrowser
+		item.setProjectCode(request.getParameter("project-Code"));
+		item.setProjectName(request.getParameter("project-Name"));
+		item.setProjectOwnerId(request.getParameter("project-Owner-Id"));
+		item.setProjectShipperId(request.getParameter("project-shipper-Id"));
+
+		// insert DB query
+		itemService.setProjectItem(item);
+		model.addAttribute("reqresult", item.getProjectCode() + " is added");
+
+		// Get DB List
+		return showAdminProject1("1", model);/* adminproj.jsp */
+	}
+
+	/*
+	 * /admin/reqmodify 사용자 정보변경
+	 */
+	@RequestMapping(value = "/admin/reqprojectmodify", method = RequestMethod.POST)
+	public String modifyAdminProject(ProjectItem item, Model model, HttpServletRequest request) {
+		// Get data from Webbrowser
+		item.setProjectCode(request.getParameter("project-Code"));
+		item.setProjectName(request.getParameter("project-Name"));
+		item.setProjectOwnerId(request.getParameter("project-Owner-Id"));
+		item.setProjectShipperId(request.getParameter("project-shipper-Id"));
+
+		// Change DB query
+		itemService.changeProjectItem(item);
+		model.addAttribute("reqresult", item.getProjectCode() + "'s datas are changed");
+		System.out.println("/admin/reqprojectmodify processed.. Req ID:" + item.getProjectCode());
+
+		// Get DB List
+		return showAdminProject1("1", model); /* adminuser.jsp */
+	}
+	
+	/*
+	 * /admin/reqmodify 사용자 정보변경
+	 */
+	@RequestMapping(value = "/admin/reqprojectremove", method = RequestMethod.POST)
+	public String removeAdminProject(ProjectItem item, Model model, HttpServletRequest request) {
+		// Get data from Webbrowser
+		item.setProjectCode(request.getParameter("project-Code"));
+
+		// Change DB query
+		itemService.removeProjectItem(item);
+		model.addAttribute("reqresult", item.getProjectCode() + " is removed");
+		System.out.println("/admin/reqprojectremove processed.. Req ID:" + item.getProjectCode());
+
+		// Get DB List
+		return showAdminProject1("1", model); /* adminuser.jsp */
+	}
+
+	/*
+	 * 
+	 * ================================= PARTS =================================
 	 * /adminparts Parts 관리 화면
 	 */
 	@RequestMapping(value = "/admin/parts", method = RequestMethod.GET)
@@ -91,6 +216,7 @@ public class WebController {
 	}
 
 	/*
+	 * ================================= USER =================================
 	 * /adminuser 사용자 List, 가입, 수정 관리화면
 	 */
 	@RequestMapping(value = "/admin/user", method = RequestMethod.GET)
@@ -111,6 +237,7 @@ public class WebController {
 		int startPage = 0;
 		int endPage = 0;
 		int page = 0;
+		int rowsPer1Page = 15;
 
 		try {
 			// 시작페이지 설정 1~5 페이지 일경우 1​​
@@ -122,11 +249,11 @@ public class WebController {
 			if (seq != null && seq != "") {
 				if (!seq.equals("1")) {
 					// 첫페이지가 아닐경우 그 페이지에 맞는 목록 뽑아옴​
-					int temp = (Integer.parseInt(seq) - 1) * 15;
+					int temp = (Integer.parseInt(seq) - 1) * rowsPer1Page;
 					page = temp;
 
 				} else if (seq.equals("1")) {
-					// 페이지 번호가 1이면 처음부터 15개​
+					// 페이지 번호가 1이면 처음부터 15개​(rowsPer1Page)
 					page = 0;
 				}
 
@@ -141,15 +268,16 @@ public class WebController {
 		String rownum = itemService.getUserItemsRow();
 		System.out.println("item rows : " + rownum);
 		// pageNum 변수는 전체 페이지의 수​
-		int pageNum = Integer.parseInt(rownum) / 15 + 1;
+		int pageNum = Integer.parseInt(rownum) / rowsPer1Page + 1;
 		// 게시물이 딱 15개일 경우 다음페이지가 생기지 않게 -1 해줌​
 
-		if (Integer.parseInt(rownum) % 15 == 0) {
+		if (Integer.parseInt(rownum) % rowsPer1Page == 0) {
 			pageNum--;
 		}
 
 		if (endPage > pageNum) {
-			// 예를 들어 마지막페이지가 12페이지인 경우 endPage가 15페이지 까지 출력되기때문에 12페이지로 바꿔줌​
+			// 예를 들어 마지막페이지가 12페이지인 경우 endPage가 15페이지(rowsPer1Page) 까지 출력되기때문에
+			// 12페이지로 바꿔줌​
 
 			endPage = pageNum;
 
@@ -159,7 +287,7 @@ public class WebController {
 		model.addAttribute("start", startPage);
 		model.addAttribute("end", endPage);
 		///////////////////
-
+		// Query DB List
 		List<UserItem> items = itemService.getUserItems(); // 위에서 Autowired로
 															// 연결=객체생성
 		System.out.println("/adminuser process");
@@ -185,10 +313,7 @@ public class WebController {
 		model.addAttribute("reqresult", userdata.getUserId() + " is added");
 
 		// Get DB List
-		List<UserItem> items = itemService.getUserItems();
-		model.addAttribute("items", items);
-		System.out.println("/admin/adduser process ID:" + userdata.getUserId());
-		return "adminuser"; /* adminuser.jsp */
+		return showAdminUser("1", model); /* adminuser.jsp */
 	}
 
 	/*
@@ -206,9 +331,7 @@ public class WebController {
 		System.out.println("/admin/reqresetpassword processed.. Req ID:" + userdata.getUserId());
 
 		// Get DB List
-		List<UserItem> items = itemService.getUserItems();
-		model.addAttribute("items", items);
-		return "adminuser"; /* adminuser.jsp */
+		return showAdminUser("1", model); /* adminuser.jsp */
 	}
 
 	/*
@@ -229,9 +352,7 @@ public class WebController {
 		System.out.println("/admin/reqmodify processed.. Req ID:" + userdata.getUserId());
 
 		// Get DB List
-		List<UserItem> items = itemService.getUserItems();
-		model.addAttribute("items", items);
-		return "adminuser"; /* adminuser.jsp */
+		return showAdminUser("1", model); /* adminuser.jsp */
 	}
 
 }
