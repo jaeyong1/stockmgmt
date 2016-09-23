@@ -18,6 +18,59 @@ public class PartsItem {
 	private int partStock;
 	private String partMemo;
 
+	/*
+	 * Page calc [start]
+	 */
+	private int currentPageNum;
+	private int rowsPerPage;
+	private int _pageOffset; // Not need Setter, Getter
+
+	public int getCurrentPageNum() {
+		return currentPageNum;
+	}
+
+	public void setCurrentPageNum(int currentPageNum) {
+		this.currentPageNum = currentPageNum;
+		this._pageOffset = this.rowsPerPage * this.currentPageNum;
+	}
+
+	public int getRowsPerPage() {
+		return rowsPerPage;
+	}
+
+	public void setRowsPerPage(int rowsPerPage) {
+		this.rowsPerPage = rowsPerPage;
+		this._pageOffset = this.rowsPerPage * this.currentPageNum;
+	}
+	/*
+	 * page calc [end]
+	 */
+
+	/*
+	 * Search Info [start]
+	 */
+	private String Keyword;
+	private int SrchType;
+
+	public String getKeyword() {
+		return Keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		Keyword = keyword;
+	}
+
+	public int getSrchType() {
+		return SrchType;
+	}
+
+	public void setSrchType(int srchType) {
+		SrchType = srchType;
+	}
+	/*
+	 * Search Info [end]
+	 */
+
 	public int getPartId() {
 		return partId;
 	}
@@ -94,6 +147,9 @@ public class PartsItem {
 		this.partStock = partStock;
 		this.partMemo = partMemo;
 
+		this._pageOffset = 0;
+		this.currentPageNum = 0;
+		this.rowsPerPage = 0;
 	}
 
 	/*
@@ -112,6 +168,9 @@ public class PartsItem {
 		this.partStock = Integer.valueOf(partStock);
 		this.partMemo = partMemo;
 
+		this._pageOffset = 0;
+		this.currentPageNum = 0;
+		this.rowsPerPage = 0;
 	}
 
 	@Override
@@ -132,5 +191,8 @@ public class PartsItem {
 		this.partStock = 0;
 		this.partMemo = "";
 
+		this._pageOffset = 0;
+		this.currentPageNum = 0;
+		this.rowsPerPage = 0;
 	}
 }
