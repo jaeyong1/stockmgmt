@@ -1,10 +1,18 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" />
 <%@ page import="java.util.*"%>
 
 
 <script language="javascript">
+$( document ).ready(function() {
+		alert("dd");
+	  // Handler for .ready() called.
+
+	});
+alert("aaa");
+
 	function newItem() {
 		if (!document.forms["newitemform"].elements["part-Project-Code"].value) {
 			alert("프로젝트코드 기입해주세요");
@@ -173,7 +181,7 @@
 				</td>
 				<td width="328">
 					<p>
-						<input type="text" name='part-Memo'>
+						<input type="text" id="aa" name='part-Memo'>
 					</p>
 				</td>
 			</tr>

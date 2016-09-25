@@ -1,11 +1,17 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
+
+
 <%@ page import="java.util.*"%>
 
 
 
 <script language="javascript">
+
+
+
 	function newItem() {
 		if (!document.forms["newitemform"].elements["project-Code"].value) {
 			alert("Id를 기입해주세요");
@@ -77,6 +83,18 @@
 <meta http-equiv="content-type" content="text/html; charset=euc-kr">
 <title>제목 없음</title>
 <meta name="generator" content="Namo WebEditor v5.0">
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"> </script>
+
+<script language="javascript">
+$(function() {
+	alert("aaa");
+	  // Handler for .ready() called.
+
+	});
+
+
+
+</script>
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="purple"
