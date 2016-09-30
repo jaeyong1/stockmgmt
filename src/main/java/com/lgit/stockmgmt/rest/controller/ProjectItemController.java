@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lgit.stockmgmt.domain.ProjectItem;
+import com.lgit.stockmgmt.domain.UserItem;
 import com.lgit.stockmgmt.rest.message.QueryProjectItemResponse;
 import com.lgit.stockmgmt.service.ItemService;
 
@@ -22,8 +24,6 @@ public class ProjectItemController {
 	 */
 	@Autowired
 	private ItemService itemService;
-
-	
 	
 	//@RequestParam(value = "status", required = false) String portStatus)
 	
@@ -42,9 +42,13 @@ public class ProjectItemController {
 	@RequestMapping(value = "/rest/project-item", method = RequestMethod.POST)
 	public void createProjectItem(@RequestBody ProjectItem projectItem) {
 		System.out.println("createProjectItem");
+		System.out.println("Project Name: "+ projectItem.getProjectName());
 		
 		
-		itemService.setProjectItem(projectItem);
+		//itemService.setProjectItem(projectItem);
+		
+		//public ResponseEntity<Car> update(@RequestBody Car car) {
+		//return new ResponseEntity<ProjectItem>(projectItem, HttpStatus.OK);
 		
 	}
 
@@ -79,4 +83,16 @@ public class ProjectItemController {
 		return new ResponseEntity<QueryPhysicalPortResponse>(response, HttpStatus.OK);
 	}
 	*/
+	
+	/*
+	@RequestMapping(value = "/cars", method = RequestMethod.POST)
+	public ResponseEntity<List<Car>> update(@RequestBody List<Car> cars) {
+
+	    cars.stream().forEach(c -> c.setMiles(c.getMiles() + 100));
+	    
+	    // TODO: call persistence layer to update
+	    return new ResponseEntity<List<Car>>(cars, HttpStatus.OK);
+	}
+*/
+	
 }

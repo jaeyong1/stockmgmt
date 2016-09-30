@@ -29,6 +29,9 @@ public class ItemService {
 	public List<ProjectItem> getProjectItems() {
 		return itemDao.queryProjectItems();
 	}
+	public List<ProjectItem> getProjectItems(int rowsPerPage, int page) {
+		return itemDao.queryProjectItems();
+	}
 
 	public List<UserItem> getUserItems() {
 		System.out.println("[getUserItems] :" + itemDao.getTime());

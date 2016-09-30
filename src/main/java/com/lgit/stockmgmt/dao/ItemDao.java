@@ -38,6 +38,11 @@ public class ItemDao {
 		return sqlSession
 				.selectList("selectProjectItemList"); /* SQL 쿼리 선택, 실행 */
 	}
+	
+	public List<ProjectItem> queryProjectItems(int rowsPerPage, int page) {
+		return sqlSession
+				.selectList("selectProjectItemList"); /* SQL 쿼리 선택, 실행 */
+	}
 
 	public List<UserItem> queryUserItems() {
 		return sqlSession.selectList("selectUserItemList"); /* SQL 쿼리 선택, 실행 */
@@ -91,5 +96,6 @@ public class ItemDao {
 	public int deletePartsItem(PartsItem item) {
 		return sqlSession.delete("deletePartsItem", item);
 	}
+
 
 }

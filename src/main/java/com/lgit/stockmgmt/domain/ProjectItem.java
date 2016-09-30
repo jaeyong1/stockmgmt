@@ -11,6 +11,7 @@ import java.util.Random;
 public class ProjectItem {
 	private String projectCode;
 	private String projectName;
+
 	private String projectOwnerId;
 	private String projectShipperId;
 

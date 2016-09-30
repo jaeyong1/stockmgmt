@@ -76,7 +76,163 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=euc-kr">
 <title>제목 없음</title>
-<meta name="" content="">
+<meta name="generator" content="Namo WebEditor v5.0">
+
+<!-- jquery -->
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<!--  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   -->
+<script>
+	jQuery(document).ready(function($) {
+
+		$("#newitemform").submit(function(event) {
+
+			// Disble the search button
+			enableSearchButton(false);
+
+			// Prevent the form from submitting via the browser.
+			event.preventDefault();
+
+			inserViaAjax();
+
+		});
+
+	});
+
+	function inserViaAjax() {
+
+		var search = {}
+		search["projectCode"] = $("#project-Code").val();
+		search["projectName"] = $("#project-Name").val();
+		search["projectOwnerId"] = $("#project-Owner-Id").val();
+		search["projectShipperId"] = $("#project-shipper-Id").val();
+		console.log("#project-Code");
+
+		$.ajax({
+			type : "POST",
+			contentType : "application/json",
+			url : "/rest/project-item",
+			data : JSON.stringify(search),
+			dataType : 'json',
+			timeout : 100000,
+			success : function(data) {
+				console.log("SUCCESS: ", data);
+				//display(data);
+			},
+			error : function(e) {
+				console.log("ERROR: ", e);
+				//display(e);
+			},
+			done : function(e) {
+				console.log("DONE");
+				//enableSearchButton(true);
+			}
+		});
+
+	}
+
+	function enableSearchButton(flag) {
+		$("#btn-insert").prop("disabled", flag);
+	}
+
+	function display(data) {
+		var json = "<h4>Ajax Response</h4><pre>"
+				+ JSON.stringify(data, null, 4) + "</pre>";
+		$('#feedback').html(json);
+	}
+</script>
+<!--  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   -->
+
+
+<script language="javascript">
+	//$(function() {
+	//alert("aaa");
+	//console.log("aaa");
+	// Handler for .ready() called.
+
+	//});
+
+	//var bno = 122223;
+
+	//$.getJSON("/rest/project-item/", function(data) {
+	//console.log(data.length);
+	//});//getJSON
+</script>
+
+<script language="javascript">
+	$(function() {
+		// Handler for .ready() called.
+		console.log("started");
+		getNshowDatas();
+	});
+	function inputbox(name, value) {
+		var sRet;
+		sRet = "<input type=text name=" + name + " value='"+value +"'> ";
+		return sRet;
+	}
+
+	function printData(response) {
+		$
+				.each(
+						response.projectItems,
+						function(i, item) {
+							$('#replies').append(' <tr >');
+							$('#replies')
+									.append(
+											' <td  width="199"> <input type="hidden" id="star" value="'+item.projectCode+'" />'
+													+ item.projectCode
+													+ ' </td>');
+							$('#replies')
+									.append(
+											' <td> <input type="text" id="star" value="'+item.projectName+'" /> </td>');
+							$('#replies')
+									.append(
+											' <td> <input type="text" id="star" value="'+item.projectOwnerId+'" /> </td>');
+							$('#replies')
+									.append(
+											' <td> <input type="text" id="star" value="'+item.projectShipperId+'" /> </td>');
+							$('#replies')
+									.append(
+											' <td> <input type="button" value="수정" name="submitbtn" OnClick="javascript:modifyCheck3('
+													+ i
+													+ ');"> <input type="button" value="삭제" name="submitbtn2" OnClick="javascript:removeItem('
+													+ i + ');"> </td>');
+
+							$('#replies').append('  </tr>');
+						});
+	};
+
+	function getNshowDatas() {
+		$.ajax({
+			url : "/rest/project-item",
+			dataType : "json",
+			type : "get",
+			success : function(response) {
+				printData(response);
+				//console.log(data.projectItems[0].projectCode);
+				//console.log(data.projectItems[0].projectName);
+				//console.log(data.projectItems[0].projectOwnerId);
+				//console.log(response.projectItems[0].projectShipperId);
+				/*
+				 $.each(response.projectItems, function(i, item) {
+				 var $tr = $('<tr>').append($('<td>').text(i + "번  "),
+				 $('<td>').text(item.projectCode),
+				 $('<td>').text(item.projectName),
+				 $('<td>').text(item.projectOwnerId),
+				 $('<td>').text(item.projectShipperId), $('</tr>'));
+				 ;
+
+				 //console.log($tr.wrap('<p>').html());
+				 $("#replies").append($tr);
+				 });
+				 */
+			},
+			error : function(request, status, error) {
+				alert("code:" + request.status + "\n" + "error:" + error);
+			}
+
+		});
+	}//getNshowDatas
+</script>
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="purple"
@@ -245,7 +401,37 @@
 			</c:if>
 		</ul>
 	</div>
-
+	<!-- - TEST -->
+	<table border="1" id="replies">
+		<colgroup>
+			<col width="204" />
+			<col width="*" />
+			<col width="204" />
+			<col width="204" />
+			<col width="60" />
+		</colgroup>
+		<thread>
+		<tr>
+			<td width="204">
+				<p>프로젝트코드</p>
+			</td>
+			<td width="204">
+				<p>프로젝트이름</p>
+			</td>
+			<td width="240">
+				<p>개발담당자ID</p>
+			</td>
+			<td width="240">
+				<p>출고담당자ID</p>
+			</td>
+			<td width="199">
+				<p></p>
+			</td>
+		</tr>
+		</thread>
+		<tbody>
+		</tbody>
+	</table>
 
 	<!-- FOOTER -->
 </body>

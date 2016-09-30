@@ -11,12 +11,12 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lgit.stockmgmt.domain.Item;
 import com.lgit.stockmgmt.domain.PartsItem;
@@ -72,76 +72,35 @@ public class WebController {
 	 */
 	@RequestMapping(value = "/admin/project", method = RequestMethod.GET)
 	public String showAdminProject2(Model model) {
-		return showAdminProject1("1", model);
+		return showAdminProject1("0", model);
 	}
 
 	@RequestMapping(value = "/admin/project/{seq}", method = RequestMethod.GET)
 	public String showAdminProject1(@PathVariable String seq, Model model) {
-
 		if (seq.equalsIgnoreCase("")) {
-			seq = "1";
+			seq = "0";
 
 		}
-		System.out.println("seq:" + seq);
+		final int rowsPer1Page = 15;
 
-		model.addAttribute("pnum", seq);
-		int startPage = 0;
-		int endPage = 0;
-		int page = 0;
-		int rowsPer1Page = 15;
-
-		try {
-			// 시작페이지 설정 1~5 페이지 일경우 1​​
-			startPage = (Integer.parseInt(seq) - 1) / 5 * 5 + 1;
-			// ex) 현재 6페이지 일경우 (6-1) /5 * 5 +1 = 1 -> 6 페이지 부터 시작​​
-
-			endPage = startPage + 5 - 1;
-
-			if (seq != null && seq != "") {
-				if (!seq.equals("1")) {
-					// 첫페이지가 아닐경우 그 페이지에 맞는 목록 뽑아옴​
-					int temp = (Integer.parseInt(seq) - 1) * rowsPer1Page;
-					page = temp;
-
-				} else if (seq.equals("1")) {
-					// 페이지 번호가 1이면 처음부터 15개​(rowsPer1Page)
-					page = 0;
-				}
-
-			}
-		} catch (Exception e) {
-			// 이상한 페이지 번호 들어오면 해당 게시판 처음으로 리다이렉트​
-			System.out.println("=== admin project , Page number error!! ===");
-			return "redirect:/admin/project/1";
-		}
-		// 전체 게시물 갯수 뽑아옴 ​
-
-		String rownum = itemService.getPrjectsItemsRow();
-		System.out.println("item rows : " + rownum);
-		// pageNum 변수는 전체 페이지의 수​
-		int pageNum = Integer.parseInt(rownum) / rowsPer1Page + 1;
-		// 게시물이 딱 15개일 경우 다음페이지가 생기지 않게 -1 해줌​
-
-		if (Integer.parseInt(rownum) % rowsPer1Page == 0) {
-			pageNum--;
-		}
-
-		if (endPage > pageNum) {
-			// 예를 들어 마지막페이지가 12페이지인 경우 endPage가 15페이지(rowsPer1Page) 까지 출력되기때문에
-			// 12페이지로 바꿔줌​
-
-			endPage = pageNum;
-
-		}
-
-		model.addAttribute("pageNum", pageNum);
-		model.addAttribute("start", startPage);
-		model.addAttribute("end", endPage);
-		///////////////////
+		// Get List
 		List<ProjectItem> items = itemService.getProjectItems();
-
 		System.out.println("/admin/project process");
-		model.addAttribute("items", items);
+		// model.addAttribute("items", items);
+
+		// Choose current page data
+		PagedListHolder<ProjectItem> paging = new PagedListHolder<ProjectItem>(items);
+		paging.setPageSize(rowsPer1Page);
+		paging.setPage(Integer.parseInt(seq));
+		model.addAttribute("items", paging.getPageList());
+
+		// Add Page number information
+		model.addAttribute("pageNum", paging.getPageCount());
+		model.addAttribute("start", paging.getFirstLinkedPage());
+		model.addAttribute("end", paging.getLastLinkedPage());
+		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
+		// 인덱스..
+
 		return "adminproj"; /* adminproj.jsp */
 	}
 
@@ -209,75 +168,35 @@ public class WebController {
 
 	@RequestMapping(value = "/admin/parts", method = RequestMethod.GET)
 	public String showAdminParts2(Model model) {
-		return showAdminParts1("1", model);
+		return showAdminParts1("0", model);
 	}
 
 	@RequestMapping(value = "/admin/parts/{seq}", method = RequestMethod.GET)
 	public String showAdminParts1(@PathVariable String seq, Model model) {
 		if (seq.equalsIgnoreCase("")) {
-			seq = "1";
-		}
-		System.out.println("seq:" + seq);
-
-		model.addAttribute("pnum", seq);
-		int startPage = 0;
-		int endPage = 0;
-		int page = 0;
-		int rowsPer1Page = 15;
-
-		try {
-			// 시작페이지 설정 1~5 페이지 일경우 1​​
-			startPage = (Integer.parseInt(seq) - 1) / 5 * 5 + 1;
-			// ex) 현재 6페이지 일경우 (6-1) /5 * 5 +1 = 1 -> 6 페이지 부터 시작​​
-
-			endPage = startPage + 5 - 1;
-
-			if (seq != null && seq != "") {
-				if (!seq.equals("1")) {
-					// 첫페이지가 아닐경우 그 페이지에 맞는 목록 뽑아옴​
-					int temp = (Integer.parseInt(seq) - 1) * rowsPer1Page;
-					page = temp;
-
-				} else if (seq.equals("1")) {
-					// 페이지 번호가 1이면 처음부터 15개​(rowsPer1Page)
-					page = 0;
-				}
-
-			}
-		} catch (Exception e) {
-			// 이상한 페이지 번호 들어오면 해당 게시판 처음으로 리다이렉트​
-			System.out.println("=== admin parts , Page number error!! ===");
-			return "redirect:/admin/parts/1";
-		}
-		// 전체 게시물 갯수 뽑아옴 ​
-
-		String rownum = itemService.getPartsItemsRow();
-		System.out.println("item rows : " + rownum);
-		// pageNum 변수는 전체 페이지의 수​
-		int pageNum = Integer.parseInt(rownum) / rowsPer1Page + 1;
-		// 게시물이 딱 15개일 경우 다음페이지가 생기지 않게 -1 해줌​
-
-		if (Integer.parseInt(rownum) % rowsPer1Page == 0) {
-			pageNum--;
-		}
-
-		if (endPage > pageNum) {
-			// 예를 들어 마지막페이지가 12페이지인 경우 endPage가 15페이지(rowsPer1Page) 까지 출력되기때문에
-			// 12페이지로 바꿔줌​
-
-			endPage = pageNum;
+			seq = "0";
 
 		}
-
-		model.addAttribute("pageNum", pageNum);
-		model.addAttribute("start", startPage);
-		model.addAttribute("end", endPage);
-		/////////////////// Page - Item class
+		final int rowsPer1Page = 15;
 
 		/////////////////// List View
 		List<PartsItem> items = itemService.getPartsItems();
 		System.out.println("/adminparts process");
-		model.addAttribute("items", items);
+		// model.addAttribute("items", items);
+
+		// Choose current page data
+		PagedListHolder<PartsItem> paging = new PagedListHolder<PartsItem>(items);
+		paging.setPageSize(rowsPer1Page);
+		paging.setPage(Integer.parseInt(seq));
+		model.addAttribute("items", paging.getPageList());
+
+		// Add Page number information
+		model.addAttribute("pageNum", paging.getPageCount());
+		model.addAttribute("start", paging.getFirstLinkedPage());
+		model.addAttribute("end", paging.getLastLinkedPage());
+		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
+		// 인덱스..
+
 		return "adminparts"; /* adminparts.jsp */
 	}
 
@@ -353,77 +272,36 @@ public class WebController {
 	 */
 	@RequestMapping(value = "/admin/user", method = RequestMethod.GET)
 	public String showAdminUser2(Model model) {
-		return showAdminUser("1", model);
+		return showAdminUser("0", model);
 	}
 
 	@RequestMapping(value = "/admin/user/{seq}", method = RequestMethod.GET)
 	public String showAdminUser(@PathVariable String seq, Model model) {
-
 		if (seq.equalsIgnoreCase("")) {
-			seq = "1";
+			seq = "0";
 
 		}
-		System.out.println("seq" + seq);
+		final int rowsPer1Page = 25;
 
-		model.addAttribute("pnum", seq);
-		int startPage = 0;
-		int endPage = 0;
-		int page = 0;
-		int rowsPer1Page = 15;
-
-		try {
-			// 시작페이지 설정 1~5 페이지 일경우 1​​
-			startPage = (Integer.parseInt(seq) - 1) / 5 * 5 + 1;
-			// ex) 현재 6페이지 일경우 (6-1) /5 * 5 +1 = 1 -> 6 페이지 부터 시작​​
-
-			endPage = startPage + 5 - 1;
-
-			if (seq != null && seq != "") {
-				if (!seq.equals("1")) {
-					// 첫페이지가 아닐경우 그 페이지에 맞는 목록 뽑아옴​
-					int temp = (Integer.parseInt(seq) - 1) * rowsPer1Page;
-					page = temp;
-
-				} else if (seq.equals("1")) {
-					// 페이지 번호가 1이면 처음부터 15개​(rowsPer1Page)
-					page = 0;
-				}
-
-			}
-		} catch (Exception e) {
-			// 이상한 페이지 번호 들어오면 해당 게시판 처음으로 리다이렉트​
-			System.out.println("=== admin user , Page number error!! ===");
-			return "redirect:/admin/user/1";
-		}
-		// 전체 게시물 갯수 뽑아옴 ​
-
-		String rownum = itemService.getUserItemsRow();
-		System.out.println("item rows : " + rownum);
-		// pageNum 변수는 전체 페이지의 수​
-		int pageNum = Integer.parseInt(rownum) / rowsPer1Page + 1;
-		// 게시물이 딱 15개일 경우 다음페이지가 생기지 않게 -1 해줌​
-
-		if (Integer.parseInt(rownum) % rowsPer1Page == 0) {
-			pageNum--;
-		}
-
-		if (endPage > pageNum) {
-			// 예를 들어 마지막페이지가 12페이지인 경우 endPage가 15페이지(rowsPer1Page) 까지 출력되기때문에
-			// 12페이지로 바꿔줌​
-
-			endPage = pageNum;
-
-		}
-
-		model.addAttribute("pageNum", pageNum);
-		model.addAttribute("start", startPage);
-		model.addAttribute("end", endPage);
 		///////////////////
 		// Query DB List
-		List<UserItem> items = itemService.getUserItems(); // 위에서 Autowired로
-															// 연결=객체생성
+		List<UserItem> items = itemService.getUserItems();
 		System.out.println("/adminuser process");
-		model.addAttribute("items", items);
+		// model.addAttribute("items", items);
+		
+		// Choose current page data
+		PagedListHolder<UserItem> paging = new PagedListHolder<UserItem>(items);
+		paging.setPageSize(rowsPer1Page);
+		paging.setPage(Integer.parseInt(seq));
+		model.addAttribute("items", paging.getPageList());
+
+		// Add Page number information
+		model.addAttribute("pageNum", paging.getPageCount());
+		model.addAttribute("start", paging.getFirstLinkedPage());
+		model.addAttribute("end", paging.getLastLinkedPage());
+		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
+		// 인덱스..
+
 		return "adminuser"; /* adminuser.jsp */
 	}
 
