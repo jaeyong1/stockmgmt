@@ -11,7 +11,7 @@ var rolekor ="";
 		rolekor = lev2Kor(${sessionScope.userLoginInfo.userLevel});
 		console.log(rolekor);
 		$('#userinfo').html('('+rolekor +')');
-	//로그인후에 표시	
+
 	});
 	
 	function lev2Kor(userLevel) {
@@ -42,12 +42,20 @@ var rolekor ="";
 <meta http-equiv="content-type" content="text/html; charset=euc-kr">
 <title>LGIT 자재관리시스템</title>
 <meta name="" content="">
+
+
+<!-- Bootstrap core CSS -->
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="/css/login.css" rel="stylesheet">
 </head>
 
 <body>
-	<!-- HEADER -->
+	<!--  HEADER  -->
 	<c:choose>
 		<c:when test="${not empty sessionScope.userLoginInfo}">
+			<!-- LOGIN status -->
 			<!--   ID : <c:out value="${sessionScope.userLoginInfo.userId}" /> -->
 			<!-- Name : ${sessionScope.userLoginInfo.userName}님 -->
 			<!-- Level : <c:out value="${sessionScope.userLoginInfo.userLevel}" /> -->
@@ -62,6 +70,7 @@ var rolekor ="";
 			<a href="page1">페이지1</a>&nbsp;&nbsp;<a href="page2">페이지2</a>
 		</c:when>
 		<c:otherwise>
+			<!-- Not LOGIN status -->
 			<form class="form-signin" name="formlogin">
 				<h2 class="form-signin-heading">LGIT 자재관리시스템</h2>
 				<!-- <label for="inputEmail" class="sr-only">Email address</label> -->
