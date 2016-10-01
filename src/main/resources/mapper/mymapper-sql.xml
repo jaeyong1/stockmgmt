@@ -19,7 +19,7 @@
 
 	<!-- *************************** PARTS *************************** -->
 
-	<!-- tb_parts 전체를 받아옴 Limit #page, #rowsPerPage-->
+	<!-- tb_parts 전체를 받아옴 Limit #page, #rowsPerPage -->
 	<select id="selectPartsItemList" resultMap="PartsItemMap">
 		SELECT
 		`part_id`,
@@ -27,7 +27,7 @@
 		`part_cost`, `part_stock`, `part_memo`
 		FROM
 		tb_part
-		order by part_id desc		
+		order by part_id desc
 	</select>
 
 	<!-- tb_parts rows -->
@@ -101,6 +101,24 @@
 		FROM
 		tb_user
 	</select>
+
+	<select id="selectUserItemListForLogin" parameterType="String" 
+		resultMap="UserItemMap">
+		SELECT
+		`user_id`,
+		`user_name`,
+		`user_password`, `user_email`,
+		`user_teamname`,
+		`user_level`
+		FROM
+		tb_user
+		WHERE
+		`user_id` =
+		#{logingUserId} AND `user_password`
+		= #{loginUserPassword}
+	</select>
+
+
 
 	<!-- tb_user 전체 row -->
 	<select id="queryUserItemsRow" resultType="string">

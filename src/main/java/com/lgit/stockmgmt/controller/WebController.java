@@ -29,13 +29,13 @@ public class WebController {
 	/*
 	 * Test Controller
 	 */
-	@RequestMapping("/")
-	public String getIndex(Model model) {
-		// model.addAttribute("name", "John Lee");
-		System.out.println("GET Index2");
-		return "index"; /* WebController.java를 참고해서 해당경로에서 파일 호출 */
-	}
 
+	// @RequestMapping("/")
+	// public String getIndex(Model model) { //
+	// model.addAttribute("name", "John Lee"); System.out.println("GET Index2");
+	// return "index"; //WebController.java를 참고해서 해당경로에서 파일 호출
+	// }
+	
 	/*
 	 * Test Controller
 	 */
@@ -288,7 +288,7 @@ public class WebController {
 		List<UserItem> items = itemService.getUserItems();
 		System.out.println("/adminuser process");
 		// model.addAttribute("items", items);
-		
+
 		// Choose current page data
 		PagedListHolder<UserItem> paging = new PagedListHolder<UserItem>(items);
 		paging.setPageSize(rowsPer1Page);

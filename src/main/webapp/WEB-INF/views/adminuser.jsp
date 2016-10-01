@@ -184,8 +184,8 @@
 							<option selected value="1">==선택하세요==</option>
 							<option value="2">개발담당자</option>
 							<option value="3">출고담당자</option>
-							<option value="3">손님(입출고권한없음)</option>
-							<option value="4">관리자</option>
+							<option value="4">손님(입출고권한없음)</option>
+							<option value="5">관리자</option>
 						</select>
 					</p>
 				</td>

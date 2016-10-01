@@ -1,6 +1,8 @@
 package com.lgit.stockmgmt.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +12,6 @@ import com.lgit.stockmgmt.domain.Item;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ProjectItem;
 import com.lgit.stockmgmt.domain.UserItem;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 @Service("itemService")
 public class ItemService {
@@ -29,6 +30,7 @@ public class ItemService {
 	public List<ProjectItem> getProjectItems() {
 		return itemDao.queryProjectItems();
 	}
+
 	public List<ProjectItem> getProjectItems(int rowsPerPage, int page) {
 		return itemDao.queryProjectItems();
 	}
@@ -70,25 +72,43 @@ public class ItemService {
 
 	public int removeProjectItem(ProjectItem item) {
 		return itemDao.deleteProjectItem(item);
-		
+
 	}
 
 	public String getPartsItemsRow() {
-		return itemDao.queryPartsItemsRow(); 
+		return itemDao.queryPartsItemsRow();
 	}
 
 	public int setPartsItem(PartsItem item) {
 		return itemDao.insertPartsItem(item);
-		
+
 	}
 
 	public int changePartsItem(PartsItem item) {
 		return itemDao.updatePartsItem(item);
-		
+
 	}
 
 	public int removePartsItem(PartsItem item) {
 		return itemDao.deletePartsItem(item);
+	}
+
+	public UserItem findByUserIdAndPassword(String logingUserId, String loginUserPassword) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("logingUserId", logingUserId);
+		paramMap.put("loginUserPassword", loginUserPassword);
+
+		List<UserItem> list = itemDao.queryUserItems(paramMap);
+		if (list.size() == 0) {
+			// no user DB data
+			System.out.println("[ItemService] no user data");
+			return null;
+		}
+		else
+			
+		System.out.println("[ItemService] finded user. login ID" + list.get(0).getUserId());
+		return list.get(0);
+
 	}
 
 }

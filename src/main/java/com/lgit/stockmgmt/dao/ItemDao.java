@@ -5,6 +5,7 @@
 package com.lgit.stockmgmt.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,12 @@ import com.lgit.stockmgmt.domain.Item;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ProjectItem;
 import com.lgit.stockmgmt.domain.UserItem;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 @Repository("itemDao")
 public class ItemDao {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
+
 
 	/* Test Code */
 	public List<Item> queryItems() {
@@ -38,7 +39,7 @@ public class ItemDao {
 		return sqlSession
 				.selectList("selectProjectItemList"); /* SQL 쿼리 선택, 실행 */
 	}
-	
+
 	public List<ProjectItem> queryProjectItems(int rowsPerPage, int page) {
 		return sqlSession
 				.selectList("selectProjectItemList"); /* SQL 쿼리 선택, 실행 */
@@ -88,7 +89,6 @@ public class ItemDao {
 		return sqlSession.insert("insertPartsItem", item);
 	}
 
-
 	public int updatePartsItem(PartsItem item) {
 		return sqlSession.update("updatePartsItem", item);
 	}
@@ -97,5 +97,10 @@ public class ItemDao {
 		return sqlSession.delete("deletePartsItem", item);
 	}
 
+	public List<UserItem> queryUserItems(Map<String, String> paramMap) {
+	
+	        return sqlSession.selectList("selectUserItemListForLogin", paramMap);
+
+	}
 
 }
