@@ -35,7 +35,7 @@ public class WebController {
 	// model.addAttribute("name", "John Lee"); System.out.println("GET Index2");
 	// return "index"; //WebController.java를 참고해서 해당경로에서 파일 호출
 	// }
-	
+
 	/*
 	 * Test Controller
 	 */
@@ -120,7 +120,7 @@ public class WebController {
 		model.addAttribute("reqresult", item.getProjectCode() + " is added");
 
 		// Get DB List
-		return showAdminProject1("1", model);/* adminproj.jsp */
+		return showAdminProject1("0", model);/* adminproj.jsp */
 	}
 
 	/*
@@ -140,7 +140,7 @@ public class WebController {
 		System.out.println("/admin/reqprojectmodify processed.. Req ID:" + item.getProjectCode());
 
 		// Get DB List
-		return showAdminProject1("1", model); /* adminuser.jsp */
+		return showAdminProject1("0", model); /* adminuser.jsp */
 	}
 
 	/*
@@ -157,7 +157,7 @@ public class WebController {
 		System.out.println("/admin/reqprojectremove processed.. Req ID:" + item.getProjectCode());
 
 		// Get DB List
-		return showAdminProject1("1", model); /* adminuser.jsp */
+		return showAdminProject1("0", model); /* adminuser.jsp */
 	}
 
 	/*
@@ -220,7 +220,7 @@ public class WebController {
 
 		// Get DB List
 
-		return showAdminParts1("1", model);/* adminparts.jsp */
+		return showAdminParts1("0", model);/* adminparts.jsp */
 	}
 
 	/*
@@ -244,7 +244,7 @@ public class WebController {
 		System.out.println("/admin/reqprojectmodify processed.. Req:" + item.getPartName());
 
 		// Get DB List
-		return showAdminParts1("1", model);/* adminparts.jsp */
+		return showAdminParts1("0", model);/* adminparts.jsp */
 	}
 
 	/*
@@ -262,7 +262,7 @@ public class WebController {
 		System.out.println("/admin/reqprojectremove processed.. Req ID:" + item.getPartName());
 
 		// Get DB List
-		return showAdminParts1("1", model);/* adminparts.jsp */
+		return showAdminParts1("0", model);/* adminparts.jsp */
 	}
 
 	/*
@@ -323,7 +323,7 @@ public class WebController {
 		model.addAttribute("reqresult", userdata.getUserId() + " is added");
 
 		// Get DB List
-		return showAdminUser("1", model); /* adminuser.jsp */
+		return showAdminUser("0", model); /* adminuser.jsp */
 	}
 
 	/*
@@ -341,7 +341,7 @@ public class WebController {
 		System.out.println("/admin/reqresetpassword processed.. Req ID:" + userdata.getUserId());
 
 		// Get DB List
-		return showAdminUser("1", model); /* adminuser.jsp */
+		return showAdminUser("0", model); /* adminuser.jsp */
 	}
 
 	/*
@@ -362,7 +362,14 @@ public class WebController {
 		System.out.println("/admin/reqmodify processed.. Req ID:" + userdata.getUserId());
 
 		// Get DB List
-		return showAdminUser("1", model); /* adminuser.jsp */
+		return showAdminUser("0", model); /* adminuser.jsp */
+	}
+
+	@RequestMapping("/mylist")
+	public String myListProcess(Model model) {
+		model.addAttribute("name", "John Lee");
+		System.out.println("/mylist process");
+		return "mylist";// mylist.jsp
 	}
 
 }
