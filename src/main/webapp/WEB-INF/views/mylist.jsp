@@ -37,6 +37,7 @@ var rolekor ="";
 	}
 </script>
 
+
 <!DOCTYPE html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=euc-kr">
@@ -45,7 +46,7 @@ var rolekor ="";
 </head>
 
 <body>
-	
+
 	<c:choose>
 		<c:when test="${not empty sessionScope.userLoginInfo}">
 			<!--   ID : <c:out value="${sessionScope.userLoginInfo.userId}" /> -->
@@ -57,19 +58,211 @@ var rolekor ="";
 
 			<!-- Team : <c:out value="${sessionScope.userLoginInfo.userTeamname}" />  -->
 			<a href="logout">로그아웃</a>
-			<br>
-			<br>
-			<a href="page1">페이지1</a>&nbsp;&nbsp;<a href="page2">페이지2</a>
+
 		</c:when>
 		<c:otherwise>
-		<!-- 로그인 안되어 있으면 로그인페이지로 -->
-		<script>alert('로그인 하세요');location.href='login';</script> 
+			<!-- 로그인 안되어 있으면 로그인페이지로 -->
+			<script>alert('로그인 하세요');location.href='login';</script>
 		</c:otherwise>
 	</c:choose>
-	<!-- HEADER -->
-	HEY~
-	<!-- FOOTER -->
+	<!-- 
+	********************************************************
+	HEADER
+	******************************************************** 
+	-->
+<script>
+	//체크박스선택한것 갯수, id 집계
+	function reqShipping(obj, obj2) {
+	    var i, sum=0, tag=[], str="";
+	    var tag2=[], str2="";
+	    var chk = document.getElementsByName(obj);
+	    var reqnum = document.getElementsByName(obj2);
+	    var tot = chk.length;
+	    for (i = 0; i < tot; i++) {
+	        if (chk[i].checked == true) {
+	            tag[sum] = chk[i].value;
+	            tag2[sum] = reqnum[i].value;
+	            sum++;
+	        }
+	    }
+	    str += "선택갯수 : "+sum;
+	    if(tag.length > 0) str += "\n chkbox id값 : "+tag.join(",");	    
+	    if(tag.length > 0) str2 += "\n textbox값 : "+tag2.join(",");
+	    alert(str);
+	    alert(str2);
+	    
+	    //출고 장바구니에 넣을래?
+	    
+	    //리스트를 만들어서 컨트롤러로 넘김
+	    
+	    //현재 화면 다시 표시
+	    
+	    
+	    
+	}
+	
+</script>
+
+	<br>
+	<p align="center">재고 조회</p>
+
+	<form name="form2">
+		<p align="right">
+			&nbsp;<select name="srchtype" size="1">
+				<option selected value="projcode">프로젝트Code</option>
+				<option value="shipperid">출고담당자이름</option>
+				<option value="devid">개발담당자이름</option>
+				<option value="lgitpn">LGIT P/N</option>
+			</select> <input type="text" name="srchword"> <input type="submit"
+				name="btnsrch" value="검색"> <input type="submit"
+				name="exportxls" value="선택엑셀받기"> <input type="button"
+				name="addshiplist" value="출고요청담기" onClick="reqShipping('chk[]', 'reqnum[]')" />
+		</p>
+	</form>
+
+	<!-- 
+	*********
+	리스트 표시 
+	*********
+	 -->
+
+
+	<table border="1">
+		<tr>
+			<td width="42">
+				<p>&nbsp;</p>
+			</td>
+			<td width="192">
+				<p>&nbsp;Project Code</p>
+			</td>
+			<td width="85">
+				<p>부서</p>
+			</td>
+			<td width="129">
+				<p>개발담당자</p>
+			</td>
+			<td width="107">
+				<p>출고담당자</p>
+			</td>
+			<td width="112">
+				<p>LGIT P/N</p>
+			</td>
+			<td width="126">
+				<p>Item&nbsp;Desc</p>
+			</td>
+			<td width="90">
+				<p>재고</p>
+			</td>
+			<td width="90">
+				<p>출고요청량</p>
+			</td>
+			<td width="90">
+				<p>단가</p>
+			</td>
+			<td width="67">
+				<p>위치</p>
+			</td>
+			<td width="114">
+				<p>비고</p>
+			</td>
+		</tr>
+		<!-- DB 데이터 채움 (클래스 변수사용) -->
+		<c:forEach var="i" items="${items}" varStatus="status">
+
+			<form name="form${status.index}">
+				<tr>
+					<td width="42">
+						<p>
+							&nbsp;<input type="checkbox" name="chk[]" value='${i.partId}'>
+							<input type=hidden name=part-Id value='${i.partId}'>
+						</p>
+					</td>
+					<td width="192">
+						<p>${i.partProjectCode}</p>
+					</td>
+					<td width="85">
+						<p>${i.userTeamname}</p>
+					</td>
+					<td width="129">
+						<p>${i.userOwnerName}</p>
+					</td>
+					<td width="107">
+						<p>${i.userShipperName}</p>
+					</td>
+					<td width="112">
+						<p>${i.partName}</p>
+					</td>
+					<td width="126">
+						<p>${i.partDesc}</p>
+					</td>
+					<td width="90">
+						<p>${i.partStock}</p>
+					</td>
+					<td width="90">
+						<p><input type="text" name="reqnum[]" value="0"  size="6"></p>
+					</td>
+					
+					</td>
+					<td width="90">
+						<p>${i.partCost}</p>
+					</td>
+					<td width="67">
+						<p>${i.partLocation}</p>
+					</td>
+					<td width="114">
+						<p>${i.partMemo}</p>
+					</td>
+				</tr>
+			</form>
+		</c:forEach>
+
+	</table>
+	<!-- 
+	*****************************
+	페이지 표시
+	*****************************
+	 -->
+
+	<div class="col-xs-8">
+		<ul class="pagination pagination-sm" style="margin-top: 0px;">
+			<!-- 시작페이지가 1부터면 이전 표시("<<") ​ 안함 -->
+			<c:if test="${start-1 ==0 }">
+
+			</c:if>
+			<!-- 시작페이지가 1이 아니면 << 이전 표시.  링크는 시작페이지가 6부터 10까지일 경우 5페이지를 가르킴 -->
+			​
+
+			<c:if test="${start-1!=0}">
+				<li><a href="/mylist/${start-1}">&laquo;</a></li>
+			</c:if>
+			<!-- 5개씩 페이지 표시-->
+			​
+
+			<c:forEach var="i" begin="${start }" end="${end }">
+				<li id="page${i }"><a href="/mylist/${i}">${i}</a></li>
+			</c:forEach>
+			<!-- end페이지 번호가 5, 10 인데 전체 페이지 갯수가 end페이지 보다 크면 다음 페이징 바로가기 표시  (">>")​ .-->
+			​
+
+			<c:if test="${end % 5 == 0 && pageNum > end}">
+				<li><a href="/mylist/${end+1}">&raquo;</a></li>
+			</c:if>
+			<!-- 마지막 페이지 번호와 전체 페이지 번호가 같으면서 5개 단위가 아니면 다음바로가기 표시 않함 -->
+			​​
+
+			<c:if test="${end % 5 != 0 && end == pageNum }">
+
+			</c:if>
+		</ul>
+	</div>
+
+
+
+	<!--
+	********************************************************
+	FOOTER 
+	******************************************************** 
+	-->
 </body>
 
 </html>
-		

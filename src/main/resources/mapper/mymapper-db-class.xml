@@ -32,10 +32,30 @@
 
 	<resultMap id="UserItemMap" type="com.lgit.stockmgmt.domain.UserItem">
 		<result property="userId" column="user_id" />
-		<result property="userName" column="user_name" />		
+		<result property="userName" column="user_name" />
 		<result property="userPassword" column="user_password" />
 		<result property="userEmail" column="user_email" />
 		<result property="userTeamname" column="user_teamname" />
 		<result property="userLevel" column="user_level" />
 	</resultMap>
+
+
+	<resultMap id="JoinedPartsItemMap" type="com.lgit.stockmgmt.domain.JoinDBItem">
+		<result property="partId" column="part_id" />
+		<result property="partProjectCode" column="project_code" />
+		<result property="userTeamname" column="user_teamname" />
+		<result property="userOwnerName" column="owner_korname" />
+		<result property="userShipperName" column="shipper_korname" />
+
+		<result property="partName" column="part_name" />
+		<result property="partDesc" column="part_desc" />
+		<result property="partStock" column="part_stock" />
+		<result property="partLocation" column="part_location" />
+		<result property="partCost" column="part_cost" />
+
+		<result property="partMemo" column="part_memo" />
+	</resultMap>
+
+
+
 </mapper>

@@ -102,7 +102,7 @@
 		tb_user
 	</select>
 
-	<select id="selectUserItemListForLogin" parameterType="String" 
+	<select id="selectUserItemListForLogin" parameterType="String"
 		resultMap="UserItemMap">
 		SELECT
 		`user_id`,
@@ -231,4 +231,153 @@
 	</delete>
 	<!-- ********************************************* -->
 
+
+	<!-- *************************** Join 처리한 테이블 *************************** -->
+	<!-- Seach Type 1 - 프로젝트CODE -->
+	<select id="queryJoinedPartsItemByProjectCode" parameterType="String"
+		resultMap="JoinedPartsItemMap">
+		SELECT
+		t2.part_id 'part_id' #part_id
+		, t1.project_code
+		'project_code' #Project Code
+		, t3.user_teamname 'user_teamname' #개발자부서
+		, t3.user_name 'owner_korname' #개발담당자
+		, t4.user_name 'shipper_korname'
+		#출고담당자
+		, t2.part_name 'part_name' #LGIT P/N
+		, t2.part_desc 'part_desc'
+		#Item Desc
+		, t2.part_stock 'part_stock' #재고
+		, t2.part_location
+		'part_location' #위치
+		, t2.part_cost 'part_cost' #단가
+		, t2.part_memo
+		'part_memo' #비고
+		FROM
+		tb_project AS t1
+		INNER JOIN (tb_part AS t2, tb_user
+		AS t3, tb_user AS t4 )
+		ON
+		(t1.project_code = t2.part_project_code)
+		AND
+		(t1.project_owner_id =
+		t3.user_id)
+		AND
+		(t1.project_shipper_id =
+		t4.user_id)
+		AND
+		(t1.project_code = #{keyWord})
+		ORDER BY t2.part_id DESC
+	</select>
+
+	<!-- Seach Type 2 - 출고자이름으로 -->
+	<select id="queryJoinedPartsItemByShipperName" parameterType="String"
+		resultMap="JoinedPartsItemMap">
+		SELECT
+		t2.part_id 'part_id' #part_id
+		, t1.project_code
+		'project_code' #Project Code
+		, t3.user_teamname 'user_teamname' #개발자부서
+		, t3.user_name 'owner_korname' #개발담당자
+		, t4.user_name 'shipper_korname'
+		#출고담당자
+		, t2.part_name 'part_name' #LGIT P/N
+		, t2.part_desc 'part_desc'
+		#Item Desc
+		, t2.part_stock 'part_stock' #재고
+		, t2.part_location
+		'part_location' #위치
+		, t2.part_cost 'part_cost' #단가
+		, t2.part_memo
+		'part_memo' #비고
+		FROM
+		tb_project AS t1
+		INNER JOIN (tb_part AS t2, tb_user
+		AS t3, tb_user AS t4 )
+		ON
+		(t1.project_code = t2.part_project_code)
+		AND
+		(t1.project_owner_id =
+		t3.user_id)
+		AND
+		(t1.project_shipper_id =
+		t4.user_id)
+		AND
+		(t4.user_name = #{keyWord})
+		ORDER BY t2.part_id DESC
+	</select>
+
+	<!-- Seach Type 3 - 개발자이름으로 -->
+	<select id="queryJoinedPartsItemByOwnerName" parameterType="String"
+		resultMap="JoinedPartsItemMap">
+		SELECT
+		t2.part_id 'part_id' #part_id
+		, t1.project_code
+		'project_code' #Project Code
+		, t3.user_teamname 'user_teamname' #개발자부서
+		, t3.user_name 'owner_korname' #개발담당자
+		, t4.user_name 'shipper_korname'
+		#출고담당자
+		, t2.part_name 'part_name' #LGIT P/N
+		, t2.part_desc 'part_desc'
+		#Item Desc
+		, t2.part_stock 'part_stock' #재고
+		, t2.part_location
+		'part_location' #위치
+		, t2.part_cost 'part_cost' #단가
+		, t2.part_memo
+		'part_memo' #비고
+		FROM
+		tb_project AS t1
+		INNER JOIN (tb_part AS t2, tb_user
+		AS t3, tb_user AS t4 )
+		ON
+		(t1.project_code = t2.part_project_code)
+		AND
+		(t1.project_owner_id =
+		t3.user_id)
+		AND
+		(t1.project_shipper_id =
+		t4.user_id)
+		AND
+		(t3.user_name = #{keyWord})
+		ORDER BY t2.part_id DESC
+	</select>
+
+	<!-- Seach Type 4 - PART_NAME으로 -->
+	<select id="queryJoinedPartsItemByPartsName" parameterType="String"
+		resultMap="JoinedPartsItemMap">
+		SELECT
+		t2.part_id 'part_id' #part_id
+		, t1.project_code
+		'project_code' #Project Code
+		, t3.user_teamname 'user_teamname' #개발자부서
+		, t3.user_name 'owner_korname' #개발담당자
+		, t4.user_name 'shipper_korname'
+		#출고담당자
+		, t2.part_name 'part_name' #LGIT P/N
+		, t2.part_desc 'part_desc'
+		#Item Desc
+		, t2.part_stock 'part_stock' #재고
+		, t2.part_location
+		'part_location' #위치
+		, t2.part_cost 'part_cost' #단가
+		, t2.part_memo
+		'part_memo' #비고
+		FROM
+		tb_project AS t1
+		INNER JOIN (tb_part AS t2, tb_user
+		AS t3, tb_user AS t4 )
+		ON
+		(t1.project_code = t2.part_project_code)
+		AND
+		(t1.project_owner_id =
+		t3.user_id)
+		AND
+		(t1.project_shipper_id =
+		t4.user_id)
+		AND
+		(t2.part_name = #{keyWord})
+		ORDER BY t2.part_id DESC
+	</select>
 </mapper>

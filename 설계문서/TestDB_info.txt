@@ -1,0 +1,172 @@
+[테스트용 로그인 정보  tb_user]
+  user_id	user_name	user_password	user_email	user_teamname	user_level
+1) id:devtest pw:1
+2) id:shiptest pw:1
+3) id:devfriendtest pw:1
+
+[테스트용 프로젝트정보  tb_project]
+  project_code	project_name	project_owner_id	project_shipper_id
+1) TESTPRJ001	TEST project 1	devtest	shiptest
+2) TESTPRJ002	TEST project 2	devtest	shiptest
+3) TESTPRJ003	TEST project 3	devtest	shiptest
+
+[테스트용 부품정보 tb_part ]
+part_id	part_project_code	part_name	part_desc	part_location	part_cost	part_stock	part_memo
+104	TESTPRJ002	p5	p5	L5	0.5	1	memo 56789 1234
+103	TESTPRJ002	p4	p4	L4	0.4	0	memo 4455
+102	TESTPRJ002	p3	p3	L3	0.1	0	memo 1
+101	TESTPRJ002	p2	p2	L2	0.1	0	memo 1
+100	TESTPRJ002	p1	p1	L1	0.1	0	memo 1
+
+
+SELECT *
+FROM tb_project AS t1
+WHERE
+t1.project_code = "TESTPRJ002"
+
+SELECT *
+FROM tb_part AS t2
+WHERE
+t2.part_project_code = "TESTPRJ002"
+
+
+SELECT *
+FROM 
+tb_project AS t1
+INNER JOIN tb_part AS t2
+ON
+(t1.project_code = t2.part_project_code)
+AND
+(t1.project_owner_id = "devtest")
+--------------------------------------
+
+SELECT *
+FROM 
+tb_project AS t1
+INNER JOIN (tb_part AS t2, tb_user AS t3, tb_user AS t4 )
+ON
+(t1.project_code = t2.part_project_code)
+AND
+(t1.project_owner_id = t3.user_id)
+AND
+(t1.project_shipper_id = t4.user_id)
+AND
+(t1.project_owner_id = "devtest")
+
+project_code	project_name	project_owner_id	project_shipper_id	part_id	part_project_code	part_name	part_desc	part_location	part_cost	part_stock	part_memo	user_id	user_name	user_password	user_email	user_teamname	user_level	user_id	user_name	user_password	user_email	user_teamname	user_level
+TESTPRJ002	TEST project 2	devtest	shiptest	100	TESTPRJ002	p1	p1	L1	0.1	0	memo 1	devtest	개발자시험용	1	devtest@a.a	개발자팀	2	shiptest	출고자시험용	1	shiptest@a.a	출고팀	3
+
+--------------------------------------
+(Search Type 1 - 프로젝트CODE)
+SELECT
+t2.part_id 'part_id' #part_id
+, t1.project_code 'project_code'	#Project Code
+, t3.user_teamname 'user_teamname'	#개발자부서
+, t3.user_name 'owner_korname'	#개발담당자
+, t4.user_name 'shipper_korname'	#출고담당자
+, t2.part_name 'part_name'	#LGIT P/N
+, t2.part_desc 'part_desc'	#Item Desc
+, t2.part_stock 'part_stock'	#재고
+, t2.part_location 'part_location'	#위치
+, t2.part_cost 'part_cost'	#단가
+, t2.part_memo 'part_memo'	#비고
+FROM 
+tb_project AS t1
+INNER JOIN (tb_part AS t2, tb_user AS t3, tb_user AS t4 )
+ON
+(t1.project_code = t2.part_project_code)
+AND
+(t1.project_owner_id = t3.user_id)
+AND
+(t1.project_shipper_id = t4.user_id)
+AND
+(t1.project_code = "TESTPRJ002")
+ORDER BY t2.part_id DESC
+
+---------------------------------
+(Search Type 2 - 출고자이름으로)
+SELECT
+t2.part_id 'part_id' #part_id
+, t1.project_code 'project_code'	#Project Code
+, t3.user_teamname 'user_teamname'	#개발자부서
+, t3.user_name 'owner_korname'	#개발담당자
+, t4.user_name 'shipper_korname'	#출고담당자
+, t2.part_name 'part_name'	#LGIT P/N
+, t2.part_desc 'part_desc'	#Item Desc
+, t2.part_stock 'part_stock'	#재고
+, t2.part_location 'part_location'	#위치
+, t2.part_cost 'part_cost'	#단가
+, t2.part_memo 'part_memo'	#비고
+FROM 
+tb_project AS t1
+INNER JOIN (tb_part AS t2, tb_user AS t3, tb_user AS t4 )
+ON
+(t1.project_code = t2.part_project_code)
+AND
+(t1.project_owner_id = t3.user_id)
+AND
+(t1.project_shipper_id = t4.user_id)
+AND
+(t4.user_name = "출고자시험용")
+ORDER BY t2.part_id DESC
+
+
+
+--------------------------------------
+(Search Type 3 - 개발자이름으로)
+SELECT
+t2.part_id 'part_id' #part_id
+, t1.project_code 'project_code'	#Project Code
+, t3.user_teamname 'user_teamname'	#개발자부서
+, t3.user_name 'owner_korname'	#개발담당자
+, t4.user_name 'shipper_korname'	#출고담당자
+
+, t2.part_name 'part_name'	#LGIT P/N
+, t2.part_desc 'part_desc'	#Item Desc
+, t2.part_stock 'part_stock'	#재고
+, t2.part_location 'part_location'	#위치
+, t2.part_cost 'part_cost'	#단가
+, t2.part_memo 'part_memo'	#비고
+FROM 
+tb_project AS t1
+INNER JOIN (tb_part AS t2, tb_user AS t3, tb_user AS t4 )
+ON
+(t1.project_code = t2.part_project_code)
+AND
+(t1.project_owner_id = t3.user_id)
+AND
+(t1.project_shipper_id = t4.user_id)
+AND
+(t3.user_name = "개발자시험용")
+ORDER BY t2.part_id DESC
+
+part_id 내림차순(역순)	project_code	user_teamname	owner_korname	shipper_korname	part_name	part_desc	part_stock	part_location	part_memo
+--------------------------------------------
+
+
+(Search Type 4 - PART_NAME으로)
+SELECT
+t2.part_id 'part_id' #part_id
+, t1.project_code 'project_code'	#Project Code
+, t3.user_teamname 'user_teamname'	#개발자부서
+, t3.user_name 'owner_korname'	#개발담당자
+, t4.user_name 'shipper_korname'	#출고담당자
+, t2.part_name 'part_name'	#LGIT P/N
+, t2.part_desc 'part_desc'	#Item Desc
+, t2.part_stock 'part_stock'	#재고
+, t2.part_location 'part_location'	#위치
+, t2.part_cost 'part_cost'	#단가
+, t2.part_memo 'part_memo'	#비고
+FROM 
+tb_project AS t1
+INNER JOIN (tb_part AS t2, tb_user AS t3, tb_user AS t4 )
+ON
+(t1.project_code = t2.part_project_code)
+AND
+(t1.project_owner_id = t3.user_id)
+AND
+(t1.project_shipper_id = t4.user_id)
+AND
+(t2.part_name = "p4")
+ORDER BY t2.part_id DESC
+

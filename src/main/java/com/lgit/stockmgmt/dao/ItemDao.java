@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.lgit.stockmgmt.domain.Item;
+import com.lgit.stockmgmt.domain.JoinDBItem;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ProjectItem;
 import com.lgit.stockmgmt.domain.UserItem;
@@ -97,10 +98,17 @@ public class ItemDao {
 		return sqlSession.delete("deletePartsItem", item);
 	}
 
-	public List<UserItem> queryUserItems(Map<String, String> paramMap) {
-	
+	public List<UserItem> queryUserItems(Map<String, String> paramMap) {	
 	        return sqlSession.selectList("selectUserItemListForLogin", paramMap);
 
 	}
+
+	/*
+	 * Joined Table query
+	 */
+	public List<JoinDBItem> queryJoinItemsByOwnerName(Map<String, String> paramMap) {
+		return sqlSession.selectList("queryJoinedPartsItemByOwnerName", paramMap);
+	}
+	
 
 }

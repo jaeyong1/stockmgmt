@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.lgit.stockmgmt.dao.ItemDao;
 import com.lgit.stockmgmt.domain.Item;
+import com.lgit.stockmgmt.domain.JoinDBItem;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ProjectItem;
 import com.lgit.stockmgmt.domain.UserItem;
@@ -103,12 +104,20 @@ public class ItemService {
 			// no user DB data
 			System.out.println("[ItemService] no user data");
 			return null;
-		}
-		else
-			
-		System.out.println("[ItemService] finded user. login ID" + list.get(0).getUserId());
+		} else
+
+			System.out.println("[ItemService] finded user. login ID" + list.get(0).getUserId());
 		return list.get(0);
 
+	}
+
+	/*
+	 * Owner Name으로 검색
+	 */
+	public List<JoinDBItem> getMyItemsByOwnerName(String userOwnerName) {
+		Map<String, String> paramMap = new HashMap<String, String>();		
+		paramMap.put("keyWord", userOwnerName);
+		return itemDao.queryJoinItemsByOwnerName(paramMap);
 	}
 
 }

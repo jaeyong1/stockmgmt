@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lgit.stockmgmt.domain.Item;
+import com.lgit.stockmgmt.domain.JoinDBItem;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ProjectItem;
 import com.lgit.stockmgmt.domain.UserItem;
@@ -365,10 +366,45 @@ public class WebController {
 		return showAdminUser("0", model); /* adminuser.jsp */
 	}
 
-	@RequestMapping("/mylist")
-	public String myListProcess(Model model) {
-		model.addAttribute("name", "John Lee");
-		System.out.println("/mylist process");
+	/*
+	 * /mylist 내정보
+	 */
+	@RequestMapping(value = "/mylist", method = RequestMethod.GET)
+	public String myListProcess2(Model model, HttpServletRequest request) {
+		return myListProcess("0", model, request);
+	}
+
+	@RequestMapping(value = "/mylist/{seq}", method = RequestMethod.GET)
+	public String myListProcess(@PathVariable String seq, Model model, HttpServletRequest request) {
+		if (seq.equalsIgnoreCase("")) {
+			seq = "0";
+		}
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/mylist process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /mylist process. req pagenum:" + seq);
+
+		final int rowsPer1Page = 15;
+
+		/////////////////// List View
+		List<JoinDBItem> items = itemService.getMyItemsByOwnerName(loginUser.getUserName());
+
+		// Choose current page data
+		PagedListHolder<JoinDBItem> paging = new PagedListHolder<JoinDBItem>(items);
+		paging.setPageSize(rowsPer1Page);
+		paging.setPage(Integer.parseInt(seq));
+		model.addAttribute("items", paging.getPageList());
+
+		// Add Page number information
+		model.addAttribute("pageNum", paging.getPageCount());
+		model.addAttribute("start", paging.getFirstLinkedPage());
+		model.addAttribute("end", paging.getLastLinkedPage());
+		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
+		// 인덱스..
+
 		return "mylist";// mylist.jsp
 	}
 
