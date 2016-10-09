@@ -2,6 +2,7 @@ package com.lgit.stockmgmt.domain;
 
 public class ShipReqPartsItem {
 	private int itemlistId; // auto increase
+	private String userId; //요청자ID.Cart에있을때만사용
 	private int itemlistShipId; // 출고요청 Seq
 	private int itemlistPartId; // 파츠 ID
 	private int itemlistAmount; // 수량
@@ -9,6 +10,9 @@ public class ShipReqPartsItem {
 	private String partDesc;// Desc
 	private int partStock;// 재고
 	private String partProjectCode; //프로젝트코드
+	
+	
+
 
 	public int getItemlistId() {
 		return itemlistId;
@@ -66,8 +70,18 @@ public class ShipReqPartsItem {
 		this.partProjectCode = partProjectCode;
 	}
 
+
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
 	public ShipReqPartsItem(int itemlistId, int itemlistShipId, int itemlistPartId, int itemlistAmount, String partDesc,
-			int partStock, String partProjectCode) {
+			int partStock, String partProjectCode, String userId) {
 		super();
 		this.itemlistId = itemlistId;
 		this.itemlistShipId = itemlistShipId;
@@ -76,8 +90,9 @@ public class ShipReqPartsItem {
 		this.partDesc = partDesc;
 		this.partStock = partStock;
 		this.partProjectCode = partProjectCode;
+		this.userId = userId;
 	}
-
+	
 	public ShipReqPartsItem() {
 		super();
 		this.itemlistShipId = -1;
@@ -87,7 +102,7 @@ public class ShipReqPartsItem {
 	 * mybatis 통할때 생성자 타입 추가 필요했음
 	 */
 	public ShipReqPartsItem(Integer itemlistId, Integer itemlistShipId, Integer itemlistPartId, Integer itemlistAmount,
-			String partDesc, Integer partStock, String partProjectCode) {
+			String partDesc, Integer partStock, String partProjectCode, String userId){
 		super();
 
 		this.itemlistId = Integer.valueOf(itemlistId);
@@ -97,6 +112,7 @@ public class ShipReqPartsItem {
 		this.partDesc = partDesc;
 		this.partStock = Integer.valueOf(partStock);
 		this.partProjectCode = partProjectCode;
+		this.userId = userId;
 
 	}
 }

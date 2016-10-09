@@ -121,10 +121,25 @@ public class ItemService {
 		return itemDao.queryJoinItemsByOwnerName(paramMap);
 	}
 
-	public List<ShipReqPartsItem> getShipPartsListItems(int itemlistShipId) {
+	public List<ShipReqPartsItem> getShipPartsListItems(int itemlistShipId, String loginID) {
 		Map<String, String> paramMap = new HashMap<String, String>();		
 		paramMap.put("itemlistShipId", itemlistShipId+"");
+		paramMap.put("userId1", loginID);
 		return itemDao.queryShipPartsListItems(paramMap);
+	}
+
+	public int changeShipPartsItem(ShipReqPartsItem shippartsdata) {
+		return itemDao.updateShipPartsItem(shippartsdata);
+	}
+
+	public int removeShipPartsItem(ShipReqPartsItem shippartsdata) {
+		return itemDao.deleteShipPartsItem(shippartsdata);
+		
+	}
+
+	public int addShipPartsItem(ShipReqPartsItem shippartsdata) {
+		return itemDao.insertShipPartsItem(shippartsdata);
+		
 	}
 
 }

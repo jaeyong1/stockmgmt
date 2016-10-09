@@ -114,6 +114,18 @@ public class ItemDao {
 	public List<ShipReqPartsItem> queryShipPartsListItems(Map<String, String> paramMap) {
 		return sqlSession.selectList("queryShipPartsListItems", paramMap);
 	}
+
+	public int updateShipPartsItem(ShipReqPartsItem shippartsdata) {
+		return sqlSession.update("updateShipReqPartsItem", shippartsdata);
+	}
+
+	public int deleteShipPartsItem(ShipReqPartsItem shippartsdata) {
+		return sqlSession.delete("deleteShipPartsItem", shippartsdata);	
+	}
+
+	public int insertShipPartsItem(ShipReqPartsItem shippartsdata) {
+		return sqlSession.insert("insertShipReqPartsItem", shippartsdata);
+	}
 	
 
 }

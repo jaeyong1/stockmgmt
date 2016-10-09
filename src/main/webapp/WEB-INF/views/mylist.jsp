@@ -70,18 +70,18 @@ var rolekor ="";
 	HEADER
 	******************************************************** 
 	-->
-<script>
+	<script>
 	//체크박스선택한것 갯수, id 집계
 	function reqShipping(obj, obj2) {
 	    var i, sum=0, tag=[], str="";
 	    var tag2=[], str2="";
 	    var chk = document.getElementsByName(obj);
 	    var reqnum = document.getElementsByName(obj2);
-	    var tot = chk.length;
+	    var tot = chk.length;  //체크박스총갯수
 	    for (i = 0; i < tot; i++) {
 	        if (chk[i].checked == true) {
-	            tag[sum] = chk[i].value;
-	            tag2[sum] = reqnum[i].value;
+	            tag[sum] = chk[i].value;  //파츠ID
+	            tag2[sum] = reqnum[i].value; //출고요청량
 	            sum++;
 	        }
 	    }
@@ -89,16 +89,26 @@ var rolekor ="";
 	    if(tag.length > 0) str += "\n chkbox id값 : "+tag.join(",");	    
 	    if(tag.length > 0) str2 += "\n textbox값 : "+tag2.join(",");
 	    alert(str);
-	    alert(str2);
+	    alert(tag2);
 	    
 	    //출고 장바구니에 넣을래?
-	    
 	    //리스트를 만들어서 컨트롤러로 넘김
-	    
 	    //현재 화면 다시 표시
 	    
-	    
-	    
+	}
+	
+	function addCart(id) {		
+		console.log("담기");
+		var nm = document.forms["form" + id].elements["part-Id"].value;
+		var response = confirm(nm + "데이터 추가할까요?")
+		if (response) {
+			//do yes task
+			document.forms["form" + id].method = "post";
+			document.forms["form" + id].action = "/reqshippartsadd"
+			document.forms["form" + id].submit();
+		} else {
+			//do no task
+		}
 	}
 	
 </script>
@@ -106,7 +116,7 @@ var rolekor ="";
 	<br>
 	<p align="center">재고 조회</p>
 
-	<form name="form2">
+	<form name="formSearchType">
 		<p align="right">
 			&nbsp;<select name="srchtype" size="1">
 				<option selected value="projcode">프로젝트Code</option>
@@ -116,7 +126,8 @@ var rolekor ="";
 			</select> <input type="text" name="srchword"> <input type="submit"
 				name="btnsrch" value="검색"> <input type="submit"
 				name="exportxls" value="선택엑셀받기"> <input type="button"
-				name="addshiplist" value="출고요청담기" onClick="reqShipping('chk[]', 'reqnum[]')" />
+				name="addshiplist" value="출고요청담기"
+				onClick="reqShipping('chk[]', 'reqnum[]')" />
 		</p>
 	</form>
 
@@ -174,7 +185,7 @@ var rolekor ="";
 					<td width="42">
 						<p>
 							&nbsp;<input type="checkbox" name="chk[]" value='${i.partId}'>
-							<input type=hidden name=part-Id value='${i.partId}'>
+							<input type=text name=part-Id value='${i.partId}'>
 						</p>
 					</td>
 					<td width="192">
@@ -198,10 +209,14 @@ var rolekor ="";
 					<td width="90">
 						<p>${i.partStock}</p>
 					</td>
-					<td width="90">
-						<p><input type="text" name="reqnum[]" value="0"  size="6"></p>
+					<td width="140">
+						<p>
+							<input type="text" name="reqnum[]" value="0" size="4"> <input
+								type="button" value="Cart" name="submitbtn"
+								OnClick="javascript:addCart('${status.index}');">
+						</p>
 					</td>
-					
+
 					</td>
 					<td width="90">
 						<p>${i.partCost}</p>

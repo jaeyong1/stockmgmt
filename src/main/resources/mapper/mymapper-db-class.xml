@@ -65,6 +65,7 @@
 		<result property="partDesc" column="part_desc" />
 		<result property="partStock" column="part_stock" />
 		<result property="partProjectCode" column="part_project_code" />
+		<result property="userId" column="itemlist_owner_id" />
 	</resultMap>
 
 </mapper>

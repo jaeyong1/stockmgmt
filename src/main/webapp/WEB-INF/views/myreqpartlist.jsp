@@ -45,7 +45,7 @@ var rolekor ="";
 		if (response) {
 			//do yes task
 			document.forms["form" + id].method = "post";
-			document.forms["form" + id].action = "/admin/reqprojectmodify"
+			document.forms["form" + id].action = "/reqshippartsmodify"
 			document.forms["form" + id].submit();
 		} else {
 			//do no task
@@ -57,7 +57,7 @@ var rolekor ="";
 		if (response) {
 			//do yes task
 			document.forms["form" + id].method = "post";
-			document.forms["form" + id].action = "/admin/reqprojectremove"
+			document.forms["form" + id].action = "/reqshippartsremove"
 			document.forms["form" + id].submit();
 		} else {
 			//do no task
@@ -111,9 +111,11 @@ var rolekor ="";
 			<td width="67">
 				<p align="center">No</p>
 			</td>
+			<!-- 
 			<td width="135">
 				<p align="center">출고요청 Seq</p>
 			</td>
+			 -->
 			<td width="135">
 				<p align="center">프로젝트Code</p>
 			</td>
@@ -139,10 +141,11 @@ var rolekor ="";
 					<td width="67"><input type=hidden name=itemlist-Id
 						value='${i.itemlistId}'> ${status.index}
 						(sn:${i.itemlistId})</td>
-
+					<!-- 
 					<td width="135">
 						<p align="center">${i.itemlistShipId}</p>
 					</td>
+					 -->
 					<td width="135">
 						<p align="center">${i.partProjectCode}</p>
 					</td>
