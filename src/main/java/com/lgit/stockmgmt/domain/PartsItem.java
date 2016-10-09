@@ -151,11 +151,11 @@ public class PartsItem {
 		this.currentPageNum = 0;
 		this.rowsPerPage = 0;
 	}
-
-	/*
-	 * mybatis 통할때 생성자 타입 추가 필요했음
-	 */
 	public PartsItem(Integer partId, String partProjectCode, String partName, String partDesc, String partLocation,
+			
+			/*
+			 * mybatis 통할때 생성자 타입 추가 필요했음
+			 */
 			Float partCost, Integer partStock, String partMemo) {
 
 		super();

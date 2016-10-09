@@ -12,6 +12,7 @@ import com.lgit.stockmgmt.domain.Item;
 import com.lgit.stockmgmt.domain.JoinDBItem;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ProjectItem;
+import com.lgit.stockmgmt.domain.ShipReqPartsItem;
 import com.lgit.stockmgmt.domain.UserItem;
 
 @Service("itemService")
@@ -118,6 +119,12 @@ public class ItemService {
 		Map<String, String> paramMap = new HashMap<String, String>();		
 		paramMap.put("keyWord", userOwnerName);
 		return itemDao.queryJoinItemsByOwnerName(paramMap);
+	}
+
+	public List<ShipReqPartsItem> getShipPartsListItems(int itemlistShipId) {
+		Map<String, String> paramMap = new HashMap<String, String>();		
+		paramMap.put("itemlistShipId", itemlistShipId+"");
+		return itemDao.queryShipPartsListItems(paramMap);
 	}
 
 }

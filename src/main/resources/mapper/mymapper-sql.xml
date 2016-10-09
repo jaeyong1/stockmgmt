@@ -380,4 +380,17 @@
 		(t2.part_name = #{keyWord})
 		ORDER BY t2.part_id DESC
 	</select>
+
+	<!-- 출고요청 Parts List -->
+	<select id="queryShipPartsListItems" parameterType="String"
+		resultMap="JoinedShipPartsListItemMap">
+		SELECT *
+		FROM
+		tb_shipreq_itemlist AS t1
+		INNER JOIN (tb_part AS
+		t2)
+		ON
+		(t1.itemlist_part_id = t2.part_id)
+		ORDER BY t2.part_project_code
+	</select>
 </mapper>

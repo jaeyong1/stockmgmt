@@ -15,6 +15,7 @@ import com.lgit.stockmgmt.domain.Item;
 import com.lgit.stockmgmt.domain.JoinDBItem;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ProjectItem;
+import com.lgit.stockmgmt.domain.ShipReqPartsItem;
 import com.lgit.stockmgmt.domain.UserItem;
 
 @Repository("itemDao")
@@ -108,6 +109,10 @@ public class ItemDao {
 	 */
 	public List<JoinDBItem> queryJoinItemsByOwnerName(Map<String, String> paramMap) {
 		return sqlSession.selectList("queryJoinedPartsItemByOwnerName", paramMap);
+	}
+
+	public List<ShipReqPartsItem> queryShipPartsListItems(Map<String, String> paramMap) {
+		return sqlSession.selectList("queryShipPartsListItems", paramMap);
 	}
 	
 

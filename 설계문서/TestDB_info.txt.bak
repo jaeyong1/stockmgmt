@@ -171,14 +171,13 @@ AND
 ORDER BY t2.part_id DESC
 
 ----------------------------------------
-t1 itemlist_id	itemlist_ship_id	itemlist_part_id	itemlist_amount
-t2 ( tb_part) part_id part_desc part_stock 
-
+( tb_part) part_id part_desc part_stock 
+itemlist_id	itemlist_ship_id	itemlist_part_id	itemlist_amount
 
 SELECT *
 FROM
 tb_shipreq_itemlist AS t1
 INNER JOIN (tb_part AS t2)
 ON
-(t2.part_id = t1.itemlist_part_id)
-ORDER BY t2.part_project_code
+(t1.part_id = t2.itemlist_part_id)
+ORDER BY t1.project_code DESC

@@ -57,5 +57,14 @@
 	</resultMap>
 
 
+	<resultMap id="JoinedShipPartsListItemMap" type="com.lgit.stockmgmt.domain.ShipReqPartsItem">
+		<result property="itemlistId" column="itemlist_id" />
+		<result property="itemlistShipId" column="itemlist_ship_id" />
+		<result property="itemlistPartId" column="itemlist_part_id" />
+		<result property="itemlistAmount" column="itemlist_amount" />
+		<result property="partDesc" column="part_desc" />
+		<result property="partStock" column="part_stock" />
+		<result property="partProjectCode" column="part_project_code" />
+	</resultMap>
 
 </mapper>
