@@ -221,4 +221,16 @@ public class ItemService {
 		return itemDao.queryShipReqItemForShipper(paramMap);
 	}
 
+	public void stateMove3to4(ShipReqItem shipreqdata, String shipRequestorId) {
+		
+	}
+
+	public int stateMove3to4(int shipId, int shipStateId) {
+		Map<String, String> paramMap2 = new HashMap<String, String>();
+		paramMap2.put("shipId", String.valueOf(shipId));		
+		paramMap2.put("newShipStateId", String.valueOf(shipStateId));
+		return itemDao.updateShipReqState_ShipId(paramMap2);
+		
+	}
+
 }

@@ -552,8 +552,18 @@
 		`project_shipper_id` =
 		#{UserId}
 		ORDER BY
-		ship_id DESC;
+		ship_id
+		DESC;
 	</select>
+
+
+	<update id="updateShipReqState_ShipId" parameterType="String">
+		UPDATE
+		tb_shipreq
+		SET `ship_state_id` = #{newShipStateId} WHERE
+		`ship_id` =
+		#{shipId} ;
+	</update>
 
 
 </mapper>

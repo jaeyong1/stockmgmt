@@ -198,17 +198,17 @@ public class ShipController {
 		LocalDateTime time4 = LocalDateTime.now().plusDays(3);
 		iam.setShipTargetdate(time4.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
-		//대표프로젝트 선택
+		// 대표프로젝트 선택
 		String firstItemPrjCode = "";
 		List<ShipReqPartsItem> list = itemService.getShipPartsListItems(-1, loginUser.getUserId());
-		if (list.size() > 0 ) {
+		if (list.size() > 0) {
 			firstItemPrjCode = list.get(0).getPartProjectCode();
 		}
 		iam.setShipProjectCode(firstItemPrjCode);
 		iam.setShipMemo("");
 		iam.setShipStateId(EShipState.STATE1_ADDCART.getStateInt());
 
-		iam.setShipIsmyproject(1); //내 자산이면 1로 .. 남의자산이면 0으로 
+		iam.setShipIsmyproject(1); // 내 자산이면 1로 .. 남의자산이면 0으로
 		iam.setShipCoworkerUserid("");
 
 		model.addAttribute("reqshipinfo", iam);
@@ -222,6 +222,43 @@ public class ShipController {
 		model.addAttribute("dbUserTeamName", userTeamName);
 		model.addAttribute("shipstatekor", EShipState.STATE1_ADDCART.getStateKor());
 
+		return "shipreq";
+
+	}
+
+	/*
+	 * /shipreqprocess/state4 요청서 작성중 처리
+	 */
+	@RequestMapping(value = "/shipreqprocess/state4", method = RequestMethod.POST)
+	public String processShipReq4(ShipReqItem shipreqdata, Model model, HttpServletRequest request) {
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/shipreqprocess/state4 process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state4 process");
+
+		// check state
+		int curstate = Integer.valueOf(request.getParameter("ship-StateId"));
+
+		// 이전 상태에 따른 분기
+		if (curstate == EShipState.STATE3_REQSHIPPING.getStateInt()) {
+			// Get data from Web browser
+			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
+			shipreqdata.setShipStateId(EShipState.STATE4_LISTPRINTED.getStateInt()); // move_to_4
+			
+			// Change DB query
+			itemService.stateMove3to4(shipreqdata.getShipId(), shipreqdata.getShipStateId());
+			//model.addAttribute("reqresult", shipreqdata.getShipId() + "'s data is added");
+			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state4 processed..");
+
+			// Get DB List
+			return "redirect:../shipreqlist";
+		}
+
+		// State ERROR
+		System.out.println("[" + loginUser.getUserId() + "]reqstate is not 3!!");
 		return "shipreq";
 
 	}
@@ -265,7 +302,8 @@ public class ShipController {
 			System.out.println("/shipreqprocess/state1 processed..");
 
 			// Get DB List
-			return "shipreqlist";
+			return "shipreqlist";			
+			//return getShipReqItems("0", model, request);
 		}
 
 		// State ERROR
@@ -298,15 +336,12 @@ public class ShipController {
 		///////////////////
 		// Query DB List
 		List<ShipReqItem> items;
-		if (loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt())
-		{	
+		if (loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt()) {
 			System.out.println("query for 출고담당자");
-			items = itemService.getShipReqItemsForShipper(loginUser.getUserId());		
+			items = itemService.getShipReqItemsForShipper(loginUser.getUserId());
+		} else {
+			items = itemService.getShipReqItems(loginUser.getUserId());
 		}
-		else
-		{			
-			items = itemService.getShipReqItems(loginUser.getUserId());			
-		}		
 		System.out.println("[" + loginUser.getUserId() + "] /shipparts process");
 		model.addAttribute("items", items);
 
@@ -331,7 +366,7 @@ public class ShipController {
 	}
 
 	/*
-	 * 출고요청 리스트. 개발자&출고자 공용 
+	 * 출고요청 리스트. 개발자&출고자 공용
 	 */
 	@RequestMapping(value = "/viewshipreq", method = RequestMethod.POST)
 	public String viewShipReqItems(Model model, HttpServletRequest request) {
