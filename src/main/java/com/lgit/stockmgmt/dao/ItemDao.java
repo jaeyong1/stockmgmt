@@ -126,6 +126,10 @@ public class ItemDao {
 	public int insertShipPartsItem(ShipReqPartsItem shippartsdata) {
 		return sqlSession.insert("insertShipReqPartsItem", shippartsdata);
 	}
+
+	public List<UserItem> queryUserItemsbyID(Map<String, String> paramMap) {
+		return sqlSession.selectList("selectUserItemListByID", paramMap);
+	}
 	
 
 }

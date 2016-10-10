@@ -9,14 +9,9 @@ public class ShipReqItem {
 	private String shipDestination;
 	private String shipToday;
 	private String shipTargetdate;
-	// //java.util.Date dt = new java.util.Date();
-	//
-	// java.text.SimpleDateFormat sdf =
-	// new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	//
-	// String currentTime = sdf.format(dt);
 	private String shipProjectCode;
 	private String shipMemo;
+	
 	private int shipIsmyproject;
 	private int shipStateId;
 	private String shipCoworkerUserid;

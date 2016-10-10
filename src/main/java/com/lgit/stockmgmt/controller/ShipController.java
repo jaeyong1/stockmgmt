@@ -1,5 +1,7 @@
 package com.lgit.stockmgmt.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.lgit.stockmgmt.domain.PartsItem;
+import com.lgit.stockmgmt.domain.EShipState;
+import com.lgit.stockmgmt.domain.ShipReqItem;
 import com.lgit.stockmgmt.domain.ShipReqPartsItem;
 import com.lgit.stockmgmt.domain.UserItem;
 import com.lgit.stockmgmt.service.ItemService;
@@ -54,7 +57,7 @@ public class ShipController {
 		///////////////////
 		// Query DB List
 		List<ShipReqPartsItem> items = itemService.getShipPartsListItems(-1, loginUser.getUserId());
-		System.out.println("[" + loginUser.getUserId() +"] /shipparts process");
+		System.out.println("[" + loginUser.getUserId() + "] /shipparts process");
 		model.addAttribute("items", items);
 		/*
 		 * // Choose current page data PagedListHolder<UserItem> paging = new
@@ -150,6 +153,62 @@ public class ShipController {
 	 * ================================= 출고 관련 =================================
 	 * /shipreq 사용자 List, 가입, 수정 관리화면
 	 */
+	@RequestMapping(value = "/shipreq", method = RequestMethod.GET)
+	public String showShipReq(Model model, HttpServletRequest request) {
+		
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/shipreq process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /shipreq process");
+
+		///////////////////
+		// Get Parts List (Query DB List)
+		showShipparts("0", model, request);
+		
+		//////////////////
+		// Default info		
+		ShipReqItem iam = new ShipReqItem();
+
+		iam.setShipRequestorId(loginUser.getUserId());
+		
+		iam.setShipDestination("");
+
+		LocalDateTime ldt = LocalDateTime.now(); // today		
+		iam.setShipToday(ldt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+
+		// +3일
+		LocalDateTime time4 = LocalDateTime.now().plusDays(3);		
+		iam.setShipTargetdate(time4.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+
+		// exam 파싱예시
+		// LocalDateTime time3 = LocalDateTime.parse("2001-05-09 13:45:30",
+		// DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		// System.out.println(time3.format(DateTimeFormatter.ofPattern("yyyy-MM-dd
+		// HH:mm:ss")));
+
+		iam.setShipProjectCode("");
+		iam.setShipMemo("");
+		iam.setShipStateId(EShipState.STATE1_ADDCART.getStateInt());
+		
+		iam.setShipIsmyproject(0);
+		iam.setShipCoworkerUserid("");
+
+		model.addAttribute("reqshipinfo", iam);
+		
+		//more web info
+		String userName = itemService.getUserNamebyID(loginUser.getUserId());
+		String userTeamName = itemService.getTeamNamebyID(loginUser.getUserId());	
+		//System.out.println("id:" + loginUser.getUserId() + " name:" + userName + " teamname:" + userTeamName);
+		model.addAttribute("dbUserName", userName);
+		model.addAttribute("dbUserTeamName", userTeamName);		
+		model.addAttribute("shipstatekor", EShipState.STATE1_ADDCART.getStateKor());
+		
+		return "shipreq";
+
+	}
 	/*
 	 * /shipreq/add
 	 */

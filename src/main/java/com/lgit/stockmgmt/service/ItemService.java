@@ -142,4 +142,29 @@ public class ItemService {
 		
 	}
 
+	public String getUserNamebyID(String logingUserId) {
+		// TODO Auto-generated method stub
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("logingUserId", logingUserId);
+		
+		List<UserItem> list = itemDao.queryUserItemsbyID(paramMap);
+		if (list.size() == 0) {		
+			System.out.println("[ItemService] no user data");
+			return null;
+		}
+		return list.get(0).getUserName();
+	}
+
+	public String getTeamNamebyID(String logingUserId) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("logingUserId", logingUserId);
+		
+		List<UserItem> list = itemDao.queryUserItemsbyID(paramMap);
+		if (list.size() == 0) {		
+			System.out.println("[ItemService] no user data");
+			return null;
+		}
+		return list.get(0).getUserTeamname();
+	}
+
 }

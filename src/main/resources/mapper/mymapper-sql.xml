@@ -431,4 +431,23 @@
 		#{itemlistAmount}
 		)
 	</insert>
+	
+	
+	
+	<select id="selectUserItemListByID" parameterType="String"
+		resultMap="UserItemMap">
+		SELECT
+		`user_id`,
+		`user_name`,
+		`user_password`, `user_email`,
+		`user_teamname`,
+		`user_level`
+		FROM
+		tb_user
+		WHERE
+		`user_id` =
+		#{logingUserId} 
+	</select>
+	
+	
 </mapper>
