@@ -11,10 +11,30 @@ public class ShipReqItem {
 	private String shipTargetdate;
 	private String shipProjectCode;
 	private String shipMemo;
-	
+
 	private int shipIsmyproject;
 	private int shipStateId;
 	private String shipCoworkerUserid;
+
+	// to display
+	private String shipperId;
+	private String shipperName;
+
+	public String getShipperId() {
+		return shipperId;
+	}
+
+	public void setShipperId(String shipperId) {
+		this.shipperId = shipperId;
+	}
+
+	public String getShipperName() {
+		return shipperName;
+	}
+
+	public void setShipperName(String shipperName) {
+		this.shipperName = shipperName;
+	}
 
 	public int getShipId() {
 		return shipId;
@@ -110,7 +130,7 @@ public class ShipReqItem {
 
 	public ShipReqItem(int shipId, String shipRequestorId, String shipDestination, String shipToday,
 			String shipTargetdate, String shipProjectCode, String shipMemo, int shipIsmyproject, int shipStateId,
-			String shipCoworkerUserid) {
+			String shipCoworkerUserid, String shipperId, String shipperName) {
 		super();
 		this.shipId = shipId;
 		this.shipRequestorId = shipRequestorId;
@@ -122,6 +142,8 @@ public class ShipReqItem {
 		this.shipIsmyproject = shipIsmyproject;
 		this.shipStateId = shipStateId;
 		this.shipCoworkerUserid = shipCoworkerUserid;
+		this.shipperId = shipperId;
+		this.shipperName = shipperName;
 	}
 
 	/*
@@ -129,7 +151,7 @@ public class ShipReqItem {
 	 */
 	public ShipReqItem(Integer shipId, String shipRequestorId, String shipDestination, String shipToday,
 			String shipTargetdate, String shipProjectCode, String shipMemo, Integer shipIsmyproject,
-			Integer shipStateId, String shipCoworkerUserid) {
+			Integer shipStateId, String shipCoworkerUserid, String shipperId, String shipperName) {
 		super();
 		this.shipId = Integer.valueOf(shipId);
 		this.shipRequestorId = shipRequestorId;
@@ -141,19 +163,8 @@ public class ShipReqItem {
 		this.shipIsmyproject = Integer.valueOf(shipIsmyproject);
 		this.shipStateId = Integer.valueOf(shipStateId);
 		this.shipCoworkerUserid = shipCoworkerUserid;
+		this.shipperId = shipperId;
+		this.shipperName = shipperName;
 	}
-
-	/*
-	 * ship_id ship_requestor_id ship_destination ship_today ship_targetdate
-	 * ship_project_code ship_memo ship_ismyproject ship_state_id
-	 * ship_coworker_userid
-	 * 
-	 * 
-	 * INSERT INTO `jaeyong2`.`tb_shipreq` ( `ship_id` , `ship_requestor_id` ,
-	 * `ship_destination` , `ship_today` , `ship_targetdate` ,
-	 * `ship_project_code` , `ship_memo` , `ship_ismyproject` , `ship_state_id`
-	 * , `ship_coworker_userid` ) VALUES ( NULL , 'devtest', '평택 1공장',
-	 * '2016-10-22', '2016-10-26', 'TESTPRJ002', '메모메모', 'Y', '1', NULL );
-	 */
 
 }

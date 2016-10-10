@@ -1,5 +1,6 @@
 package com.lgit.stockmgmt.controller;
 
+import java.security.KeyStore.Entry.Attribute;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lgit.stockmgmt.domain.EShipState;
+import com.lgit.stockmgmt.domain.EUserLevel;
+import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ShipReqItem;
 import com.lgit.stockmgmt.domain.ShipReqPartsItem;
 import com.lgit.stockmgmt.domain.UserItem;
@@ -195,11 +198,17 @@ public class ShipController {
 		LocalDateTime time4 = LocalDateTime.now().plusDays(3);
 		iam.setShipTargetdate(time4.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
-		iam.setShipProjectCode("");
+		//대표프로젝트 선택
+		String firstItemPrjCode = "";
+		List<ShipReqPartsItem> list = itemService.getShipPartsListItems(-1, loginUser.getUserId());
+		if (list.size() > 0 ) {
+			firstItemPrjCode = list.get(0).getPartProjectCode();
+		}
+		iam.setShipProjectCode(firstItemPrjCode);
 		iam.setShipMemo("");
 		iam.setShipStateId(EShipState.STATE1_ADDCART.getStateInt());
 
-		iam.setShipIsmyproject(0);
+		iam.setShipIsmyproject(1); //내 자산이면 1로 .. 남의자산이면 0으로 
 		iam.setShipCoworkerUserid("");
 
 		model.addAttribute("reqshipinfo", iam);
@@ -256,7 +265,7 @@ public class ShipController {
 			System.out.println("/shipreqprocess/state1 processed..");
 
 			// Get DB List
-			return "shipreq";
+			return "shipreqlist";
 		}
 
 		// State ERROR
@@ -288,11 +297,18 @@ public class ShipController {
 
 		///////////////////
 		// Query DB List
-		List<ShipReqItem> items = itemService.getShipReqItems(loginUser.getUserId());
+		List<ShipReqItem> items;
+		if (loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt())
+		{	
+			System.out.println("query for 출고담당자");
+			items = itemService.getShipReqItemsForShipper(loginUser.getUserId());		
+		}
+		else
+		{			
+			items = itemService.getShipReqItems(loginUser.getUserId());			
+		}		
 		System.out.println("[" + loginUser.getUserId() + "] /shipparts process");
 		model.addAttribute("items", items);
-
-		model.addAttribute("koritems", items);
 
 		// Choose current page data
 		PagedListHolder<ShipReqItem> paging = new PagedListHolder<ShipReqItem>(items);
@@ -306,15 +322,17 @@ public class ShipController {
 		model.addAttribute("end", paging.getLastLinkedPage());
 		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
 		// 인덱스..
-		
 
-		//jsp에서 직접 한글화
+		// jsp에서 직접 한글화
 		List<String> eshipstate = EShipState.getKorList();
 		model.addAttribute("eshipstate", eshipstate);
 
 		return "shipreqlist"; /* myreqpartlist.jsp */
 	}
 
+	/*
+	 * 출고요청 리스트. 개발자&출고자 공용 
+	 */
 	@RequestMapping(value = "/viewshipreq", method = RequestMethod.POST)
 	public String viewShipReqItems(Model model, HttpServletRequest request) {
 
@@ -326,20 +344,20 @@ public class ShipController {
 		}
 
 		int reqshipid = Integer.valueOf(request.getParameter("ship-Id"));
-		
+
 		///////////////////
 		// Query DB List
 		List<ShipReqItem> main_items = itemService.getShipReqItems(reqshipid);
 		model.addAttribute("reqshipinfo", main_items.get(0));
 		// more web info
-		String userName = itemService.getUserNamebyID(loginUser.getUserId());
-		String userTeamName = itemService.getTeamNamebyID(loginUser.getUserId());
+		String userName = itemService.getUserNamebyID(main_items.get(0).getShipRequestorId());
+		String userTeamName = itemService.getTeamNamebyID(main_items.get(0).getShipRequestorId());
 		model.addAttribute("dbUserName", userName);
 		model.addAttribute("dbUserTeamName", userTeamName);
-		model.addAttribute("shipstatekor", EShipState.STATE1_ADDCART.getStateKor());
+		model.addAttribute("shipstatekor", EShipState.getShipStateKor(main_items.get(0).getShipStateId()));
 
 		///////////////////
-		// Query DB List		
+		// Query DB List
 		List<ShipReqPartsItem> items = itemService.getShipPartsListItems(reqshipid, loginUser.getUserId());
 		System.out.println("[" + loginUser.getUserId() + "] /shipparts process");
 		model.addAttribute("items", items);

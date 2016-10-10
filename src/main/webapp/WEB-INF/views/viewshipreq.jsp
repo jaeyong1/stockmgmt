@@ -34,6 +34,20 @@ var rolekor ="";
 		document.forms["formlogin"].action = "/loginProcess";
 		document.forms["formlogin"].submit();
 		//var response = confirm("Login Continue");
+		
+		
+	}
+	
+	//State 3 -> 4 
+	function shipperChecked()
+	{
+		alert("프린트창을 닫으면 출고진행상태가 변경됩니다.");
+		window.print();
+		
+		document.forms["formshipreq"].method = "post";
+		document.forms["formshipreq"].action = "/shipreqprocess/state4";
+		document.forms["formshipreq"].submit();	
+		
 	}
 </script>
 
@@ -130,7 +144,7 @@ var rolekor ="";
 		
 		//newitemform		
 		//var nm = document.forms["formshipreq"].elements["part-Name"].value;
-		var response = confirm( "의 데이터를 신규생성할까요?")
+		var response = confirm( "출고요청 데이터를 생성할까요?")
 		if (response) {
 			//do yes task
 			document.forms["formshipreq"].method = "post";
@@ -142,6 +156,7 @@ var rolekor ="";
 	}
 	</script>
 	<p>1. 출고요청 정보</p>
+
 	<table border="1" width="796">
 		<form name="formshipreq">
 			<tr>
@@ -178,11 +193,11 @@ var rolekor ="";
 					<p>대표프로젝트</p>
 				</td>
 				<td width="225">
-				<p>
-				${reqshipinfo.shipProjectCode}
-				<input type="hidden" name='ship-ProjectCode'
-					value='${reqshipinfo.shipProjectCode}'>
-					</p></td>
+					<p>
+						${reqshipinfo.shipProjectCode} <input type="hidden"
+							name='ship-ProjectCode' value='${reqshipinfo.shipProjectCode}'>
+					</p>
+				</td>
 			</tr>
 			<tr>
 				<td width="115">
@@ -190,9 +205,8 @@ var rolekor ="";
 				</td>
 				<td width="259">
 					<p>
-					${reqshipinfo.shipDestination}
-						<input type="hidden" name='ship-Destination'
-							value='${reqshipinfo.shipDestination}'>
+						${reqshipinfo.shipDestination} <input type="hidden"
+							name='ship-Destination' value='${reqshipinfo.shipDestination}'>
 					</p>
 
 				</td>
@@ -204,8 +218,7 @@ var rolekor ="";
 				</td>
 				<td width="225">
 					<p>
-					${reqshipinfo.shipMemo}
-						<input type="hidden" name='ship-Memo'
+						${reqshipinfo.shipMemo} <input type="hidden" name='ship-Memo'
 							value='${reqshipinfo.shipMemo}'>
 					</p>
 
@@ -223,11 +236,19 @@ var rolekor ="";
 					<p>&nbsp;</p>
 				</td>
 				<td width="126" height="27">
-					<p>&nbsp;</p>
+					<p>본인자산여부</p>
 				</td>
 				<td width="225" height="27">
-					<!-- 본인자산유무 -->
 					<p>
+						<c:choose>
+							<c:when test="${0 == reqshipinfo.shipIsmyproject }">
+							  No(타개발자와합의)
+							</c:when>
+							<c:otherwise>
+							 Yes
+							</c:otherwise>
+						</c:choose>
+
 						<input type="hidden" name='ship-Ismyproject'
 							value='${reqshipinfo.shipIsmyproject}'>&nbsp;
 					</p>
@@ -240,9 +261,8 @@ var rolekor ="";
 				<td width="259" height="25">
 
 					<p>
-					${reqshipinfo.shipTargetdate}
-						<input type="hidden" name='ship-Targetdate'
-							value='${reqshipinfo.shipTargetdate}'>
+						${reqshipinfo.shipTargetdate} <input type="hidden"
+							name='ship-Targetdate' value='${reqshipinfo.shipTargetdate}'>
 					</p>
 
 				</td>
@@ -250,11 +270,21 @@ var rolekor ="";
 					<p>&nbsp;</p>
 				</td>
 				<td width="126" height="25">
-					<p>자산협의자</p>
+					<p>
+						<c:choose>
+							<c:when test="${0 == reqshipinfo.shipIsmyproject }">
+								자산협의자
+						</c:when>
+						</c:choose>
+					</p>
 				</td>
 				<td width="225" height="25">
 					<p>
-					${reqshipinfo.shipCoworkerUserid}
+						<c:choose>
+							<c:when test="${0 == reqshipinfo.shipIsmyproject }">
+							${reqshipinfo.shipCoworkerUserid}
+							</c:when>
+						</c:choose>
 						<input type="hidden" name='ship-CoworkerUserid'
 							value='${reqshipinfo.shipCoworkerUserid}'>
 					</p>
@@ -262,8 +292,10 @@ var rolekor ="";
 			</tr>
 			<!-- <input type="button" value="출고요청" name="submitbtn1"
 				OnClick="javascript:newItem();">  -->
+
 		</form>
 	</table>
+
 	<p>&nbsp;</p>
 	<p>2.출고요청 리스트</p>
 	<!-- 
@@ -349,6 +381,19 @@ var rolekor ="";
 
 	</table>
 
+	<!--
+	********************************************************
+	Button 
+	******************************************************** 
+	-->
+	<br>
+	<c:choose>
+		<c:when
+			test="${(3 == sessionScope.userLoginInfo.userLevel) && (3 == reqshipinfo.shipStateId) }">
+			<input type="button" value="출고접수완료" name="submitbtn1"
+				OnClick="javascript:shipperChecked();">
+		</c:when>
+	</c:choose>
 	<!--
 	********************************************************
 	FOOTER 

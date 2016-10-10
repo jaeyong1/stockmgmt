@@ -177,9 +177,13 @@ var rolekor ="";
 				<td width="126">
 					<p>대표프로젝트</p>
 				</td>
-				<td width="225"><input type="text" name='ship-ProjectCode'
-					value='${reqshipinfo.shipProjectCode}'>
-					<p></p></td>
+
+				<td width="225">
+					<p>
+						${reqshipinfo.shipProjectCode} <input type="hidden"
+							name='ship-ProjectCode' value='${reqshipinfo.shipProjectCode}'>
+					</p>
+				</td>
 			</tr>
 			<tr>
 				<td width="115">

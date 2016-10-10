@@ -215,4 +215,10 @@ public class ItemService {
 		return itemDao.queryShipReqItemByShipId(paramMap);
 	}
 
+	public List<ShipReqItem> getShipReqItemsForShipper(String userId) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("UserId", userId);
+		return itemDao.queryShipReqItemForShipper(paramMap);
+	}
+
 }

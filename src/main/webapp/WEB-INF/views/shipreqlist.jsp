@@ -10,9 +10,6 @@
 		document.forms["form" + id].action = "/viewshipreq"
 		document.forms["form" + id].submit();
 	}
-
-	
-	
 </script>
 <html>
 
@@ -58,6 +55,9 @@
 				<p>출고요청일</p>
 			</td>
 			<td width="130">
+				<p>출고담당자</p>
+			</td>
+			<td width="130">
 				<p>진행상태</p>
 			</td>
 			<td width="80">
@@ -83,12 +83,16 @@
 					<td width="130">
 						<p>${i.shipTargetdate}</p>
 					</td>
-					<td width="130">		
-					<p>				
-						<c:out value="${eshipstate.get(status.index)}"/>
+					<td width="130">
+						<p>
+							<c:out value="${i.shipperName}" />
 						</p>
-						
-
+					</td>
+					<td width="130">
+						<p>${i.shipStateId}
+							<c:out value="${eshipstate.get((i.shipStateId-1))}" />
+						</p>
+					</td>
 					<td width="80">
 						<p>
 							<input type=button name="formbutton2" value="자세히"
@@ -127,19 +131,19 @@
 
 			<c:forEach var="i" begin="${start }" end="${end }">
 				<li id="page${i }"><a href="/shipreqlist/${i}">${i}</a></li>
-			</c:forEach>
-			<!-- end페이지 번호가 5, 10 인데 전체 페이지 갯수가 end페이지 보다 크면 다음 페이징 바로가기 표시  (">>")​ .-->
+				</c:forEach>
+				<!-- end페이지 번호가 5, 10 인데 전체 페이지 갯수가 end페이지 보다 크면 다음 페이징 바로가기 표시  (">>")​ .-->
 			​
 
 			<c:if test="${end % 5 == 0 && pageNum > end}">
-				<li><a href="/shipreqlist/${end+1}">&raquo;</a></li>
-			</c:if>
-			<!-- 마지막 페이지 번호와 전체 페이지 번호가 같으면서 5개 단위가 아니면 다음바로가기 표시 않함 -->
+					<li><a href="/shipreqlist/${end+1}">&raquo;</a></li>
+				</c:if>
+				<!-- 마지막 페이지 번호와 전체 페이지 번호가 같으면서 5개 단위가 아니면 다음바로가기 표시 않함 -->
 			​​
 
 			<c:if test="${end % 5 != 0 && end == pageNum }">
 
-			</c:if>
+				</c:if>
 		</ul>
 	</div>
 	<p>&nbsp;</p>

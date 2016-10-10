@@ -32,6 +32,27 @@ public enum EShipState {
 		return estate2kor;
 	}
 
+	public static String getShipStateKor(int i) {
+		switch (i) {
+		case 1:
+			return EShipState.STATE1_ADDCART.getStateKor();
+		case 2:
+			return EShipState.STATE2_REQCOWORKSHIPPING.getStateKor();
+		case 3:
+			return EShipState.STATE3_REQSHIPPING.getStateKor();
+		case 4:
+			return EShipState.STATE4_LISTPRINTED.getStateKor();
+		case 5:
+			return EShipState.STATE5_SHIPPINGFINISHED.getStateKor();
+		case 6:
+			return EShipState.STATE6_REJSHIPPING.getStateKor();
+
+		default:
+			return "잘못된 데이터";
+
+		}
+	}
+
 	private static ArrayList<String> estate2kor = new ArrayList<String>() {
 		{
 			add(EShipState.STATE1_ADDCART.getStateKor());

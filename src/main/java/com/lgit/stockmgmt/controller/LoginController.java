@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.lgit.stockmgmt.domain.EUserLevel;
 import com.lgit.stockmgmt.domain.UserItem;
 import com.lgit.stockmgmt.service.ItemService;
 
@@ -65,8 +66,14 @@ public class LoginController {
 
 		UserItem loginUser = itemService.findByUserIdAndPassword(reqID, reqPW);
 
-		if (loginUser != null) {			
+		if (loginUser != null) {
 			session.setAttribute("userLoginInfo", loginUser);
+		}
+
+		if (loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt()) {
+			mav.setViewName("redirect:shipreqlist");
+		} else {
+			mav.setViewName("redirect:mylist");
 		}
 
 		return mav;

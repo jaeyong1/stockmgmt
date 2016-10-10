@@ -80,6 +80,8 @@
 		<result property="shipIsmyproject" column="ship_ismyproject" />
 		<result property="shipStateId" column="ship_state_id" />
 		<result property="shipCoworkerUserid" column="ship_coworker_userid" />
+		<result property="shipperId" column="project_shipper_id" />		
+		<result property="shipperName" column="user_name" />		
 	</resultMap>
 
 

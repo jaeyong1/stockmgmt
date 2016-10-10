@@ -148,6 +148,10 @@ public class ItemDao {
 		return sqlSession.selectList("queryShipReqListItemsByShipId", paramMap);
 	}
 
+	public List<ShipReqItem> queryShipReqItemForShipper(Map<String, String> paramMap) {
+		return sqlSession.selectList("queryShipReqListItemsForShipper", paramMap);
+	}
+
 	
 
 }
