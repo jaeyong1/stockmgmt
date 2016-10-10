@@ -222,15 +222,30 @@ public class ItemService {
 	}
 
 	public void stateMove3to4(ShipReqItem shipreqdata, String shipRequestorId) {
-		
+
 	}
 
 	public int stateMove3to4(int shipId, int shipStateId) {
 		Map<String, String> paramMap2 = new HashMap<String, String>();
-		paramMap2.put("shipId", String.valueOf(shipId));		
+		paramMap2.put("shipId", String.valueOf(shipId));
 		paramMap2.put("newShipStateId", String.valueOf(shipStateId));
 		return itemDao.updateShipReqState_ShipId(paramMap2);
-		
+
+	}
+
+	public int stateMove4to6(int shipId, int shipStateId) {
+		Map<String, String> paramMap2 = new HashMap<String, String>();
+		paramMap2.put("shipId", String.valueOf(shipId));
+		paramMap2.put("newShipStateId", String.valueOf(shipStateId));
+		return itemDao.updateShipReqState_ShipId(paramMap2);
+
+	}
+
+	public int stateMove4to5(int shipId, int shipStateId) {
+		Map<String, String> paramMap2 = new HashMap<String, String>();
+		paramMap2.put("shipId", String.valueOf(shipId));
+		paramMap2.put("newShipStateId", String.valueOf(shipStateId));
+		return itemDao.updateShipReqState_ShipId(paramMap2);
 	}
 
 }

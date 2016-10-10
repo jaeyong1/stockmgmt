@@ -125,8 +125,8 @@ var rolekor ="";
 				<option value="lgitpn">LGIT P/N</option>
 			</select> <input type="text" name="srchword"> <input type="submit"
 				name="btnsrch" value="검색"> <input type="submit"
-				name="exportxls" value="선택엑셀받기"> <input type="button"
-				name="addshiplist" value="출고요청담기"
+				name="exportxls"  disabled=true value="선택엑셀받기"> <input type="button"
+				name="addshiplist" value="출고요청담기"  disabled=true
 				onClick="reqShipping('chk[]', 'reqnum[]')" />
 		</p>
 	</form>
@@ -152,7 +152,7 @@ var rolekor ="";
 			<td width="129">
 				<p>개발담당자</p>
 			</td>
-			<td width="107">
+			<td width="117">
 				<p>출고담당자</p>
 			</td>
 			<td width="112">
@@ -184,8 +184,8 @@ var rolekor ="";
 				<tr>
 					<td width="42">
 						<p>
-							&nbsp;<input type="checkbox" name="chk[]" value='${i.partId}'>
-							<input type=text name=part-Id value='${i.partId}'>
+							&nbsp;<input type="checkbox" name="chk[]" value='${i.partId}'  disabled=true>
+							<input type=hidden name=part-Id value='${i.partId}'>
 						</p>
 					</td>
 					<td width="192">
@@ -197,7 +197,7 @@ var rolekor ="";
 					<td width="129">
 						<p>${i.userOwnerName}</p>
 					</td>
-					<td width="107">
+					<td width="117">
 						<p>${i.userShipperName}</p>
 					</td>
 					<td width="112">

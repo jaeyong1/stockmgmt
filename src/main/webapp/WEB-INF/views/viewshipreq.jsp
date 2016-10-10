@@ -49,6 +49,26 @@ var rolekor ="";
 		document.forms["formshipreq"].submit();	
 		
 	}
+	
+	//State 4 -> 5
+	function shipperAccept()
+	{
+		document.forms["formshipreq"].method = "post";
+		document.forms["formshipreq"].action = "/shipreqprocess/state5";
+		document.forms["formshipreq"].submit();
+	
+	}
+	
+	//State 4 -> 6
+	function shipperRej()
+	{
+		document.forms["formshipreq"].method = "post";
+		document.forms["formshipreq"].action = "/shipreqprocess/state6";
+		document.forms["formshipreq"].submit();
+	
+	}
+	
+	
 </script>
 
 
@@ -386,6 +406,7 @@ var rolekor ="";
 	Button 
 	******************************************************** 
 	-->
+	<!-- state 3 > 4 -->
 	<br>
 	<c:choose>
 		<c:when
@@ -394,6 +415,28 @@ var rolekor ="";
 				OnClick="javascript:shipperChecked();">
 		</c:when>
 	</c:choose>
+
+	<!-- state 4 > 5 -->
+	<br>
+	<c:choose>
+		<c:when
+			test="${(3 == sessionScope.userLoginInfo.userLevel) && (4 == reqshipinfo.shipStateId) }">
+			<input type="button" value="출고완료" name="submitbtn2"
+				OnClick="javascript:shipperAccept();">
+		</c:when>
+	</c:choose>
+	
+	<!-- state 4 > 6 -->
+	<br>
+	<c:choose>
+		<c:when
+			test="${(3 == sessionScope.userLoginInfo.userLevel) && (4 == reqshipinfo.shipStateId) }">
+			<input type="button" value="출고요청반려" name="submitbtn3"
+				OnClick="javascript:shipperRej();">
+		</c:when>
+	</c:choose>
+	
+
 	<!--
 	********************************************************
 	FOOTER 
