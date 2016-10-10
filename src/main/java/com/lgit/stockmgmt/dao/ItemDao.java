@@ -15,6 +15,7 @@ import com.lgit.stockmgmt.domain.Item;
 import com.lgit.stockmgmt.domain.JoinDBItem;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ProjectItem;
+import com.lgit.stockmgmt.domain.ShipReqItem;
 import com.lgit.stockmgmt.domain.ShipReqPartsItem;
 import com.lgit.stockmgmt.domain.UserItem;
 
@@ -22,7 +23,6 @@ import com.lgit.stockmgmt.domain.UserItem;
 public class ItemDao {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
-
 
 	/* Test Code */
 	public List<Item> queryItems() {
@@ -99,8 +99,8 @@ public class ItemDao {
 		return sqlSession.delete("deletePartsItem", item);
 	}
 
-	public List<UserItem> queryUserItems(Map<String, String> paramMap) {	
-	        return sqlSession.selectList("selectUserItemListForLogin", paramMap);
+	public List<UserItem> queryUserItems(Map<String, String> paramMap) {
+		return sqlSession.selectList("selectUserItemListForLogin", paramMap);
 
 	}
 
@@ -120,7 +120,7 @@ public class ItemDao {
 	}
 
 	public int deleteShipPartsItem(ShipReqPartsItem shippartsdata) {
-		return sqlSession.delete("deleteShipPartsItem", shippartsdata);	
+		return sqlSession.delete("deleteShipPartsItem", shippartsdata);
 	}
 
 	public int insertShipPartsItem(ShipReqPartsItem shippartsdata) {
@@ -130,6 +130,24 @@ public class ItemDao {
 	public List<UserItem> queryUserItemsbyID(Map<String, String> paramMap) {
 		return sqlSession.selectList("selectUserItemListByID", paramMap);
 	}
+
+	public int insertShipReqItem(ShipReqItem shipreqdata) {
+		return sqlSession.insert("insertShipReqItem", shipreqdata);
+
+	}
+
+	public List<ShipReqItem> queryShipReqItem(Map<String, String> paramMap) {
+		return sqlSession.selectList("queryShipReqListItems", paramMap);
+	}
+
+	public int updateShipParts_ShipId(Map<String, String> paramMap2) {
+		return sqlSession.update("updateShipParts_ShipId", paramMap2);
+	}
+
+	public List<ShipReqItem> queryShipReqItemByShipId(Map<String, String> paramMap) {
+		return sqlSession.selectList("queryShipReqListItemsByShipId", paramMap);
+	}
+
 	
 
 }

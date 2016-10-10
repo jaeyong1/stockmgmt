@@ -177,9 +177,12 @@ var rolekor ="";
 				<td width="126">
 					<p>대표프로젝트</p>
 				</td>
-				<td width="225"><input type="text" name='ship-ProjectCode'
+				<td width="225">
+				<p>
+				${reqshipinfo.shipProjectCode}
+				<input type="hidden" name='ship-ProjectCode'
 					value='${reqshipinfo.shipProjectCode}'>
-					<p></p></td>
+					</p></td>
 			</tr>
 			<tr>
 				<td width="115">
@@ -187,7 +190,8 @@ var rolekor ="";
 				</td>
 				<td width="259">
 					<p>
-						<input type="text" name='ship-Destination'
+					${reqshipinfo.shipDestination}
+						<input type="hidden" name='ship-Destination'
 							value='${reqshipinfo.shipDestination}'>
 					</p>
 
@@ -200,7 +204,8 @@ var rolekor ="";
 				</td>
 				<td width="225">
 					<p>
-						<input type="text" name='ship-Memo'
+					${reqshipinfo.shipMemo}
+						<input type="hidden" name='ship-Memo'
 							value='${reqshipinfo.shipMemo}'>
 					</p>
 
@@ -235,7 +240,8 @@ var rolekor ="";
 				<td width="259" height="25">
 
 					<p>
-						<input type="text" name='ship-Targetdate'
+					${reqshipinfo.shipTargetdate}
+						<input type="hidden" name='ship-Targetdate'
 							value='${reqshipinfo.shipTargetdate}'>
 					</p>
 
@@ -248,13 +254,14 @@ var rolekor ="";
 				</td>
 				<td width="225" height="25">
 					<p>
-						<input type="text" name='ship-CoworkerUserid'
+					${reqshipinfo.shipCoworkerUserid}
+						<input type="hidden" name='ship-CoworkerUserid'
 							value='${reqshipinfo.shipCoworkerUserid}'>
 					</p>
 				</td>
 			</tr>
-			<input type="button" value="출고요청" name="submitbtn1"
-				OnClick="javascript:newItem();">
+			<!-- <input type="button" value="출고요청" name="submitbtn1"
+				OnClick="javascript:newItem();">  -->
 		</form>
 	</table>
 	<p>&nbsp;</p>

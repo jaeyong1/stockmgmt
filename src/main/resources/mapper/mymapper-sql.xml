@@ -431,9 +431,9 @@
 		#{itemlistAmount}
 		)
 	</insert>
-	
-	
-	
+
+
+
 	<select id="selectUserItemListByID" parameterType="String"
 		resultMap="UserItemMap">
 		SELECT
@@ -446,8 +446,75 @@
 		tb_user
 		WHERE
 		`user_id` =
-		#{logingUserId} 
+		#{logingUserId}
 	</select>
-	
-	
+
+
+	<!-- *************************** ShipReq *************************** -->
+	<insert id="insertShipReqItem">
+		INSERT INTO tb_shipreq(
+		`ship_requestor_id`,
+		`ship_destination`,
+		`ship_today`,
+		`ship_targetdate`,
+		`ship_project_code`,
+		`ship_memo`,
+		`ship_ismyproject`,
+		`ship_state_id`,
+		`ship_coworker_userid`
+		)
+		VALUES (
+		#{shipRequestorId},
+		#{shipDestination},
+		#{shipToday},
+		#{shipTargetdate},
+		#{shipProjectCode},
+		#{shipMemo},
+		#{shipIsmyproject},
+		#{shipStateId},
+		#{shipCoworkerUserid}
+		)
+
+	</insert>
+
+	<select id="queryShipReqListItems" parameterType="String"
+		resultMap="ShipReqItemMap">
+		SELECT
+		*
+		FROM
+		tb_shipreq
+		INNER JOIN tb_shipstate
+		WHERE
+		tb_shipreq.`ship_state_id` = tb_shipstate.`shipstate_id`
+		AND
+		`ship_requestor_id` =
+		#{UserId}
+		ORDER BY
+		ship_id DESC;
+	</select>
+
+
+	<select id="queryShipReqListItemsByShipId" parameterType="String"
+		resultMap="ShipReqItemMap">
+		SELECT
+		*
+		FROM
+		tb_shipreq
+		INNER JOIN tb_shipstate
+		WHERE
+		tb_shipreq.`ship_state_id` = tb_shipstate.`shipstate_id`
+		AND
+		`ship_id` =
+		#{shipId}
+		ORDER BY
+		ship_id DESC;
+	</select>
+
+	<update id="updateShipParts_ShipId" parameterType="String">
+		UPDATE
+		tb_shipreq_itemlist
+		SET `itemlist_ship_id` = #{NewShipId} WHERE
+		`itemlist_ship_id` = #{OldShipId} AND
+		itemlist_owner_id = #{UserId};
+	</update>
 </mapper>

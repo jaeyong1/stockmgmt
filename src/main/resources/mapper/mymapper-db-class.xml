@@ -68,4 +68,20 @@
 		<result property="userId" column="itemlist_owner_id" />
 	</resultMap>
 
+
+	<resultMap id="ShipReqItemMap" type="com.lgit.stockmgmt.domain.ShipReqItem">
+		<result property="shipId" column="ship_id" />
+		<result property="shipRequestorId" column="ship_requestor_id" />
+		<result property="shipDestination" column="ship_destination" />
+		<result property="shipToday" column="ship_today" />
+		<result property="shipTargetdate" column="ship_targetdate" />
+		<result property="shipProjectCode" column="ship_project_code" />
+		<result property="shipMemo" column="ship_memo" />
+		<result property="shipIsmyproject" column="ship_ismyproject" />
+		<result property="shipStateId" column="ship_state_id" />
+		<result property="shipCoworkerUserid" column="ship_coworker_userid" />
+	</resultMap>
+
+
+
 </mapper>

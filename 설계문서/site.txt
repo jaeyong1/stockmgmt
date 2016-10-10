@@ -1,0 +1,3 @@
+ID : innoparts
+PW : qkrwodyd1!
+DB,FTP, Telnet PW : dbqkrwodyd1!

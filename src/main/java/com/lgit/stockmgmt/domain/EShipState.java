@@ -1,7 +1,9 @@
 package com.lgit.stockmgmt.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum EShipState {
-	
 
 	STATE1_ADDCART(1, "요청서작성중"), // 요청서작성중
 	STATE2_REQCOWORKSHIPPING(2, "합의요청중"), // 합의요청중
@@ -25,5 +27,21 @@ public enum EShipState {
 	public String getStateKor() {
 		return this.korcurr;
 	}
+
+	public static ArrayList<String> getKorList() {
+		return estate2kor;
+	}
+
+	private static ArrayList<String> estate2kor = new ArrayList<String>() {
+		{
+			add(EShipState.STATE1_ADDCART.getStateKor());
+			add(EShipState.STATE2_REQCOWORKSHIPPING.getStateKor());
+			add(EShipState.STATE3_REQSHIPPING.getStateKor());
+			add(EShipState.STATE4_LISTPRINTED.getStateKor());
+			add(EShipState.STATE5_SHIPPINGFINISHED.getStateKor());
+			add(EShipState.STATE6_REJSHIPPING.getStateKor());
+
+		}
+	};
 
 }
