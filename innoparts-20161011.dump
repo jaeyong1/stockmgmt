@@ -1,0 +1,194 @@
+-- MySQL dump 10.13  Distrib 5.5.17, for Linux (x86_64)
+--
+-- Host: localhost    Database: innoparts
+-- ------------------------------------------------------
+-- Server version	5.5.17-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `tb_part`
+--
+
+DROP TABLE IF EXISTS `tb_part`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_part` (
+  `part_id` int(11) NOT NULL AUTO_INCREMENT,
+  `part_project_code` varchar(20) DEFAULT NULL,
+  `part_name` varchar(20) DEFAULT NULL,
+  `part_desc` varchar(50) DEFAULT NULL,
+  `part_location` varchar(15) DEFAULT NULL,
+  `part_cost` float DEFAULT NULL,
+  `part_stock` int(11) DEFAULT NULL,
+  `part_memo` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`part_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=105 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_part`
+--
+
+LOCK TABLES `tb_part` WRITE;
+/*!40000 ALTER TABLE `tb_part` DISABLE KEYS */;
+INSERT INTO `tb_part` VALUES (1,'P001','에스공공이사','랜덤1','서쪽2층',0.1234,5678,'메모메모'),(2,'P001','YK938328','와이케이구팔삼','동관2층창고B',0.6789,12345,'메에모오'),(3,'P001','YK938328','와이케이구팔삼','지하1층창고',0.543,210,'메모모레123'),(4,'P001','EKA1391','이케이에이일삼구일','3층서편입구 34',0.2432,3921222,'테스트메모 띄워쓰기 !@#$%^ 특수문자 1'),(5,'asdf','afsd','asdf','adsf',0.54654,6546,'adsf 123123'),(6,'asdf','afsd','asdf','adsf 123',0.54654,6546,'adsf 123'),(10,'adsfas','adsfads','adsfasdf','adsf',123,512,'4123124'),(11,'123123','123','123','123',123,123,'123'),(12,'adf','123','123','123',123,123,'123'),(13,'adf','123','123','123',123,123,'123'),(14,'adf','123','123','123',123,123,'123'),(15,'adf','123','123','123',123,123,'123'),(16,'adf','123','123','123',123,123,'123'),(17,'adf','123','123','123',123,123,'123'),(18,'adf','123','123','123',123,123,'123'),(19,'adf','123','123','123',123,123,'123'),(20,'adf','123','123','123',123,123,'123'),(21,'adf','123','123','123',123,123,'123'),(22,'adf','123','123','123',123,123,'123'),(23,'adf','123','123','123',123,123,'123'),(24,'adf','123','123','123',123,123,'123'),(25,'adf','123','123','123',123,123,'123'),(26,'adf','123','123','123',123,123,'123'),(27,'adf','123','123','123',123,123,'123'),(28,'adf','123','123','123',123,123,'123'),(29,'adf','123','123','123',123,123,'123'),(30,'adf','123','123','123',123,123,'123'),(31,'adf','123','123','123',123,123,'123'),(32,'adf','123','123','123',123,123,'123'),(33,'adf','123','123','123',123,123,'123'),(34,'adf','123','123','123',123,123,'123'),(35,'adf','123','123','123',123,123,'123'),(36,'adf','123','123','123',123,123,'123'),(37,'adf','123','123','123',123,123,'123'),(38,'adf','123','123','123',123,123,'123'),(39,'adf','123','123','123',123,123,'123'),(40,'adf','123','123','123',123,123,'123'),(41,'adf','123','123','123',123,123,'123'),(42,'adf','123','123','123',123,123,'123'),(46,'245','2345','2345','2345',245,245,'2345'),(44,'adf','123','123','123',123,123,'1231313123'),(45,'adf','123','123','123',123,123,'123'),(47,'245','2345','2345','2345',245,245,'2345'),(48,'245','2345','2345','2345',245,245,'2345'),(49,'245','2345','2345','2345',245,245,'2345'),(50,'245','2345','2345','2345',245,245,'2345'),(51,'245','2345','2345','2345',245,245,'2345'),(52,'245','2345','2345','2345',245,245,'2345'),(53,'245','2345','2345','2345',245,245,'2345'),(54,'245','2345','2345','2345',245,245,'2345'),(55,'245','2345','2345','2345',245,245,'2345'),(56,'245','2345','2345','2345',245,245,'2345'),(57,'245','2345','2345','2345',245,245,'2345'),(58,'245','2345','2345','2345',245,245,'2345'),(59,'245','2345','2345','2345',245,245,'2345'),(60,'245','2345','2345','2345',245,245,'2345'),(61,'245','2345','2345','2345',245,245,'2345'),(62,'245','2345','2345','2345',245,245,'2345'),(63,'245','2345','2345','2345',245,245,'2345'),(64,'245','2345','2345','2345',245,245,'2345'),(65,'245','2345','2345','2345',245,245,'2345'),(66,'245','2345','2345','2345',245,245,'2345'),(67,'245','2345','2345','2345',245,245,'2345'),(68,'245','2345','2345','2345',245,245,'2345'),(69,'245','2345','2345','2345',245,245,'2345'),(70,'245','2345','2345','2345',245,245,'2345'),(71,'245','2345','2345','2345',245,245,'2345'),(72,'245','2345','2345','2345',245,245,'2345'),(73,'245','2345','2345','2345',245,245,'2345'),(74,'245','2345','2345','2345',245,245,'2345'),(75,'245','2345','2345','2345',245,245,'2345'),(76,'245','2345','2345','2345',245,245,'2345'),(77,'245','2345','2345','2345',245,245,'2345'),(78,'245','2345','2345','2345',245,245,'2345'),(79,'245','2345','2345','2345',245,245,'2345'),(80,'245','2345','2345','2345',245,245,'2345'),(81,'245','2345','2345','2345',245,245,'2345'),(82,'245','2345','2345','2345',245,245,'2345'),(83,'245','2345','2345','2345',245,245,'2345'),(84,'245','2345','2345','2345',245,245,'2345'),(85,'245','2345','2345','2345',245,245,'2345'),(86,'245','2345','2345','2345',245,245,'2345'),(87,'245','2345','2345','2345',245,245,'2345'),(88,'245','2345','2345','2345',245,245,'2345'),(89,'245','2345','2345','2345',245,245,'2345'),(90,'245','2345','2345','2345',245,245,'2345'),(91,'245','2345','2345','2345',245,245,'2345'),(92,'245','2345','2345','2345',245,245,'2345'),(93,'245','2345','2345','2345',245,245,'2345'),(94,'245','2345','2345','2345',245,245,'2345'),(95,'245','2345','2345','2345',245,245,'2345'),(96,'1222','2222','2222','2222',22222,22222,'2222'),(97,'A001','GNS23988','Desc','Loc',10,10,'no'),(98,'1235','5123','5123','5123',1523,153,'1523'),(100,'TESTPRJ002','p1','p1','L1',0.1,5,'memo 1'),(101,'TESTPRJ002','p2','p2','L2',0.1,4,'memo 1'),(103,'TESTPRJ002','p4','p4','L4',0.4,3,'memo 4455'),(104,'TESTPRJ002','p54','p5','L5',0.5,1,'memo 56789 1234 555');
+/*!40000 ALTER TABLE `tb_part` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_project`
+--
+
+DROP TABLE IF EXISTS `tb_project`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_project` (
+  `project_code` varchar(20) NOT NULL,
+  `project_name` varchar(25) DEFAULT NULL,
+  `project_owner_id` varchar(30) DEFAULT NULL,
+  `project_shipper_id` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`project_code`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_project`
+--
+
+LOCK TABLES `tb_project` WRITE;
+/*!40000 ALTER TABLE `tb_project` DISABLE KEYS */;
+INSERT INTO `tb_project` VALUES ('TESTPRJ002','TEST project 2','devtest','shiptest'),('TESTPRJ003','TEST project 3','devtest','shiptest'),('TESTPRJ001','TEST project 1','devtest','shiptest');
+/*!40000 ALTER TABLE `tb_project` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_shipreq`
+--
+
+DROP TABLE IF EXISTS `tb_shipreq`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_shipreq` (
+  `ship_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ship_requestor_id` varchar(30) DEFAULT NULL,
+  `ship_destination` varchar(20) DEFAULT NULL,
+  `ship_today` date DEFAULT NULL,
+  `ship_targetdate` date DEFAULT NULL,
+  `ship_project_code` varchar(20) DEFAULT NULL,
+  `ship_memo` varchar(50) DEFAULT NULL,
+  `ship_ismyproject` int(11) DEFAULT NULL,
+  `ship_state_id` int(11) DEFAULT NULL,
+  `ship_coworker_userid` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`ship_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_shipreq`
+--
+
+LOCK TABLES `tb_shipreq` WRITE;
+/*!40000 ALTER TABLE `tb_shipreq` DISABLE KEYS */;
+INSERT INTO `tb_shipreq` VALUES (1,'devtest','평택 1공장','2016-10-22','2016-10-26','TESTPRJ002','메모메모',0,1,NULL),(3,'devtest2','수령지','2016-10-10','2016-10-13','TESTPRJ001','사유',0,3,'협의자'),(5,'devtest','123','2016-10-10','2016-10-13','TESTPRJ001','123',0,5,'123'),(6,'devtest','13241243','2016-10-10','2016-10-13','TESTPRJ001','4312434',0,6,'6767676'),(7,'devtest','aaa','2016-10-10','2016-10-13','TESTPRJ002','111',0,5,''),(9,'devtest','','2016-10-10','2016-10-13','','',0,3,''),(10,'devtest','인천','2016-10-10','2016-10-13','TESTPRJ002','증여',0,6,''),(11,'devtest','123','2016-10-10','2016-10-13','TESTPRJ002','123',1,4,'123'),(17,'devtest','333','2016-10-10','2016-10-13','TESTPRJ002','333',0,6,'333');
+/*!40000 ALTER TABLE `tb_shipreq` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_shipreq_itemlist`
+--
+
+DROP TABLE IF EXISTS `tb_shipreq_itemlist`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_shipreq_itemlist` (
+  `itemlist_id` int(11) NOT NULL AUTO_INCREMENT,
+  `itemlist_owner_id` varchar(30) NOT NULL,
+  `itemlist_ship_id` int(11) DEFAULT NULL,
+  `itemlist_part_id` int(11) DEFAULT NULL,
+  `itemlist_amount` int(11) DEFAULT NULL,
+  PRIMARY KEY (`itemlist_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_shipreq_itemlist`
+--
+
+LOCK TABLES `tb_shipreq_itemlist` WRITE;
+/*!40000 ALTER TABLE `tb_shipreq_itemlist` DISABLE KEYS */;
+INSERT INTO `tb_shipreq_itemlist` VALUES (3,'devtest',10,103,3),(2,'devtest',7,104,5),(6,'devtest',6,104,3),(5,'devtest',6,104,3),(7,'devtest',2,104,3),(8,'devtest',6,104,3),(9,'devtest',6,104,3),(10,'devtest',1,101,4),(11,'devtest',1,103,3),(12,'devtest',6,100,12),(15,'devtest',6,101,4),(16,'devtest',17,103,0),(17,'devtest',6,100,0),(18,'devtest',6,100,3),(21,'devtest',6,104,5),(20,'devtest',6,103,3),(22,'jaeyong1',2,103,4),(23,'devtest',-1,104,3);
+/*!40000 ALTER TABLE `tb_shipreq_itemlist` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_shipstate`
+--
+
+DROP TABLE IF EXISTS `tb_shipstate`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_shipstate` (
+  `shipstate_id` int(11) NOT NULL,
+  `shipstate_desc` char(20) DEFAULT NULL,
+  PRIMARY KEY (`shipstate_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_shipstate`
+--
+
+LOCK TABLES `tb_shipstate` WRITE;
+/*!40000 ALTER TABLE `tb_shipstate` DISABLE KEYS */;
+INSERT INTO `tb_shipstate` VALUES (1,'요청서작성중'),(2,'합의요청중'),(3,'출고접수중'),(4,'출고접수완료'),(5,'출고완료'),(6,'반려'),(0,'스테이트에러');
+/*!40000 ALTER TABLE `tb_shipstate` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_user`
+--
+
+DROP TABLE IF EXISTS `tb_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_user` (
+  `user_id` varchar(30) NOT NULL,
+  `user_name` char(30) DEFAULT NULL,
+  `user_password` char(30) DEFAULT NULL,
+  `user_email` varchar(40) DEFAULT NULL,
+  `user_teamname` varchar(40) DEFAULT NULL,
+  `user_level` int(11) DEFAULT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_user`
+--
+
+LOCK TABLES `tb_user` WRITE;
+/*!40000 ALTER TABLE `tb_user` DISABLE KEYS */;
+INSERT INTO `tb_user` VALUES ('jaeyong1','jaeyong1','1','jaeyong1@a.a','SW DEV 1',10),('asdfg',NULL,'defaultPassWord123','asdf@123','asf 1223',4),('1231','2106','defaultPassWord123','345454','4',6),('456','456','456','456','45632ggg g g g g g ',45623),('a',NULL,'defaultPassWord123','c','d',4),('e','e','e','e','e',999),('oi','oi','oi','oi','oi',123),('i-d','na-me','p-w','e-mail','t-n333',3),('adf4e3','박재용','ㅁㅁㅁㅁ','한글@한글.@#!@한글','한글 띄워쓰기 느낌표!!!',12),('w1','w2','w5','w3','w4',6),('11111','11111','defaultPassWord123','11111','11111',3),('er3r3','3r3r3r','r3r3r3','3r3r3','r3r3r3',3),('adfasdf','asdfasdf','adfafsd','adsfadsf','adsfadsf',2),('asdfsafas','fasdfas','afsdafds','dfasdf','asdfasdf',3),('1__2345','2131241','12412412','2312312412','12412412',2),('id2','id2name','1','1@1.1','team 1',2),('ababab','ababab','ababab','ababab','ababab',2),('devtest','개발자시험용','1','devtest@a.a','개발자팀',2),('shiptest','출고자시험용','1','shiptest@a.a','출고팀',3),('devfriendtest','개발자협조테스트','1','1@1.1','협조시험',2);
+/*!40000 ALTER TABLE `tb_user` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2016-10-11 14:58:25
