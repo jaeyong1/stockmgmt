@@ -226,57 +226,6 @@ public class ShipController {
 
 	}
 
-	
-
-	/*
-	 * /shipreqprocess/state3 요청서 작성중 처리
-	 */
-	@RequestMapping(value = "/shipreqprocess/state3", method = RequestMethod.POST)
-	public String processShipReq(ShipReqItem shipreqdata, Model model, HttpServletRequest request) {
-		// session 확인
-		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
-		if (loginUser == null) {
-			System.out.println("/shipreqprocess/state3 process. no session info. return login.jsp ");
-			return "login";
-		}
-		System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state3 process");
-
-		// check state
-		int curstate = Integer.valueOf(request.getParameter("ship-StateId"));
-
-		// 이전 상태에 따른 분기
-		if (curstate == EShipState.STATE1_ADDCART.getStateInt()) {
-			// Get data from Web browser
-			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
-			shipreqdata.setShipRequestorId(request.getParameter("ship-RequestorId"));
-			shipreqdata.setShipDestination(request.getParameter("ship-Destination"));
-			shipreqdata.setShipToday(request.getParameter("ship-Today"));
-			shipreqdata.setShipTargetdate(request.getParameter("ship-Targetdate"));
-			shipreqdata.setShipProjectCode(request.getParameter("ship-ProjectCode"));
-			shipreqdata.setShipMemo(request.getParameter("ship-Memo"));
-			shipreqdata.setShipIsmyproject(Integer.valueOf(request.getParameter("ship-Ismyproject")));
-			shipreqdata.setShipStateId(EShipState.STATE3_REQSHIPPING.getStateInt()); // move
-																						// to
-																						// state
-																						// 3
-			shipreqdata.setShipCoworkerUserid(request.getParameter("ship-CoworkerUserid"));
-
-			// Change DB query
-			itemService.stateMove1to3(shipreqdata, shipreqdata.getShipRequestorId());
-			model.addAttribute("reqresult", shipreqdata.getShipId() + "'s data is added");
-			System.out.println("/shipreqprocess/state1 processed..");
-
-			// Get DB List
-			return "shipreqlist";			
-			//return getShipReqItems("0", model, request);
-		}
-
-		// State ERROR
-		System.out.println("[" + loginUser.getUserId() + "]reqstate is not 1(요청서작성중) or 2(합의요청중) !!");
-		return "shipreq";
-
-	}
-
 	/*
 	 * /shipreqlist 요청서 리스트 뷰
 	 */
@@ -365,7 +314,56 @@ public class ShipController {
 		return "viewshipreq";
 
 	}
-	
+
+	/*
+	 * /shipreqprocess/state3 요청서 작성중 처리
+	 */
+	@RequestMapping(value = "/shipreqprocess/state3", method = RequestMethod.POST)
+	public String processShipReq(ShipReqItem shipreqdata, Model model, HttpServletRequest request) {
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/shipreqprocess/state3 process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state3 process");
+
+		// check state
+		int curstate = Integer.valueOf(request.getParameter("ship-StateId"));
+
+		// 이전 상태에 따른 분기
+		if (curstate == EShipState.STATE1_ADDCART.getStateInt()) {
+			// Get data from Web browser
+			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
+			shipreqdata.setShipRequestorId(request.getParameter("ship-RequestorId"));
+			shipreqdata.setShipDestination(request.getParameter("ship-Destination"));
+			shipreqdata.setShipToday(request.getParameter("ship-Today"));
+			shipreqdata.setShipTargetdate(request.getParameter("ship-Targetdate"));
+			shipreqdata.setShipProjectCode(request.getParameter("ship-ProjectCode"));
+			shipreqdata.setShipMemo(request.getParameter("ship-Memo"));
+			shipreqdata.setShipIsmyproject(Integer.valueOf(request.getParameter("ship-Ismyproject")));
+			shipreqdata.setShipStateId(EShipState.STATE3_REQSHIPPING.getStateInt()); // move
+																						// to
+																						// state
+																						// 3
+			shipreqdata.setShipCoworkerUserid(request.getParameter("ship-CoworkerUserid"));
+
+			// Change DB query
+			itemService.stateMove1to3(shipreqdata, shipreqdata.getShipRequestorId());
+			model.addAttribute("reqresult", shipreqdata.getShipId() + "'s data is added");
+			System.out.println("/shipreqprocess/state1 processed..");
+
+			// Get DB List
+			return "shipreqlist";
+			// return getShipReqItems("0", model, request);
+		}
+
+		// State ERROR
+		System.out.println("[" + loginUser.getUserId() + "]reqstate is not 1(요청서작성중) or 2(합의요청중) !!");
+		return "shipreq";
+
+	}
+
 	/*
 	 * /shipreqprocess/state4 요청서 작성중 처리
 	 */
@@ -387,10 +385,11 @@ public class ShipController {
 			// Get data from Web browser
 			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
 			shipreqdata.setShipStateId(EShipState.STATE4_LISTPRINTED.getStateInt()); // move_to_4
-			
+
 			// Change DB query
 			itemService.stateMove3to4(shipreqdata.getShipId(), shipreqdata.getShipStateId());
-			//model.addAttribute("reqresult", shipreqdata.getShipId() + "'s data is added");
+			// model.addAttribute("reqresult", shipreqdata.getShipId() + "'s
+			// data is added");
 			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state4 processed..");
 
 			// Get DB List
@@ -402,7 +401,7 @@ public class ShipController {
 		return "shipreq";
 
 	}
-	
+
 	/*
 	 * /shipreqprocess/state5 요청서 작성중 처리
 	 */
@@ -424,7 +423,7 @@ public class ShipController {
 			// Get data from Web browser
 			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
 			shipreqdata.setShipStateId(EShipState.STATE5_SHIPPINGFINISHED.getStateInt()); // move_to_4
-			
+
 			// Change DB query
 			itemService.stateMove4to5(shipreqdata.getShipId(), shipreqdata.getShipStateId());
 			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state5 processed..");
@@ -438,8 +437,7 @@ public class ShipController {
 		return "shipreq";
 
 	}
-	
-	
+
 	/*
 	 * /shipreqprocess/state6 요청서 작성중 처리
 	 */
@@ -461,10 +459,11 @@ public class ShipController {
 			// Get data from Web browser
 			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
 			shipreqdata.setShipStateId(EShipState.STATE6_REJSHIPPING.getStateInt()); // move_to_4
-			
+
 			// Change DB query
 			itemService.stateMove4to6(shipreqdata.getShipId(), shipreqdata.getShipStateId());
-			//model.addAttribute("reqresult", shipreqdata.getShipId() + "'s data is added");
+			// model.addAttribute("reqresult", shipreqdata.getShipId() + "'s
+			// data is added");
 			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state6 processed..");
 
 			// Get DB List
