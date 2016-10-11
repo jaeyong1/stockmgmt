@@ -1,7 +1,5 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ page import="java.util.*"%>
+<%@ include file="header.jsp"%>
 
 
 <script language="javascript">
@@ -11,35 +9,27 @@
 		document.forms["form" + id].submit();
 	}
 </script>
-<html>
 
-<head>
-<meta http-equiv="content-type" content="text/html; charset=euc-kr">
-<title>제목 없음</title>
-<meta name="generator" content="">
-</head>
 
-<body bgcolor="white" text="black" link="blue" vlink="purple"
-	alink="red">
-
-	<!-- 
+<!-- 
 	*****************************
 	직전 작업 결과 표시
 	*****************************
 	 -->
-	<h2>${reqresult}</h2>
+<h3>${reqresult}</h3>
+<center>
+	<h3>출고요청건 리스트</h3>
+</center>
 
-	<p>출고요청건 리스트</p>
 
-
-	<!-- 
+<!-- 
 	*****************************
 	리스트 표시 및 수정하기
 	*****************************
 	 -->
 
-	<p>&nbsp;</p>
-	<p>[데이터보기]</p>
+<p>&nbsp;</p>
+<center>
 	<table border="1">
 		<tr>
 			<td width="130">
@@ -96,60 +86,57 @@
 					<td width="80">
 						<p>
 							<input type=button name="formbutton2" value="자세히"
+								class="btn btn-primary btn-xs"
 								OnClick="javascript:DetailView('${status.index}');">
 						</p>
 					</td>
-
 				</tr>
-
 			</form>
 		</c:forEach>
-
 	</table>
+</center>
 
 
-	<p>&nbsp;</p>
-	<!-- 
+<p>&nbsp;</p>
+<!-- 
 	*****************************
 	페이지 표시
 	*****************************
 	 -->
-	<div class="col-xs-8">
-		<ul class="pagination pagination-sm" style="margin-top: 0px;">
-			<!-- 시작페이지가 1부터면 이전 표시("<<") ​ 안함 -->
-			<c:if test="${start-1 ==0 }">
+	 <center>
+<div class="col-xs-8">
+	<ul class="pagination pagination-sm" style="margin-top: 0px;">
+		<!-- 시작페이지가 1부터면 이전 표시("<<") ​ 안함 -->
+		<c:if test="${start-1 ==0 }">
 
-			</c:if>
-			<!-- 시작페이지가 1이 아니면 << 이전 표시.  링크는 시작페이지가 6부터 10까지일 경우 5페이지를 가르킴 -->
-			​
+		</c:if>
+		<!-- 시작페이지가 1이 아니면 << 이전 표시.  링크는 시작페이지가 6부터 10까지일 경우 5페이지를 가르킴 -->
+		​
 
-			<c:if test="${start-1!=0 }">
-				<li><a href="/shipreqlist/${start-1}">&laquo;</a></li>
-			</c:if>
-			<!-- 5개씩 페이지 표시-->
-			​
+		<c:if test="${start-1!=0 }">
+			<li><a href="/shipreqlist/${start-1}">&laquo;</a></li>
+		</c:if>
+		<!-- 5개씩 페이지 표시-->
+		​
 
-			<c:forEach var="i" begin="${start }" end="${end }">
-				<li id="page${i }"><a href="/shipreqlist/${i}">${i}</a></li>
-				</c:forEach>
-				<!-- end페이지 번호가 5, 10 인데 전체 페이지 갯수가 end페이지 보다 크면 다음 페이징 바로가기 표시  (">>")​ .-->
-			​
+		<c:forEach var="i" begin="${start }" end="${end }">
+			<li id="page${i }"><a href="/shipreqlist/${i}">${i}</a></li>
+		</c:forEach>
+		<!-- end페이지 번호가 5, 10 인데 전체 페이지 갯수가 end페이지 보다 크면 다음 페이징 바로가기 표시  (">>")​ .-->
+		​
 
-			<c:if test="${end % 5 == 0 && pageNum > end}">
-					<li><a href="/shipreqlist/${end+1}">&raquo;</a></li>
-				</c:if>
-				<!-- 마지막 페이지 번호와 전체 페이지 번호가 같으면서 5개 단위가 아니면 다음바로가기 표시 않함 -->
-			​​
+		<c:if test="${end % 5 == 0 && pageNum > end}">
+			<li><a href="/shipreqlist/${end+1}">&raquo;</a></li>
+		</c:if>
+		<!-- 마지막 페이지 번호와 전체 페이지 번호가 같으면서 5개 단위가 아니면 다음바로가기 표시 않함 -->
+		​​
 
-			<c:if test="${end % 5 != 0 && end == pageNum }">
+		<c:if test="${end % 5 != 0 && end == pageNum }">
 
-				</c:if>
-		</ul>
-	</div>
-	<p>&nbsp;</p>
+		</c:if>
+	</ul>
+</div>
+<p>&nbsp;</p>
+</center>
 
-
-
-</body>
-
-</html>
+<%@ include file="footer.jsp"%>

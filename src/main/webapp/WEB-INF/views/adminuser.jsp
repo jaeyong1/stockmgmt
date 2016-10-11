@@ -1,7 +1,6 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ page import="java.util.*"%>
+<%@ include file="header.jsp"%>
+
 
 <script language="javascript">
 	//신규가입 레벨선택
@@ -87,149 +86,140 @@
 </script>
 
 
-<!DOCTYPE html>
 
-<html>
-<head>
-
-
-<meta http-equiv="content-type" content="text/html; charset=euc-kr">
-<title>회원 관리</title>
-<meta name="generator" content="Namo WebEditor v5.0">
-</head>
-
-<body bgcolor="white" text="black" link="blue" vlink="purple"
-	alink="red">
-
-
-
-	<!-- 
+<!-- 
 	*****************************
 	직전 작업 결과 표시
 	*****************************
 	 -->
-	<h2>${reqresult}</h2>
+<h3>${reqresult}</h3>
+<center>
+	<h3>사용자 관리</h3>
+</center>
+<h5>
+	<b>[신규추가]</b>
+</h5>
 
 
-	<!-- 
+<!-- 
 	*****************************
 	회원 가입 폼
 	*****************************
 	 -->
 
-	<p>회원 관리</p>
-	<p>[신규추가]</p>
-	<form name="newuserform">
-		<table border="1" width="487">
-			<tr>
-				<td width="143">
-					<p>user id</p>
-				</td>
-				<td width="328">
-					<p>
-						<input type="text" name='user-Id'>
-					</p>
-				</td>
-			</tr>
-			<tr>
-				<td width="143">
-					<p>name</p>
-				</td>
-				<td width="328">
-					<p>
-						<input type="text" name='user-Name'>
-					</p>
-				</td>
-			</tr>
+<form name="newuserform">
+	<table border="1" width="487">
+		<tr>
+			<td width="143">
+				<p>user id</p>
+			</td>
+			<td width="328">
+				<p>
+					<input type="text" name='user-Id'>
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td width="143">
+				<p>name</p>
+			</td>
+			<td width="328">
+				<p>
+					<input type="text" name='user-Name'>
+				</p>
+			</td>
+		</tr>
 
-			<tr>
-				<td width="143">
-					<p>email</p>
-				</td>
-				<td width="328">
-					<p>
-						<input type="text" name='user-Email'>
-					</p>
-				</td>
-			</tr>
-			<tr>
-				<td width="143">
-					<p>team name</p>
-				</td>
-				<td width="328">
-					<p>
-						<input type="text" name='user-Teamname'>
-					</p>
-				</td>
-			</tr>
-			<tr>
-				<td width="143">
-					<p>password</p>
-				</td>
-				<td width="328">
-					<p>
-						<input type="text" name='user-Password'>
-					</p>
-				</td>
-			</tr>
-			<tr>
-				<td width="143">
-					<p>level(숫자로..)</p>
-				</td>
-				<td width="328">
-					<p>
-						<input type="hidden" name='user-Level'>
-						<!-- 클릭하면 input에 대입 -->
-						<select name="user-level-choice" size="1" onchange="choice(this);">
-							<option selected value="1">==선택하세요==</option>
-							<option value="2">개발담당자</option>
-							<option value="3">출고담당자</option>
-							<option value="4">손님(입출고권한없음)</option>
-							<option value="5">관리자</option>
-						</select>
-					</p>
-				</td>
-			</tr>
-		</table>
-		<input type="button" value="신규가입" name="submitbtn1"
-			OnClick="javascript:newUser();">
-	</form>
+		<tr>
+			<td width="143">
+				<p>email</p>
+			</td>
+			<td width="328">
+				<p>
+					<input type="text" name='user-Email'>
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td width="143">
+				<p>team name</p>
+			</td>
+			<td width="328">
+				<p>
+					<input type="text" name='user-Teamname'>
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td width="143">
+				<p>password</p>
+			</td>
+			<td width="328">
+				<p>
+					<input type="text" name='user-Password'>
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td width="143">
+				<p>level(숫자로..)</p>
+			</td>
+			<td width="328">
+				<p>
+					<input type="hidden" name='user-Level'>
+					<!-- 클릭하면 input에 대입 -->
+					<select name="user-level-choice" size="1" onchange="choice(this);">
+						<option selected value="1">==선택하세요==</option>
+						<option value="2">개발담당자</option>
+						<option value="3">출고담당자</option>
+						<option value="4">손님(입출고권한없음)</option>
+						<option value="5">관리자</option>
+					</select>
+				</p>
+			</td>
+		</tr>
+	</table>
+	<input type="button" value="신규가입" name="submitbtn1" class="btn btn-success btn-md" 
+		OnClick="javascript:newUser();">
+</form>
 
 
-	<!-- 
+<!-- 
 	*****************************
 	회원 정보 리스트 및 수정하기
 	*****************************
 	 -->
 
-	<p>&nbsp;</p>
-	<p>[회원정보 수정]</p>
-	<table border="1">
-		<tr>
-			<td width="30">${status.index}</td>
-			<td width="199">
-				<p>user id</p>
-			</td>
-			<td width="199">
-				<p>name</p>
-			</td>
-			<td width="199">
-				<p>email</p>
-			</td>
-			<td width="199">
-				<p>team</p>
-			</td>
-			<td width="199">
-				<p>level</p>
-			</td>
-			<td width="199">
-				<p>&nbsp;</p>
-			</td>
-		</tr>
-		<!-- DB 데이터 채움 (클래스 변수사용) -->
-		<c:forEach var="i" items="${items}" varStatus="status">
+<p>&nbsp;</p>
+<h5>
+	<b>[회원정보 수정]</b>
+</h5>
+<table border="1">
+	<tr>
+		<td width="30">${status.index}</td>
+		<td width="199">
+			<p>user id</p>
+		</td>
+		<td width="199">
+			<p>name</p>
+		</td>
+		<td width="199">
+			<p>email</p>
+		</td>
+		<td width="199">
+			<p>team</p>
+		</td>
+		<td width="199">
+			<p>level</p>
+		</td>
+		<td width="199">
+			<p>&nbsp;</p>
+		</td>
+	</tr>
+	<!-- DB 데이터 채움 (클래스 변수사용) -->
+	<c:forEach var="i" items="${items}" varStatus="status">
 
-			<form name="form${status.index}">
+		<form name="form${status.index}">
 			<tr>
 				<td width="30">${status.index}</td>
 				<td width="199">
@@ -262,9 +252,9 @@
 					<p>
 
 
-						<input type="button" value="수정" name="submitbtn"
+						<input type="button" value="수정" class="btn btn-primary btn-xs"  name="submitbtn"
 							OnClick="javascript:modifyCheck2('${status.index}');"> <input
-							type=button name="formbutton2" value="비번초기화"
+							type=button name="formbutton2" value="비번초기화" class="btn btn-warning btn-xs" 
 							OnClick="javascript:ResetPassword('${status.index}');">
 					</p>
 
@@ -273,52 +263,50 @@
 
 			</tr>
 
-			</form>
-		</c:forEach>
+		</form>
+	</c:forEach>
 
-	</table>
-	<p>&nbsp;</p>
+</table>
+<p>&nbsp;</p>
 
-	<!-- 
+<!-- 
 	*****************************
 	페이지 표시
 	*****************************
 	 -->
 
-	<div class="col-xs-8">
-		<ul class="pagination pagination-sm" style="margin-top: 0px;">
-			<!-- 시작페이지가 1부터면 이전 표시("<<") ​ 안함 -->
-			<c:if test="${start-1 ==0 }">
+<div class="col-xs-8">
+	<ul class="pagination pagination-sm" style="margin-top: 0px;">
+		<!-- 시작페이지가 1부터면 이전 표시("<<") ​ 안함 -->
+		<c:if test="${start-1 ==0 }">
 
-			</c:if>
-			<!-- 시작페이지가 1이 아니면 << 이전 표시.  링크는 시작페이지가 6부터 10까지일 경우 5페이지를 가르킴 -->
-			​
+		</c:if>
+		<!-- 시작페이지가 1이 아니면 << 이전 표시.  링크는 시작페이지가 6부터 10까지일 경우 5페이지를 가르킴 -->
+		​
 
-			<c:if test="${start-1!=0 }">
-				<li><a href="/admin/user/${start-1}">&laquo;</a></li>
-			</c:if>
-			<!-- 5개씩 페이지 표시-->
-			​
+		<c:if test="${start-1!=0 }">
+			<li><a href="/admin/user/${start-1}">&laquo;</a></li>
+		</c:if>
+		<!-- 5개씩 페이지 표시-->
+		​
 
-			<c:forEach var="i" begin="${start }" end="${end }">
-				<li id="page${i }"><a href="/admin/user/${i}">${i}</a></li>
-			</c:forEach>
-			<!-- end페이지 번호가 5, 10 인데 전체 페이지 갯수가 end페이지 보다 크면 다음 페이징 바로가기 표시  (">>")​ .-->
-			​
+		<c:forEach var="i" begin="${start }" end="${end }">
+			<li id="page${i }"><a href="/admin/user/${i}">${i}</a></li>
+		</c:forEach>
+		<!-- end페이지 번호가 5, 10 인데 전체 페이지 갯수가 end페이지 보다 크면 다음 페이징 바로가기 표시  (">>")​ .-->
+		​
 
-			<c:if test="${end % 5 == 0 && pageNum > end}">
-				<li><a href="/admin/user/${end+1}">&raquo;</a></li>
-			</c:if>
-			<!-- 마지막 페이지 번호와 전체 페이지 번호가 같으면서 5개 단위가 아니면 다음바로가기 표시 않함 -->
-			​​
+		<c:if test="${end % 5 == 0 && pageNum > end}">
+			<li><a href="/admin/user/${end+1}">&raquo;</a></li>
+		</c:if>
+		<!-- 마지막 페이지 번호와 전체 페이지 번호가 같으면서 5개 단위가 아니면 다음바로가기 표시 않함 -->
+		​​
 
-			<c:if test="${end % 5 != 0 && end == pageNum }">
+		<c:if test="${end % 5 != 0 && end == pageNum }">
 
-			</c:if>
-		</ul>
-	</div>
-</body>
-
-</html>
+		</c:if>
+	</ul>
+</div>
 
 
+<%@ include file="footer.jsp"%>
