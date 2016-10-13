@@ -360,7 +360,7 @@ public class ShipController {
 
 		// State ERROR
 		System.out.println("[" + loginUser.getUserId() + "]reqstate is not 1(요청서작성중) or 2(합의요청중) !!");
-		return "shipreq";
+		return "shipparts";
 
 	}
 

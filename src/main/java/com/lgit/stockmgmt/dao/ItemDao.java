@@ -156,4 +156,17 @@ public class ItemDao {
 		return sqlSession.update("updateShipReqState_ShipId", paramMap2);
 	}
 
+	public List<ProjectItem> queryMyProjectItems(Map<String, String> paramMap) {
+		return sqlSession.selectList("queryProjectItemsByID", paramMap);
+	}
+
+	
+
+	public List<PartsItem> queryMyPartsItemsById(Map<String, String> paramMap) {
+		return sqlSession.selectList("selectPartsItemListByID", paramMap);
+	}
+
+
+	
+
 }

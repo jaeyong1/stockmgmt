@@ -70,6 +70,8 @@ var rolekor ="";
 						class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="#">Inno Parts System</a>
+				<a class="navbar-brand" href="/myproject">프로젝트관리</a>
+				<a class="navbar-brand" href="/myparts">파츠관리</a>
 			</div>
 
 			<div id="navbar" class="navbar-collapse collapse">

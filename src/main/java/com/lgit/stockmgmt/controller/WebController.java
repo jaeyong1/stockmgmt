@@ -46,7 +46,7 @@ public class WebController {
 		System.out.println("hello process -John lee");
 		return "itemlist_test";
 	}
-	
+
 	/*
 	 * Controller - Service 연결
 	 */
@@ -78,7 +78,7 @@ public class WebController {
 
 	@RequestMapping(value = "/admin/project/{seq}", method = RequestMethod.GET)
 	public String showAdminProject1(@PathVariable String seq, Model model) {
-		if (seq.equalsIgnoreCase("")) {
+		if (seq.equalsIgnoreCase("") || seq.equalsIgnoreCase("-1")) {
 			seq = "0";
 
 		}
@@ -174,7 +174,7 @@ public class WebController {
 
 	@RequestMapping(value = "/admin/parts/{seq}", method = RequestMethod.GET)
 	public String showAdminParts1(@PathVariable String seq, Model model) {
-		if (seq.equalsIgnoreCase("")) {
+		if (seq.equalsIgnoreCase("") || seq.equalsIgnoreCase("-1")) {
 			seq = "0";
 
 		}
@@ -278,7 +278,7 @@ public class WebController {
 
 	@RequestMapping(value = "/admin/user/{seq}", method = RequestMethod.GET)
 	public String showAdminUser(@PathVariable String seq, Model model) {
-		if (seq.equalsIgnoreCase("")) {
+		if (seq.equalsIgnoreCase("") || seq.equalsIgnoreCase("-1")) {
 			seq = "0";
 
 		}
@@ -376,7 +376,7 @@ public class WebController {
 
 	@RequestMapping(value = "/mylist/{seq}", method = RequestMethod.GET)
 	public String myListProcess(@PathVariable String seq, Model model, HttpServletRequest request) {
-		if (seq.equalsIgnoreCase("")) {
+		if (seq.equalsIgnoreCase("") || seq.equalsIgnoreCase("-1")) {
 			seq = "0";
 		}
 		// session 확인
@@ -385,7 +385,8 @@ public class WebController {
 			System.out.println("/mylist process. no session info. return login.jsp ");
 			return "login";
 		}
-		System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /mylist process. req pagenum:" + seq);
+		System.out.println(
+				"[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /mylist process. req pagenum:" + seq);
 
 		final int rowsPer1Page = 15;
 
@@ -406,6 +407,234 @@ public class WebController {
 		// 인덱스..
 
 		return "mylist";// mylist.jsp
+	}
+
+	/*
+	 * 
+	 * ============================== 사용자 프로젝트 관리 ==============================
+	 */
+
+	/*
+	 * /addmyproject 프로젝트 생성
+	 */
+	@RequestMapping(value = "/myproject", method = RequestMethod.GET)
+	public String showMyProject2(Model model, HttpServletRequest request) {
+		return showMyProject1("0", model, request);
+	}
+
+	@RequestMapping(value = "/myproject/{seq}", method = RequestMethod.GET)
+	public String showMyProject1(@PathVariable String seq, Model model, HttpServletRequest request) {
+		if (seq.equalsIgnoreCase("") || seq.equalsIgnoreCase("-1")) {
+			seq = "0";
+		}
+
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/shipreqlist process. no session info.  ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /shipreqlist process");
+
+		final int rowsPer1Page = 15;
+
+		// Get List
+		// List<ProjectItem> items = itemService.getProjectItems();
+		List<ProjectItem> items = itemService.getMyProjectItems(loginUser.getUserId());
+		System.out.println("/myproject process");
+
+		// Choose current page data
+		PagedListHolder<ProjectItem> paging = new PagedListHolder<ProjectItem>(items);
+		paging.setPageSize(rowsPer1Page);
+		paging.setPage(Integer.parseInt(seq));
+		model.addAttribute("items", paging.getPageList());
+
+		// Add Page number information
+		model.addAttribute("pageNum", paging.getPageCount());
+		model.addAttribute("start", paging.getFirstLinkedPage());
+		model.addAttribute("end", paging.getLastLinkedPage());
+		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
+		// 인덱스..
+
+		return "myproject"; /* myproject.jsp */
+	}
+
+	@RequestMapping(value = "/addmyproject", method = RequestMethod.POST)
+	public String addMyProject(ProjectItem item, Model model, HttpServletRequest request) {
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/addmyproject process. no session info.  ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /addmyproject process");
+
+		// Get data from Webbrowser
+		item.setProjectCode(request.getParameter("project-Code"));
+		item.setProjectName(request.getParameter("project-Name"));
+		item.setProjectOwnerId(loginUser.getUserId());
+		item.setProjectShipperId(request.getParameter("project-shipper-Id"));
+		System.out.println("[" + loginUser.getUserId() + "]" + item.toString());
+
+		// insert DB query
+		itemService.setProjectItem(item);
+		model.addAttribute("reqresult", item.getProjectCode() + " is added");
+
+		// Get DB List
+		return showMyProject1("0", model, request);
+	}
+
+	/*
+	 * /reqmyprojectmodify 프로젝트 수정
+	 */
+	@RequestMapping(value = "/reqmyprojectmodify", method = RequestMethod.POST)
+	public String modifyMyProject(ProjectItem item, Model model, HttpServletRequest request) {
+		// Get data from Webbrowser
+		item.setProjectCode(request.getParameter("project-Code"));
+		item.setProjectName(request.getParameter("project-Name"));
+		item.setProjectOwnerId(request.getParameter("project-Owner-Id"));
+		item.setProjectShipperId(request.getParameter("project-shipper-Id"));
+
+		// Change DB query
+		itemService.changeProjectItem(item);
+		model.addAttribute("reqresult", item.getProjectCode() + "'s datas are changed");
+		System.out.println("/reqmyprojectmodify processed.. Req ID:" + item.getProjectCode());
+
+		// Get DB List
+		return showMyProject1("0", model, request);
+	}
+
+	/*
+	 * /reqmyprojectremove 프로젝트 제거
+	 * 
+	 */
+	@RequestMapping(value = "/reqmyprojectremove", method = RequestMethod.POST)
+	public String removeMyProject(ProjectItem item, Model model, HttpServletRequest request) {
+		// Get data from Webbrowser
+		item.setProjectCode(request.getParameter("project-Code"));
+
+		// Change DB query
+		itemService.removeProjectItem(item);
+		model.addAttribute("reqresult", item.getProjectCode() + " is removed");
+		System.out.println("/reqmyprojectremove processed.. Req ID:" + item.getProjectCode());
+
+		// Get DB List
+		return showMyProject1("0", model, request);
+	}
+
+	// =================================================
+
+	/*
+	 * /addmyparts 파츠 추가
+	 */
+	@RequestMapping(value = "/addmyparts", method = RequestMethod.POST)
+	public String addMyParts(PartsItem item, Model model, HttpServletRequest request) {
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/addmyproject process. no session info.  ");
+			return "login";
+		}
+		// Get data from Webbrowser
+		item.setPartProjectCode(request.getParameter("part-Project-Code"));
+		item.setPartName(request.getParameter("part-Name"));
+		item.setPartDesc(request.getParameter("part-Desc"));
+		item.setPartLocation(request.getParameter("part-Location"));
+		item.setPartCost(Float.valueOf(request.getParameter("part-Cost")));
+		item.setPartStock(Integer.valueOf(request.getParameter("part-Stock")));
+		item.setPartMemo(request.getParameter("part-Memo"));
+
+		// insert DB query
+		itemService.setPartsItem(item);
+		model.addAttribute("reqresult", item.getPartName() + " is added");
+
+		// Get DB List
+
+		return showMyParts1("0", model, request);
+	}
+
+	/*
+	 * /myparts 파츠 조회
+	 */
+	@RequestMapping(value = "/myparts", method = RequestMethod.GET)
+	public String showMyParts2(Model model, HttpServletRequest request) {
+		return showMyParts1("0", model, request);
+	}
+
+	@RequestMapping(value = "/myparts/{seq}", method = RequestMethod.GET)
+	public String showMyParts1(@PathVariable String seq, Model model, HttpServletRequest request) {
+		if (seq.equalsIgnoreCase("") || seq.equalsIgnoreCase("-1")) {
+			seq = "0";
+		}
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/mylist process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out.println(
+				"[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /mylist process. req pagenum:" + seq);
+
+		final int rowsPer1Page = 15;
+
+		/////////////////// List View
+		List<PartsItem> items = itemService.getMyItemsByID(loginUser.getUserId());
+		System.out.println("/adminparts process");
+		// model.addAttribute("items", items);
+
+		// Choose current page data
+		PagedListHolder<PartsItem> paging = new PagedListHolder<PartsItem>(items);
+		paging.setPageSize(rowsPer1Page);
+		paging.setPage(Integer.parseInt(seq));
+		model.addAttribute("items", paging.getPageList());
+
+		// Add Page number information
+		model.addAttribute("pageNum", paging.getPageCount());
+		model.addAttribute("start", paging.getFirstLinkedPage());
+		model.addAttribute("end", paging.getLastLinkedPage());
+		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
+		// 인덱스..
+
+		return "myparts"; /* adminparts.jsp */
+	}
+
+	/*
+	 * /reqmypartsmodify 파츠 수정
+	 */
+	@RequestMapping(value = "/reqmypartsmodify", method = RequestMethod.POST)
+	public String modifyMyParts(PartsItem item, Model model, HttpServletRequest request) {
+		// Get data from Webbrowser
+		item.setPartId(Integer.valueOf(request.getParameter("part-Id")));
+		item.setPartProjectCode(request.getParameter("part-Project-Code"));
+		item.setPartName(request.getParameter("part-Name"));
+		item.setPartDesc(request.getParameter("part-Desc"));
+		item.setPartLocation(request.getParameter("part-Location"));
+		item.setPartCost(Float.valueOf(request.getParameter("part-Cost")));
+		item.setPartStock(Integer.valueOf(request.getParameter("part-Stock")));
+		item.setPartMemo(request.getParameter("part-Memo"));
+
+		// Change DB query
+		itemService.changePartsItem(item);
+		model.addAttribute("reqresult", item.getPartName() + "'s datas are changed");
+		System.out.println("/reqmypartsmodify processed.. Req:" + item.getPartName());
+
+		// Get DB List
+		return showMyParts1("0", model, request);
+	}
+
+	/*
+	 * /reqmypartsremove 파츠 제거
+	 */
+	@RequestMapping(value = "/reqmypartsremove", method = RequestMethod.POST)
+	public String removeMyParts(PartsItem item, Model model, HttpServletRequest request) {
+		// Get data from Webbrowser
+		item.setPartId(Integer.valueOf(request.getParameter("part-Id")));
+		item.setPartName(request.getParameter("part-Name"));
+
+		// Change DB query
+		itemService.removePartsItem(item);
+		model.addAttribute("reqresult", item.getPartName() + " is removed");
+		System.out.println("/admin/reqprojectremove processed.. Req ID:" + item.getPartName());
+
+		// Get DB List
+		return showMyParts1("0", model, request);
 	}
 
 }

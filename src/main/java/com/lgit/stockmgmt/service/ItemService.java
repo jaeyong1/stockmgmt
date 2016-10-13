@@ -248,4 +248,17 @@ public class ItemService {
 		return itemDao.updateShipReqState_ShipId(paramMap2);
 	}
 
+	public List<ProjectItem> getMyProjectItems(String userId) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("UserId", userId);		
+		return itemDao.queryMyProjectItems(paramMap);
+	}
+
+
+	public List<PartsItem> getMyItemsByID(String userId) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("UserId", userId);	
+		return itemDao.queryMyPartsItemsById(paramMap);
+	}
+
 }

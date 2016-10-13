@@ -236,7 +236,7 @@
 	<!-- Seach Type 1 - 프로젝트CODE -->
 	<select id="queryJoinedPartsItemByProjectCode" parameterType="String"
 		resultMap="JoinedPartsItemMap">
-		SELECT
+		SELECT		
 		t2.part_id 'part_id' #part_id
 		, t1.project_code
 		'project_code' #Project Code
@@ -564,6 +564,50 @@
 		`ship_id` =
 		#{shipId} ;
 	</update>
+
+
+	<!-- *************************** 프로젝트 관리 *************************** -->
+
+	<!-- tb_project 전체를 받아옴 -->
+	<select id="queryProjectItemsByID" resultMap="ProjectItemMap">
+		SELECT
+		`project_code`, `project_name`, `project_owner_id`,
+		`project_shipper_id`
+		FROM
+		tb_project
+		where
+		`project_owner_id` = #{UserId};
+	</select>
+
+
+	<!-- tb_parts 전체를 받아옴 -->
+	<select id="selectPartsItemListByID" parameterType="String" resultMap="PartsItemMap">				
+		SELECT
+		t2.part_id 'part_id'	
+		,t2.part_project_code 'part_project_code'
+		,t2.part_name 'part_name'
+		,t2.part_desc 'part_desc'
+		,t2.part_location 'part_location'
+		,t2.part_cost	 'part_cost'
+		,t2.part_stock 'part_stock'
+		,t2.part_memo 'part_memo'
+		FROM
+		tb_project AS t1
+		INNER JOIN (tb_part AS t2, tb_user
+		AS t3, tb_user AS t4 )
+		ON
+		(t1.project_code = t2.part_project_code)
+		AND
+		(t1.project_owner_id =
+		t3.user_id)
+		AND
+		(t1.project_shipper_id =
+		t4.user_id)
+		AND
+		(t3.user_id = #{UserId})
+		ORDER BY t2.part_id DESC
+	</select>
+	
 
 
 </mapper>
