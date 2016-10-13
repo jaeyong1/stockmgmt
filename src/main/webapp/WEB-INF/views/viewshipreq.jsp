@@ -242,6 +242,9 @@
 		<td width="169">
 			<p align="center">Item Desc</p>
 		</td>
+		<td width="169">
+			<p align="center">Maker</p>
+		</td>
 		<td width="86">
 			<p align="center">재고수량</p>
 		</td>
@@ -275,6 +278,9 @@
 				</td>
 				<td width="169">
 					<p align="center">${i.partDesc}</p>
+				</td>
+				<td width="169">
+					<p align="center">${i.partMemo}</p>
 				</td>
 				<td width="86">
 					<p align="center">${i.partStock}</p>
@@ -311,32 +317,32 @@
 	******************************************************** 
 	-->
 <!-- state 3 > 4 -->
-<br>
+
 <c:choose>
 	<c:when
 		test="${(3 == sessionScope.userLoginInfo.userLevel) && (3 == reqshipinfo.shipStateId) }">
-		<input type="button" value="출고접수완료" name="submitbtn1"
-			OnClick="javascript:shipperChecked();">
+		<input type="button" value="출고접수완료" name="submitbtn1" class="btn btn-primary btn-md"
+			OnClick="javascript:shipperChecked();">&nbsp;&nbsp;
 	</c:when>
 </c:choose>
 
 <!-- state 4 > 5 -->
-<br>
+
 <c:choose>
 	<c:when
 		test="${(3 == sessionScope.userLoginInfo.userLevel) && (4 == reqshipinfo.shipStateId) }">
-		<input type="button" value="출고완료" name="submitbtn2"
-			OnClick="javascript:shipperAccept();">
+		<input type="button" value="출고완료" name="submitbtn2" class="btn btn-primary btn-md"
+			OnClick="javascript:shipperAccept();">&nbsp;&nbsp;
 	</c:when>
 </c:choose>
 
 <!-- state 4 > 6 -->
-<br>
+
 <c:choose>
 	<c:when
 		test="${(3 == sessionScope.userLoginInfo.userLevel) && (4 == reqshipinfo.shipStateId) }">
-		<input type="button" value="출고요청반려" name="submitbtn3"
-			OnClick="javascript:shipperRej();">
+		<input type="button" value="출고요청반려" name="submitbtn3" class="btn btn-primary btn-md"
+			OnClick="javascript:shipperRej();">&nbsp;&nbsp;
 	</c:when>
 </c:choose>
 

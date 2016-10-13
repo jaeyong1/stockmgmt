@@ -70,32 +70,59 @@ var rolekor ="";
 						class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="#">Inno Parts System</a>
-				<a class="navbar-brand" href="/myproject">프로젝트관리</a>
-				<a class="navbar-brand" href="/myparts">파츠관리</a>
+
 			</div>
 
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="/mylist">나의자재</a></li>
+
+					<c:choose>
+						<c:when test="${(3 == sessionScope.userLoginInfo.userLevel) }">
+
+							<li class="active"><a href="/shipreqlist">출고요청처리</a></li>
+							<li><a href="/mylist"><del>재물조사수행</del></a></li>
+						</c:when>
+					</c:choose>
+
+					<c:choose>
+						<c:when test="${(2 == sessionScope.userLoginInfo.userLevel) }">
+							<li class="active"><a href="/mylist">나의자재</a></li>
+							<li class="dropdown"><a href="#" class="dropdown-toggle"
+								data-toggle="dropdown" role="button" aria-haspopup="true"
+								aria-expanded="false">출고요청하기<span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a href="/shipparts">출고요청 부품리스트</a></li>
+									<li><a href="/shipreq">출고요청서 작성</a></li>
+								</ul></li>
+							<li><a href="/shipreqlist">출고진행상황</a></li>
+							<li><a href="/otherslist"><del>파트너자재</del></a></li>
+							<li><a href="/mylist"><del>파트너출고요청 </del></a></li>
+						</c:when>
+					</c:choose>
+
+
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
-						aria-expanded="false">출고요청하기<span class="caret"></span></a>
+						aria-expanded="false">DataBase관리<span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a href="/shipparts">출고요청 부품리스트</a></li>
-							<li><a href="/shipreq">출고요청서 작성</a></li>
-						</ul></li>
-					<li><a href="/shipreqlist">출고진행상황</a></li>
-					<li><a href="/mylist"><del>파트너자재</del></a></li>
-					<li><a href="/mylist"><del>파트너출고요청 </del></a></li>
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown" role="button" aria-haspopup="true"
-						aria-expanded="false">DB관리(Admin)<span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="/admin/user">User Mgmt</a></li>
-							<li><a href="/admin/project">Project Mgmt</a></li>
-							<li><a href="/admin/parts">Parts Mgmt</a></li>
-							<li role="separator" class="divider"></li>
-							<li class="dropdown-header">About</li>
+							<c:choose>
+								<c:when test="${(2 == sessionScope.userLoginInfo.userLevel) }">
+
+									<li><a href="/myproject">Project 관리</a></li>
+									<li><a href="/myparts">Parts 관리</a></li>
+									<li role="separator" class="divider"></li>
+								</c:when>
+							</c:choose>
+
+							<li><a href="/helppage">도움말</a></li>
+							<c:choose>
+								<c:when test="${(5 == sessionScope.userLoginInfo.userLevel) }">
+									<li role="separator" class="divider"></li>
+									<li><a href="/admin/user">User Mgmt</a></li>
+									<li><a href="/admin/project">Project Mgmt</a></li>
+									<li><a href="/admin/parts">Parts Mgmt</a></li>
+								</c:when>
+							</c:choose>
 						</ul></li>
 				</ul>
 

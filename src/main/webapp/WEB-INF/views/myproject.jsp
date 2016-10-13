@@ -4,27 +4,32 @@
 
 
 <script language="javascript">
+	function popup() {
+		//출고담당자 리스트 호출
+		window.open("/shipperlist", 'window', 'width=650,height=600');
+	}
+
 	function newItem() {
 		if (!document.forms["newitemform"].elements["project-Code"].value) {
-			alert("Id를 기입해주세요");
+			alert("프로젝트코드를 기입해주세요");
 			document.forms["newitemform"].elements["project-Code"].focus();
 			return;
 		}
 
 		if (!document.forms["newitemform"].elements["project-Name"].value) {
-			alert("이름을 기입해주세요");
+			alert("프로젝트이름을 기입해주세요");
 			document.forms["newitemform"].elements["project-Name"].focus();
 			return;
 		}
 
 		if (!document.forms["newitemform"].elements["project-Owner-Id"].value) {
-			alert("Email을 기입해주세요");
+			alert("본인 아이디를 기입해주세요");
 			document.forms["newitemform"].elements["project-Owner-Id"].focus();
 			return;
 		}
 
 		if (!document.forms["newitemform"].elements["project-shipper-Id"].value) {
-			alert("소속팀명을 기입해주세요");
+			alert("출고담당자 ID를 기입해주세요(모르면 ADMIN후 관리자문의)");
 			document.forms["newitemform"].elements["project-shipper-Id"]
 					.focus();
 			return;
@@ -129,8 +134,17 @@
 			</td>
 		</tr>
 	</table>
-	<input type="button" value="신규" name="submitbtn1"
-		class="btn btn-success btn-md" OnClick="javascript:newItem();">
+
+	<input type="button" value="신규생성" name="submitbtn1"
+		class="btn btn-warning btn-md" OnClick="javascript:newItem();">
+	&nbsp;&nbsp;&nbsp;
+	<!-- Trigger the modal with a button -->
+	<button type="button" class="btn  btn-success  btn-md  "
+		data-toggle="modal" data-target="#myModal">도움말</button>
+
+	<button type="button" class="btn btn-info btn-md"
+		OnClick="javascript:popup();">출고담당자찾기</button>
+
 </form>
 
 <!-- 
@@ -205,6 +219,7 @@
 	</c:forEach>
 
 </table>
+
 <!-- 
 	*****************************
 	페이지 표시
@@ -242,6 +257,40 @@
 
 		</c:if>
 	</ul>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Trigger the modal with a button -->
+		<button type="button" class="btn btn-info btn-lg" data-toggle="modal"
+			data-target="#myModal">알려드려요</button>
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">프로젝트 생성안내</h4>
+			</div>
+			<div class="modal-body">
+				<p>
+					- <b>개발담당자</b>는 자신의 프로젝트를 생성후에 자산을 등록할 수 있습니다.
+				<p>
+					- 개발담당자는 프로젝트 생성시에 시작담당자(출고담당자)를 꼭 <b>지정</b>해야 합니다. <br>
+					&nbsp;&nbsp;잘모를경우 "ADMIN"이라 써놓고 관리자에게 연락주세요.
+				<p>
+					- 시작담당자(출고담당자)가 지정되지 않으면 출고업무를 진행 할 수 없으므로, <br>&nbsp;&nbsp; 꼭
+					지정해 주세요.
+				<p>
+				<p>- 관리운영자 : jaeyong1.park@lginnotek.com</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+			</div>
+		</div>
+
+	</div>
 </div>
 
 

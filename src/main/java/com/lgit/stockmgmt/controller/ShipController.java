@@ -307,7 +307,7 @@ public class ShipController {
 
 		///////////////////
 		// Query DB List
-		List<ShipReqPartsItem> items = itemService.getShipPartsListItems(reqshipid, loginUser.getUserId());
+		List<ShipReqPartsItem> items = itemService.getShipPartsListItems(reqshipid, main_items.get(0).getShipRequestorId());
 		System.out.println("[" + loginUser.getUserId() + "] /shipparts process");
 		model.addAttribute("items", items);
 
@@ -351,17 +351,18 @@ public class ShipController {
 			// Change DB query
 			itemService.stateMove1to3(shipreqdata, shipreqdata.getShipRequestorId());
 			model.addAttribute("reqresult", shipreqdata.getShipId() + "'s data is added");
-			System.out.println("/shipreqprocess/state1 processed..");
+			System.out.println("/shipreqprocess/state3 processed..");
 
 			// Get DB List
-			return "shipreqlist";
+			//return "shipreqlist";
+			return "redirect:../shipreqlist";
 			// return getShipReqItems("0", model, request);
 		}
 
 		// State ERROR
 		System.out.println("[" + loginUser.getUserId() + "]reqstate is not 1(요청서작성중) or 2(합의요청중) !!");
-		return "shipparts";
 
+		return "shipreqlist";
 	}
 
 	/*
@@ -423,10 +424,12 @@ public class ShipController {
 			// Get data from Web browser
 			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
 			shipreqdata.setShipStateId(EShipState.STATE5_SHIPPINGFINISHED.getStateInt()); // move_to_4
-
+			
 			// Change DB query
 			itemService.stateMove4to5(shipreqdata.getShipId(), shipreqdata.getShipStateId());
 			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state5 processed..");
+			
+
 
 			// Get DB List
 			return "redirect:../shipreqlist";

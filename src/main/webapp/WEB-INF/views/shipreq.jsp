@@ -61,7 +61,7 @@
 
 		//newitemform		
 		//var nm = document.forms["formshipreq"].elements["part-Name"].value;
-		var response = confirm("의 데이터를 신규생성할까요?")
+		var response = confirm("출고요청 할까요?")
 		if (response) {
 			//do yes task
 			document.forms["formshipreq"].method = "post";
@@ -81,15 +81,17 @@
 	 -->
 <h3>${reqresult}</h3>
 <h3>1. 출고요청 정보</h3>
-<table border="1" width="796">
-	<form name="formshipreq">
+
+<form name="formshipreq">
+
+	<table border="1" width="796">
 		<tr>
-			<td width="115" height="20">
+			<th width="115" height="20">
 				<p>요청부서</p> <input type="hidden" name='ship-Id'
 				value='${reqshipinfo.shipId}'>
 
 
-			</td>
+			</th>
 			<td width="259" height="20">
 				<p>${dbUserTeamName}</p>
 			</td>
@@ -195,12 +197,11 @@
 				</p>
 			</td>
 		</tr>
-		<input type="button" value="출고요청" name="submitbtn1"
-			class="btn btn-success btn-md" OnClick="javascript:newItem();">
-	</form>
-</table>
-<p>&nbsp;</p>
-
+	</table>
+	
+	<input type="button" value="출고요청" name="submitbtn1"
+		class="btn btn-success btn-md" OnClick="javascript:newItem();">
+</form>
 <h3>2.출고요청 리스트</h3>
 <!-- 
 	*********
@@ -226,6 +227,9 @@
 		</td>
 		<td width="169">
 			<p align="center">Item Desc</p>
+		</td>
+		<td width="169">
+			<p align="center">Maker</p>
 		</td>
 		<td width="86">
 			<p align="center">재고수량</p>
@@ -260,6 +264,9 @@
 				<td width="169">
 					<p align="center">${i.partDesc}</p>
 				</td>
+				<td width="169">
+					<p align="center">${i.partMemo}</p>
+				</td>				
 				<td width="86">
 					<p align="center">${i.partStock}</p>
 

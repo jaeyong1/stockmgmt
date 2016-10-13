@@ -47,7 +47,7 @@
 
 
 <center>
-	<h3>나의 재고 조회</h3>
+	<h3>파트너의 재고 조회</h3>
 </center>
 
 <form name="formSearchType">
@@ -77,16 +77,16 @@
 		<th width="42">
 			<p>&nbsp;</p>
 		</th>
-		<th width="172">
+		<th width="192">
 			<p>&nbsp;Project Code</p>
 		</th>
-		<th width="100">
+		<th width="85">
 			<p>부서</p>
 		</th>
-		<th width="130">
+		<th width="129">
 			<p>개발담당자</p>
 		</th>
-		<th width="130">
+		<th width="117">
 			<p>출고담당자</p>
 		</th>
 		<th width="112">
@@ -110,6 +110,7 @@
 		<th width="67">
 			<p>위치</p>
 		</th>
+
 	</tr>
 	<!-- DB 데이터 채움 (클래스 변수사용) -->
 	<c:forEach var="i" items="${items}" varStatus="status">

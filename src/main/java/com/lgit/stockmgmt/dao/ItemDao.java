@@ -156,17 +156,30 @@ public class ItemDao {
 		return sqlSession.update("updateShipReqState_ShipId", paramMap2);
 	}
 
+	public List<JoinDBItem> queryOthersJoinItemsByOwner(Map<String, String> paramMap) {
+		return sqlSession.selectList("queryOthersJoinedPartsItemByOwnerName", paramMap);
+	}
+
 	public List<ProjectItem> queryMyProjectItems(Map<String, String> paramMap) {
 		return sqlSession.selectList("queryProjectItemsByID", paramMap);
 	}
-
-	
 
 	public List<PartsItem> queryMyPartsItemsById(Map<String, String> paramMap) {
 		return sqlSession.selectList("selectPartsItemListByID", paramMap);
 	}
 
+	public List<UserItem> queryShipperUserItems() {
+		return sqlSession.selectList("selectShipperUserItem");
 
-	
+	}
+
+	public List<ShipReqPartsItem> queryShipPartsitemsByShipid(Map<String, String> paramMap) {
+		return sqlSession.selectList("queryShipReqListItemsByShipid", paramMap);
+	}
+
+	public int updateMinusStockToTBPart(Map<String, String> paramMap3) {
+		return sqlSession.update("updateMinusStockToTBPart", paramMap3);
+
+	}
 
 }

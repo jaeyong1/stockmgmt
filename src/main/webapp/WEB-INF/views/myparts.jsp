@@ -16,7 +16,7 @@
 		}
 
 		if (!document.forms["newitemform"].elements["part-Desc"].value) {
-			alert("설명을 기입해주세요");
+			alert("설명(Desc)을 기입해주세요");
 			document.forms["newitemform"].elements["part-Desc"].focus();
 			return;
 		}
@@ -162,7 +162,7 @@
 
 		<tr>
 			<td width="143">
-				<p>비고</p>
+				<p>Maker</p>
 			</td>
 			<td width="328">
 				<p>
@@ -202,6 +202,9 @@
 			<p>Desc</p>
 		</td>
 		<td width="130">
+			<p>Maker</p>
+		</td>
+		<td width="130">
 			<p>위치</p>
 		</td>
 		<td width="130">
@@ -210,9 +213,7 @@
 		<td width="130">
 			<p>재고</p>
 		</td>
-		<td width="130">
-			<p>비고</p>
-		</td>
+
 		<td width="130">
 			<p>&nbsp;</p>
 		</td>
@@ -242,6 +243,12 @@
 				</td>
 				<td>
 					<p>
+						<input type=text name=part-Memo size="14" value='${i.partMemo}'>
+					</p>
+				</td>
+
+				<td>
+					<p>
 						<input type=text name=part-Location size="14"
 							value='${i.partLocation}'>
 					</p>
@@ -256,11 +263,7 @@
 						<input type=text name=part-Stock size="4" value='${i.partStock}'>
 					</p>
 				</td>
-				<td>
-					<p>
-						<input type=text name=part-Memo size="14" value='${i.partMemo}'>
-					</p>
-				</td>
+
 
 
 				<td>

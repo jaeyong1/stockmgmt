@@ -410,6 +410,49 @@ public class WebController {
 	}
 
 	/*
+	 * /otherslist 파트너 재고정보
+	 */
+	@RequestMapping(value = "/otherslist", method = RequestMethod.GET)
+	public String othersListProcess2(Model model, HttpServletRequest request) {
+		return othersListProcess("0", model, request);
+	}
+
+	@RequestMapping(value = "/otherslist/{seq}", method = RequestMethod.GET)
+	public String othersListProcess(@PathVariable String seq, Model model, HttpServletRequest request) {
+		if (seq.equalsIgnoreCase("")) {
+			seq = "0";
+		}
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/otherslist process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName()
+				+ "] /otherslist process. req pagenum:" + seq);
+
+		final int rowsPer1Page = 15;
+
+		/////////////////// List View
+		List<JoinDBItem> items = itemService.getOthersItemsByOwnerName(loginUser.getUserName());
+
+		// Choose current page data
+		PagedListHolder<JoinDBItem> paging = new PagedListHolder<JoinDBItem>(items);
+		paging.setPageSize(rowsPer1Page);
+		paging.setPage(Integer.parseInt(seq));
+		model.addAttribute("items", paging.getPageList());
+
+		// Add Page number information
+		model.addAttribute("pageNum", paging.getPageCount());
+		model.addAttribute("start", paging.getFirstLinkedPage());
+		model.addAttribute("end", paging.getLastLinkedPage());
+		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
+		// 인덱스..
+
+		return "mylist";// mylist.jsp
+	}
+
+	/*
 	 * 
 	 * ============================== 사용자 프로젝트 관리 ==============================
 	 */
@@ -636,5 +679,46 @@ public class WebController {
 		// Get DB List
 		return showMyParts1("0", model, request);
 	}
+
+	/*
+	 * /shipperlist 출고담당자리스트
+	 */
+	@RequestMapping(value = "/shipperlist", method = RequestMethod.GET)
+	public String showShipperUser(Model model, HttpServletRequest request) {
+
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/shipperlist process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /shipperlist process. ");
+
+		///////////////////
+		// Query DB List
+		List<UserItem> items = itemService.getShipperUserItems();
+		System.out.println("/shipperlist process");
+		model.addAttribute("items", items);
+
+		return "popup-shipperlist"; /* popup-shipperlist.jsp */
+	}
+	
+	/*
+	 * /helppage 도움말 페이지
+	 */
+	@RequestMapping(value = "/helppage", method = RequestMethod.GET)
+	public String showHelpPage(Model model, HttpServletRequest request) {
+
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/helppage process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /shipperlist process. ");
+
+		return "helppage"; /* helppage.jsp */
+	}
+	
 
 }

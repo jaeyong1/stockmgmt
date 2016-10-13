@@ -11,8 +11,17 @@ public class ShipReqPartsItem {
 	private int partStock;// 재고
 	private String partProjectCode; //프로젝트코드
 	
-	
 
+	private String partMemo;
+
+
+	public String getPartMemo() {
+		return partMemo;
+	}
+
+	public void setPartMemo(String partMemo) {
+		this.partMemo = partMemo;
+	}
 
 	public int getItemlistId() {
 		return itemlistId;
@@ -79,20 +88,24 @@ public class ShipReqPartsItem {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+	
+	
+	
 
-	public ShipReqPartsItem(int itemlistId, int itemlistShipId, int itemlistPartId, int itemlistAmount, String partDesc,
-			int partStock, String partProjectCode, String userId) {
+	public ShipReqPartsItem(int itemlistId, String userId, int itemlistShipId, int itemlistPartId, int itemlistAmount,
+			String partDesc, int partStock, String partProjectCode, String partMemo) {
 		super();
 		this.itemlistId = itemlistId;
+		this.userId = userId;
 		this.itemlistShipId = itemlistShipId;
 		this.itemlistPartId = itemlistPartId;
 		this.itemlistAmount = itemlistAmount;
 		this.partDesc = partDesc;
 		this.partStock = partStock;
 		this.partProjectCode = partProjectCode;
-		this.userId = userId;
+		this.partMemo = partMemo;
 	}
-	
+
 	public ShipReqPartsItem() {
 		super();
 		this.itemlistShipId = -1;
@@ -102,7 +115,7 @@ public class ShipReqPartsItem {
 	 * mybatis 통할때 생성자 타입 추가 필요했음
 	 */
 	public ShipReqPartsItem(Integer itemlistId, Integer itemlistShipId, Integer itemlistPartId, Integer itemlistAmount,
-			String partDesc, Integer partStock, String partProjectCode, String userId){
+			String partDesc, Integer partStock, String partProjectCode, String userId , String partMemo){
 		super();
 
 		this.itemlistId = Integer.valueOf(itemlistId);
@@ -113,6 +126,8 @@ public class ShipReqPartsItem {
 		this.partStock = Integer.valueOf(partStock);
 		this.partProjectCode = partProjectCode;
 		this.userId = userId;
+
+		this.partMemo = partMemo;
 
 	}
 }

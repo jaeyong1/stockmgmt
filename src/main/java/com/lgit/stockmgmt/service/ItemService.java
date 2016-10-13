@@ -1,5 +1,6 @@
 package com.lgit.stockmgmt.service;
 
+import java.awt.event.ItemListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,6 +123,12 @@ public class ItemService {
 		return itemDao.queryJoinItemsByOwnerName(paramMap);
 	}
 
+	public List<JoinDBItem> getOthersItemsByOwnerName(String userOwnerName) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("keyWord", userOwnerName);
+		return itemDao.queryOthersJoinItemsByOwner(paramMap);
+	}
+
 	public List<ShipReqPartsItem> getShipPartsListItems(int itemlistShipId, String loginID) {
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("itemlistShipId", itemlistShipId + "");
@@ -221,10 +228,6 @@ public class ItemService {
 		return itemDao.queryShipReqItemForShipper(paramMap);
 	}
 
-	public void stateMove3to4(ShipReqItem shipreqdata, String shipRequestorId) {
-
-	}
-
 	public int stateMove3to4(int shipId, int shipStateId) {
 		Map<String, String> paramMap2 = new HashMap<String, String>();
 		paramMap2.put("shipId", String.valueOf(shipId));
@@ -242,6 +245,32 @@ public class ItemService {
 	}
 
 	public int stateMove4to5(int shipId, int shipStateId) {
+		// Get itemlist_ship_id
+		/**
+		 * itemlist_part_id=part_id | itemlist_amount
+		 */
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("itemlistShipId", shipId + "");
+		List<ShipReqPartsItem> partslist = itemDao.queryShipPartsitemsByShipid(paramMap);
+		System.out.println(partslist.size() + "건의 재고감소 진행");
+
+		/**
+		 * ex) update board set 칼럼명 = 칼럼명 + 2 where num = '7' 은 스스로 값을계산하여 업데이트
+		 * 수행
+		 */
+		// reduce query
+		int i;
+		Map<String, String> paramMap3 = new HashMap<String, String>();
+		for (i = 0; i < partslist.size(); i++) {
+			paramMap3.clear();
+			paramMap3.put("part_id", String.valueOf(partslist.get(i).getItemlistPartId()));
+			paramMap3.put("minus_amount", String.valueOf(partslist.get(i).getItemlistAmount()));
+			System.out.println("query minus ItemlistPartId:" + partslist.get(i).getItemlistPartId() + ", minusvolume:"
+					+ partslist.get(i).getItemlistAmount());
+			itemDao.updateMinusStockToTBPart(paramMap3);
+		}
+
+		// STATE UPDATE
 		Map<String, String> paramMap2 = new HashMap<String, String>();
 		paramMap2.put("shipId", String.valueOf(shipId));
 		paramMap2.put("newShipStateId", String.valueOf(shipStateId));
@@ -250,15 +279,19 @@ public class ItemService {
 
 	public List<ProjectItem> getMyProjectItems(String userId) {
 		Map<String, String> paramMap = new HashMap<String, String>();
-		paramMap.put("UserId", userId);		
+		paramMap.put("UserId", userId);
 		return itemDao.queryMyProjectItems(paramMap);
 	}
 
-
 	public List<PartsItem> getMyItemsByID(String userId) {
 		Map<String, String> paramMap = new HashMap<String, String>();
-		paramMap.put("UserId", userId);	
+		paramMap.put("UserId", userId);
 		return itemDao.queryMyPartsItemsById(paramMap);
+	}
+
+	public List<UserItem> getShipperUserItems() {
+		// 출고담당자 리스트
+		return itemDao.queryShipperUserItems();
 	}
 
 }
