@@ -2,6 +2,8 @@ package com.lgit.stockmgmt.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -35,4 +37,14 @@ public class WebConfig extends WebMvcConfigurerAdapter { /* 상속받아 구현 
         registry.addResourceHandler("/js/**").addResourceLocations("/resources/js/").setCachePeriod(31556926);
         registry.addResourceHandler("/bootstrap/**").addResourceLocations("/resources/bootstrap/").setCachePeriod(31556926);
     }
+    
+    /*
+     * 엑셀처리를 위해 파일 업로드 
+     */
+//    @Bean
+//    public MultipartResolver multipartResolver() {
+//        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+//        multipartResolver.setMaxUploadSize(10000000);
+//        return multipartResolver;
+//    }
 }
