@@ -702,7 +702,7 @@ public class WebController {
 
 		return "popup-shipperlist"; /* popup-shipperlist.jsp */
 	}
-	
+
 	/*
 	 * /helppage 도움말 페이지
 	 */
@@ -719,6 +719,13 @@ public class WebController {
 
 		return "helppage"; /* helppage.jsp */
 	}
-	
+
+	/*
+	 *   index 페이지
+	 */
+	@RequestMapping("/")
+	public String getIndex(Model model) {
+		return "redirect:mylist";
+	}
 
 }
