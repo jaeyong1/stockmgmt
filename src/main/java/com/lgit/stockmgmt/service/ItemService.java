@@ -209,6 +209,40 @@ public class ItemService {
 
 	}
 
+	public int stateMove1to2(ShipReqItem shipreqdata, String UserId) {
+
+		int partsShipreqId = 0;
+
+		if (shipreqdata.getShipId() == -1) {
+			// shipreq 생성
+			itemDao.insertShipReqItem(shipreqdata);
+
+			// last id 받아옴 (myID, desc순으로 마지막꺼)
+			Map<String, String> paramMap = new HashMap<String, String>();
+			paramMap.put("UserId", UserId);
+			List<ShipReqItem> list = itemDao.queryShipReqItem(paramMap);
+			partsShipreqId = list.get(0).getShipId();
+			System.out.println("new ship id :" + partsShipreqId);
+
+		} else {
+
+			partsShipreqId = shipreqdata.getShipId();
+			System.out.println("last ship id :" + partsShipreqId);
+			itemDao.insertShipReqItem(shipreqdata);
+
+			// update;
+		}
+		// tb_part에서 myID이면서 -1인것 id로 업데이트
+		Map<String, String> paramMap2 = new HashMap<String, String>();
+		paramMap2.put("UserId", UserId);
+		paramMap2.put("OldShipId", String.valueOf(-1));
+		paramMap2.put("NewShipId", String.valueOf(partsShipreqId));
+		itemDao.updateShipParts_ShipId(paramMap2);
+
+		return 0;
+
+	}
+
 	public List<ShipReqItem> getShipReqItems(String userId) {
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("UserId", userId);
@@ -292,6 +326,54 @@ public class ItemService {
 	public List<UserItem> getShipperUserItems() {
 		// 출고담당자 리스트
 		return itemDao.queryShipperUserItems();
+	}
+
+	public boolean isVaildOthersCartItem(Integer partsId, String userId) {
+
+		// 입력받은 아이템의 owner정보가져옴
+
+		Map<String, String> paramMap1 = new HashMap<String, String>();
+		paramMap1.put("partId", String.valueOf(partsId));
+		List<UserItem> items1 = itemDao.getUserItemsByPartsId(paramMap1);
+		if (items1.size() == 0) {
+			System.out.println("[타인출고담기] 잘못된 PartId로 추정됨.. partsId:" + partsId);
+			return false;
+		}
+		String partsOwnerrId = items1.get(0).getUserId();
+		System.out.println("[타인출고담기] 아이템id (" + partsId + "의 소유자Id : " + partsOwnerrId);
+
+		// 현재 장바구니에 있는 아이템의 프로젝트 OwnerID
+		Map<String, String> paramMap2 = new HashMap<String, String>();
+		paramMap2.put("UserId", userId);
+		List<UserItem> items2 = itemDao.getOneUserItemsByOthersCart(paramMap2);
+
+		System.out.println("[타인출고담기] 현재 담겨있는 아이템갯수 : " + items2.size());
+
+		if (items2.size() != 0) {
+			String othersCartOwnerId = items2.get(0).getUserId();
+			if (!partsOwnerrId.equals(othersCartOwnerId)) {
+				// 비교해서 다르면 에러팝업띄움
+
+				// 담을려는 아이템의 OwnerID..
+				// 현재 프로젝트의 OwnerID..
+				System.out.println("[타인출고담기][NOT ALLOWED] 담겨있는 아이템의 소유자 ID :" + othersCartOwnerId);
+
+				return false;
+
+			} else {
+				;// 비교해서 같으면 담을 수 있음
+			}
+		}
+		// 장바구니에 아무것도 없으면그냥담음..
+		return true;
+	}
+
+	public List<UserItem> getUserItemInOthersCart(String userId) {
+		// 현재 장바구니에 있는 아이템의 프로젝트 OwnerID
+		Map<String, String> paramMap2 = new HashMap<String, String>();
+		paramMap2.put("UserId", userId);
+		return itemDao.getOneUserItemsByOthersCart(paramMap2);
+
 	}
 
 }

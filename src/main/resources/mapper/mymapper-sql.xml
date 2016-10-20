@@ -236,29 +236,37 @@
 	<!-- Seach Type 1 - 프로젝트CODE -->
 	<select id="queryJoinedPartsItemByProjectCode" parameterType="String"
 		resultMap="JoinedPartsItemMap">
-		SELECT		
+		SELECT
 		t2.part_id 'part_id' #part_id
 		, t1.project_code
 		'project_code' #Project Code
-		, t3.user_teamname 'user_teamname' #개발자부서
-		, t3.user_name 'owner_korname' #개발담당자
+		,
+		t3.user_teamname 'user_teamname' #개발자부서
+		,
+		t3.user_name 'owner_korname'
+		#개발담당자
 		, t4.user_name 'shipper_korname'
 		#출고담당자
-		, t2.part_name 'part_name' #LGIT P/N
+		, t2.part_name 'part_name'
+		#LGIT P/N
 		, t2.part_desc 'part_desc'
 		#Item Desc
-		, t2.part_stock 'part_stock' #재고
+		, t2.part_stock
+		'part_stock' #재고
 		, t2.part_location
 		'part_location' #위치
-		, t2.part_cost 'part_cost' #단가
+		, t2.part_cost
+		'part_cost' #단가
 		, t2.part_memo
 		'part_memo' #비고
 		FROM
 		tb_project AS t1
-		INNER JOIN (tb_part AS t2, tb_user
+		INNER
+		JOIN (tb_part AS t2, tb_user
 		AS t3, tb_user AS t4 )
 		ON
-		(t1.project_code = t2.part_project_code)
+		(t1.project_code =
+		t2.part_project_code)
 		AND
 		(t1.project_owner_id =
 		t3.user_id)
@@ -449,32 +457,36 @@
 		#{logingUserId}
 	</select>
 
-<!-- Seach Type 나만빼고 - 개발자이름으로 -->
-	<select id="queryOthersJoinedPartsItemByOwnerName" parameterType="String"
-		resultMap="JoinedPartsItemMap">
+	<!-- Seach Type 나만빼고 - 개발자이름으로 -->
+	<select id="queryOthersJoinedPartsItemByOwnerName"
+		parameterType="String" resultMap="JoinedPartsItemMap">
 		SELECT
-		t2.part_id 'part_id' #part_id
-		, t1.project_code
-		'project_code' #Project Code
-		, t3.user_teamname 'user_teamname' #개발자부서
-		, t3.user_name 'owner_korname' #개발담당자
+		t2.part_id 'part_id'
+		,
+		t1.project_code 'project_code'
+		, t3.user_teamname 'user_teamname'
+		,
+		t3.user_name 'owner_korname'
 		, t4.user_name 'shipper_korname'
-		#출고담당자
-		, t2.part_name 'part_name' #LGIT P/N
+		,
+		t2.part_name 'part_name'
 		, t2.part_desc 'part_desc'
-		#Item Desc
-		, t2.part_stock 'part_stock' #재고
-		, t2.part_location
-		'part_location' #위치
-		, t2.part_cost 'part_cost' #단가
-		, t2.part_memo
-		'part_memo' #비고
+		, t2.part_stock 'part_stock'
+		,
+		t2.part_location 'part_location'
+		, t2.part_cost 'part_cost'
+		,
+		t2.part_memo 'part_memo'
 		FROM
 		tb_project AS t1
-		INNER JOIN (tb_part AS t2, tb_user
-		AS t3, tb_user AS t4 )
+		INNER JOIN (tb_part
+		AS t2,
+		tb_user
+		AS t3, tb_user AS t4
+		)
 		ON
-		(t1.project_code = t2.part_project_code)
+		(t1.project_code =
+		t2.part_project_code)
 		AND
 		(t1.project_owner_id =
 		t3.user_id)
@@ -482,7 +494,8 @@
 		(t1.project_shipper_id =
 		t4.user_id)
 		AND
-		(t3.user_name != #{keyWord})
+		(t3.user_name !=
+		#{keyWord})
 		ORDER BY t2.part_id DESC
 	</select>
 
@@ -617,18 +630,21 @@
 
 
 	<!-- tb_parts 전체를 받아옴 -->
-	<select id="selectPartsItemListByID" parameterType="String" resultMap="PartsItemMap">				
+	<select id="selectPartsItemListByID" parameterType="String"
+		resultMap="PartsItemMap">
 		SELECT
-		t2.part_id 'part_id'	
-		,t2.part_project_code 'part_project_code'
+		t2.part_id 'part_id'
+		,t2.part_project_code
+		'part_project_code'
 		,t2.part_name 'part_name'
 		,t2.part_desc 'part_desc'
 		,t2.part_location 'part_location'
-		,t2.part_cost	 'part_cost'
+		,t2.part_cost 'part_cost'
 		,t2.part_stock 'part_stock'
 		,t2.part_memo 'part_memo'
 		FROM
-		tb_project AS t1
+		tb_project AS
+		t1
 		INNER JOIN (tb_part AS t2, tb_user
 		AS t3, tb_user AS t4 )
 		ON
@@ -640,12 +656,13 @@
 		(t1.project_shipper_id =
 		t4.user_id)
 		AND
-		(t3.user_id = #{UserId})
+		(t3.user_id =
+		#{UserId})
 		ORDER BY t2.part_id DESC
 	</select>
-	
+
 	<!-- 출고담당자 리스트 query -->
-	
+
 	<select id="selectShipperUserItem" resultMap="UserItemMap">
 		SELECT
 		`user_id`,
@@ -658,8 +675,8 @@
 		WHERE
 		`user_level` = 3;
 	</select>
-	
-	<!-- ShipId로 부품리스트 가져오기 -->	
+
+	<!-- ShipId로 부품리스트 가져오기 -->
 	<select id="queryShipReqListItemsByShipid" parameterType="String"
 		resultMap="JoinedShipPartsListItemMap">
 		SELECT *
@@ -670,19 +687,73 @@
 		ON
 		(t1.itemlist_part_id = t2.part_id)
 		AND
-		t1.itemlist_ship_id = #{itemlistShipId}
+		t1.itemlist_ship_id =
+		#{itemlistShipId}
 		ORDER BY
 		t1.itemlist_id DESC;
 	</select>
-	
+
 	<!-- parts 재고감소 -->
-	
-		<update id="updateMinusStockToTBPart" parameterType="String">
+
+	<update id="updateMinusStockToTBPart" parameterType="String">
 		UPDATE
 		tb_part
 		SET `part_stock` = `part_stock` - #{minus_amount}
-		 WHERE
+		WHERE
 		`part_id` = #{part_id};
 	</update>
 
+
+	<!-- Parts Id로 owner의 User정보 -->
+	<select id="queryUserItemByPartId" parameterType="String"
+		resultMap="UserItemMap">
+		SELECT
+		`user_id`,
+		`user_name`,
+		`user_password`, `user_email`,
+		`user_teamname`,
+		`user_level`
+		from tb_part as t1
+		inner join (tb_project
+		as t2, tb_user as t3)
+		on
+		t1.part_project_code = t2.project_code
+		and
+		t2.project_owner_id = t3.user_id
+		and
+		t1.part_id = #{partId};
+	</select>
+
+	<!-- 나의 장바구니에서 shipid가 -2인 partid의 onwer정보 1개만 -->
+
+	<select id="queryUserItemByCartOwnerId_minus2" parameterType="String"
+		resultMap="UserItemMap">
+		SELECT
+		`user_id`,
+		`user_name`,
+		`user_password`, `user_email`,
+		`user_teamname`,
+		`user_level`
+		from
+		tb_shipreq_itemlist as t1
+		inner join(
+		tb_part as t2,
+		tb_project as t3,
+		tb_user as t4
+		)
+		on
+		t1.itemlist_part_id =
+		t2.part_id
+		and
+		t1.itemlist_ship_id = -2
+		and
+		t1.itemlist_owner_id =
+		#{UserId}
+		and
+		t2.part_project_code = t3.project_code
+		and
+		t3.project_owner_id = t4.user_id
+		LIMIT 0 , 1
+
+	</select>
 </mapper>

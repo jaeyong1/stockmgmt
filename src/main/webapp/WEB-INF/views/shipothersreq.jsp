@@ -65,7 +65,7 @@
 		if (response) {
 			//do yes task
 			document.forms["formshipreq"].method = "post";
-			document.forms["formshipreq"].action = "/shipreqprocess/state3" //'3출고접수'단계로 이동
+			document.forms["formshipreq"].action = "/shipreqprocess/state2" //'2파트너출고접수'단계로 이동
 			document.forms["formshipreq"].submit();
 		} else {
 			//do no task
@@ -188,10 +188,10 @@
 				<p>&nbsp;</p>
 			</td>
 			<td width="126" height="25">
-				<p><!-- 자산협의자 --></p>
+				<p>자산협의자</p>
 			</td>
 			<td width="225" height="25">
-				<p>
+				<p>${reqshipinfo.shipCoworkerUserid}
 					<input type="hidden" name='ship-CoworkerUserid'
 						value='${reqshipinfo.shipCoworkerUserid}'>
 				</p>

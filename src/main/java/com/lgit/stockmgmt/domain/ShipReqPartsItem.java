@@ -130,4 +130,6 @@ public class ShipReqPartsItem {
 		this.partMemo = partMemo;
 
 	}
+
+
 }

@@ -406,6 +406,9 @@ public class WebController {
 		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
 		// 인덱스..
 
+		model.addAttribute("PageTitleInfoFromerver", "나의 재고 관리");
+		model.addAttribute("PostPageUrl", "/reqshippartsadd");
+		// model.addAttribute("CalledUrl","/mylist");
 		return "mylist";// mylist.jsp
 	}
 
@@ -419,7 +422,7 @@ public class WebController {
 
 	@RequestMapping(value = "/otherslist/{seq}", method = RequestMethod.GET)
 	public String othersListProcess(@PathVariable String seq, Model model, HttpServletRequest request) {
-		if (seq.equalsIgnoreCase("")) {
+		if (seq.equalsIgnoreCase("") || seq.equalsIgnoreCase("-1")) {
 			seq = "0";
 		}
 		// session 확인
@@ -432,7 +435,7 @@ public class WebController {
 				+ "] /otherslist process. req pagenum:" + seq);
 
 		final int rowsPer1Page = 15;
-
+	
 		/////////////////// List View
 		List<JoinDBItem> items = itemService.getOthersItemsByOwnerName(loginUser.getUserName());
 
@@ -447,11 +450,18 @@ public class WebController {
 		model.addAttribute("start", paging.getFirstLinkedPage());
 		model.addAttribute("end", paging.getLastLinkedPage());
 		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
-		// 인덱스..
+		// 인덱스..		
+
+		model.addAttribute("PageTitleInfoFromerver", "파트너 재고 관리");
+		model.addAttribute("PostPageUrl", "/reqothersshippartsadd");
 
 		return "mylist";// mylist.jsp
 	}
 
+	
+	
+	
+	
 	/*
 	 * 
 	 * ============================== 사용자 프로젝트 관리 ==============================
@@ -721,7 +731,7 @@ public class WebController {
 	}
 
 	/*
-	 *   index 페이지
+	 * index 페이지
 	 */
 	@RequestMapping("/")
 	public String getIndex(Model model) {

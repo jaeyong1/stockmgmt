@@ -34,10 +34,10 @@
 		console.log("담기");
 		var nm = document.forms["form" + id].elements["part-Id"].value;
 		var response = confirm(nm + "데이터 추가할까요?")
-		if (response) {
+		if (response) {			
 			//do yes task
 			document.forms["form" + id].method = "post";
-			document.forms["form" + id].action = "/reqshippartsadd"
+			document.forms["form" + id].action = "${PostPageUrl}"; //"/reqshippartsadd"
 			document.forms["form" + id].submit();
 		} else {
 			//do no task
@@ -45,9 +45,9 @@
 	}
 </script>
 
-
+<!-- <center>	<h3>나의 재고 조회</h3> </center>  -->
 <center>
-	<h3>나의 재고 조회</h3>
+	<h3>${PageTitleInfoFromerver}</h3>	
 </center>
 
 <form name="formSearchType">

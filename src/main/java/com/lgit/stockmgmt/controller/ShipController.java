@@ -1,9 +1,7 @@
 package com.lgit.stockmgmt.controller;
 
-import java.security.KeyStore.Entry.Attribute;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lgit.stockmgmt.domain.EShipState;
 import com.lgit.stockmgmt.domain.EUserLevel;
-import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ShipReqItem;
 import com.lgit.stockmgmt.domain.ShipReqPartsItem;
 import com.lgit.stockmgmt.domain.UserItem;
@@ -64,19 +61,7 @@ public class ShipController {
 		List<ShipReqPartsItem> items = itemService.getShipPartsListItems(-1, loginUser.getUserId());
 		System.out.println("[" + loginUser.getUserId() + "] /shipparts process");
 		model.addAttribute("items", items);
-		/*
-		 * // Choose current page data PagedListHolder<UserItem> paging = new
-		 * PagedListHolder<UserItem>(items); paging.setPageSize(rowsPer1Page);
-		 * paging.setPage(Integer.parseInt(seq)); model.addAttribute("items",
-		 * paging.getPageList());
-		 * 
-		 * // Add Page number information model.addAttribute("pageNum",
-		 * paging.getPageCount()); model.addAttribute("start",
-		 * paging.getFirstLinkedPage()); model.addAttribute("end",
-		 * paging.getLastLinkedPage()); //
-		 * System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
-		 * // 인덱스..
-		 */
+	
 		return "myreqpartlist"; /* myreqpartlist.jsp */
 	}
 
@@ -117,6 +102,43 @@ public class ShipController {
 	}
 
 	/*
+	 * /reqshippartsmodify_others 타인 장바구니 - 값수정
+	 * 
+	 */
+	@RequestMapping(value = "/reqshippartsmodify_others", method = RequestMethod.POST)
+	public String modifyShipPartsOthers(ShipReqPartsItem shippartsdata, Model model, HttpServletRequest request) {
+		// Get data from Web browser
+		shippartsdata.setItemlistId(Integer.valueOf(request.getParameter("itemlist-Id")));
+		shippartsdata.setItemlistAmount(Integer.valueOf(request.getParameter("itemlist-Amount")));
+
+		// Change DB query
+		itemService.changeShipPartsItem(shippartsdata);
+		model.addAttribute("reqresult", shippartsdata.getItemlistId() + "'s data is changed");
+		System.out.println("/reqshippartsmodify_others processed.. Req ID:" + shippartsdata.getItemlistId());
+
+		// Get DB List
+		return showShippartsOthers("0", model, request); /* adminuser.jsp */
+	}
+
+	/*
+	 * /reqshippartsremove_others 타인 장바구니 - 아이템삭제
+	 */
+
+	@RequestMapping(value = "/reqshippartsremove_others", method = RequestMethod.POST)
+	public String removeShipPartsOthers(ShipReqPartsItem shippartsdata, Model model, HttpServletRequest request) {
+		// Get data from Web browser
+		shippartsdata.setItemlistId(Integer.valueOf(request.getParameter("itemlist-Id")));
+
+		// Change DB query
+		itemService.removeShipPartsItem(shippartsdata);
+		model.addAttribute("reqresult", shippartsdata.getItemlistId() + " is removed");
+		System.out.println("/reqshippartsremove processed.. Req ID:" + shippartsdata.getItemlistId());
+
+		// Get DB List
+		return showShippartsOthers("0", model, request); /* adminuser.jsp */
+	}
+
+	/*
 	 * /shipparts/add
 	 */
 	@RequestMapping(value = "/reqshippartsadd", method = RequestMethod.POST)
@@ -153,10 +175,106 @@ public class ShipController {
 		return showShipparts("0", model, request); /* adminuser.jsp */
 	}
 
+	// == 파트너 출고부품 추가
+	/*
+	 * /reqothersshippartsadd
+	 */
+	@RequestMapping(value = "/reqothersshippartsadd", method = RequestMethod.POST)
+	public String addShipPartsOthers(ShipReqPartsItem shippartsdata, Model model, HttpServletRequest request) {
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/reqothersshippartsadd process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out
+				.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /reqshippartsadd process. ");
+
+		// Get data from Web browser
+		shippartsdata.setUserId(loginUser.getUserId());
+		shippartsdata.setItemlistShipId(-2); // -2 은 아직 장바구니안에 아직대기. 파트너용 부품
+		shippartsdata.setItemlistPartId(Integer.valueOf(request.getParameter("part-Id")));
+		shippartsdata.setItemlistAmount(Integer.valueOf(request.getParameter("reqnum[]")));
+
+		// 해당 PartsId를 카트에담을수 있는지
+		boolean isValidItem = itemService.isVaildOthersCartItem(Integer.valueOf(request.getParameter("part-Id")),
+				loginUser.getUserId());
+
+		if (!isValidItem) {
+			model.addAttribute("reqresult",
+					"[담기실패]<br> 현재 출고요청 준비중인 아이템과 같은 개발담당자의 아이템만 담을 수 있습니다.<br> 현재 담겨있는 Item을 출고요청 후에 다른 개발담당자의 아이템을 담아주세요.<br>");
+			return showShippartsOthers("0", model, request);
+		}
+
+		// Change DB query
+		itemService.addShipPartsItem(shippartsdata);
+		model.addAttribute("reqresult", "(" + shippartsdata.getItemlistPartId() + ")아이템 담기완료");
+		System.out.println("/reqothersshippartsadd processed.. Req ID:" + shippartsdata.getItemlistId() + " reqNum:"
+				+ shippartsdata.getItemlistAmount());
+
+		// Change DB query
+		// itemService.removeShipPartsItem(shippartsdata);
+		// model.addAttribute("reqresult", shippartsdata.getItemlistId() + " is
+		// removed");
+		System.out.println("/reqothersshippartsadd processed.. "); // Req ID:" +
+																	// shippartsdata.getItemlistId());
+
+		// Get DB List
+		return showShippartsOthers("0", model, request); /* adminuser.jsp */
+
+		/// test
+	}
+
+	/*
+	 * /shipparts 파트너출고요청 부품리스트(장바구니)
+	 */
+	@RequestMapping(value = "/shipothersparts", method = RequestMethod.GET)
+	public String showShippartsOthers2(Model model, HttpServletRequest request) {
+		return showShippartsOthers("0", model, request);
+	}
+
+	@RequestMapping(value = "/shipothersparts/{seq}", method = RequestMethod.GET)
+	public String showShippartsOthers(@PathVariable String seq, Model model, HttpServletRequest request) {
+		if (seq.equalsIgnoreCase("")) {
+			seq = "0";
+		}
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/shipothersparts process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName()
+				+ "] /shipothersparts process. req pagenum:" + seq);
+
+		final int rowsPer1Page = 15;
+
+		///////////////////
+		// Query DB List
+		List<ShipReqPartsItem> items = itemService.getShipPartsListItems(-2, loginUser.getUserId());
+		System.out.println("[" + loginUser.getUserId() + "] /shipparts process");
+		model.addAttribute("items", items);
+		/*
+		 * // Choose current page data PagedListHolder<UserItem> paging = new
+		 * PagedListHolder<UserItem>(items); paging.setPageSize(rowsPer1Page);
+		 * paging.setPage(Integer.parseInt(seq)); model.addAttribute("items",
+		 * paging.getPageList());
+		 * 
+		 * // Add Page number information model.addAttribute("pageNum",
+		 * paging.getPageCount()); model.addAttribute("start",
+		 * paging.getFirstLinkedPage()); model.addAttribute("end",
+		 * paging.getLastLinkedPage()); //
+		 * System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
+		 * // 인덱스..
+		 */
+
+		return "othersreqpartlist"; /* myreqpartlist.jsp */
+	}
+
 	/*
 	 * 
 	 * ================================= 출고 관련 =================================
-	 * /shipreq 사용자 List, 가입, 수정 관리화면
+	 * /shipreq 출고 요청서 작성
 	 */
 	@RequestMapping(value = "/shipreq", method = RequestMethod.GET)
 	public String showShipReq(Model model, HttpServletRequest request) {
@@ -173,15 +291,6 @@ public class ShipController {
 		// Get Parts List (Query DB List)
 		showShipparts("0", model, request);
 
-		/*
-		 * 
-		 * 
-		 * 
-		 * 
-		 * state 1인게 있는지 확인하고 있으면 가져오기. <<<
-		 * 
-		 * 없으면 신규 생성 <<<
-		 */
 		//////////////////
 		// Default info
 		ShipReqItem iam = new ShipReqItem();
@@ -227,6 +336,77 @@ public class ShipController {
 	}
 
 	/*
+	 * /shipothersreq 타인자재 출고요청서 작성
+	 */
+
+	@RequestMapping(value = "/shipothersreq", method = RequestMethod.GET)
+	public String showShipReq_Others(Model model, HttpServletRequest request) {
+
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/shipothersreq process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /shipothersreq process");
+
+		///////////////////
+		// Get Parts List (Query DB List)
+		//showShipparts("0", model, request);  //내재고
+		showShippartsOthers("0", model, request);
+
+		//////////////////
+		// Default info
+		ShipReqItem iam = new ShipReqItem();
+
+		iam.setShipId(-1); // new item
+		iam.setShipRequestorId(loginUser.getUserId());
+
+		iam.setShipDestination("");
+
+		LocalDateTime ldt = LocalDateTime.now(); // today
+		iam.setShipToday(ldt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+
+		// +3일
+		LocalDateTime time4 = LocalDateTime.now().plusDays(3);
+		iam.setShipTargetdate(time4.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+
+		// 대표프로젝트 선택
+		String firstItemPrjCode = "";
+		List<ShipReqPartsItem> list = itemService.getShipPartsListItems(-2, loginUser.getUserId());
+		if (list.size() > 0) {
+			firstItemPrjCode = list.get(0).getPartProjectCode();
+		}
+		iam.setShipProjectCode(firstItemPrjCode);
+		iam.setShipMemo("");
+		iam.setShipStateId(EShipState.STATE1_ADDCART.getStateInt());
+
+		iam.setShipIsmyproject(0); // 내 자산이면 1로 .. 남의자산이면 0으로
+		
+		//자산협의자
+		String coworkerId ="";
+		List<UserItem> list2 = itemService.getUserItemInOthersCart(loginUser.getUserId());
+		if (list2.size() > 0) {
+			coworkerId = list2.get(0).getUserId();
+		}		
+		iam.setShipCoworkerUserid(coworkerId);
+
+		model.addAttribute("reqshipinfo", iam);
+
+		// more web info
+		String userName = itemService.getUserNamebyID(loginUser.getUserId());
+		String userTeamName = itemService.getTeamNamebyID(loginUser.getUserId());
+		// System.out.println("id:" + loginUser.getUserId() + " name:" +
+		// userName + " teamname:" + userTeamName);
+		model.addAttribute("dbUserName", userName);
+		model.addAttribute("dbUserTeamName", userTeamName);
+		model.addAttribute("shipstatekor", EShipState.STATE1_ADDCART.getStateKor());
+
+		return "shipothersreq";
+
+	}
+
+	/*
 	 * /shipreqlist 요청서 리스트 뷰
 	 */
 
@@ -256,7 +436,7 @@ public class ShipController {
 		} else {
 			items = itemService.getShipReqItems(loginUser.getUserId());
 		}
-		System.out.println("[" + loginUser.getUserId() + "] /shipparts process");
+		System.out.println("[" + loginUser.getUserId() + "] /shipreqlist process");
 		model.addAttribute("items", items);
 
 		// Choose current page data
@@ -307,13 +487,65 @@ public class ShipController {
 
 		///////////////////
 		// Query DB List
-		List<ShipReqPartsItem> items = itemService.getShipPartsListItems(reqshipid, main_items.get(0).getShipRequestorId());
+		List<ShipReqPartsItem> items = itemService.getShipPartsListItems(reqshipid,
+				main_items.get(0).getShipRequestorId());
 		System.out.println("[" + loginUser.getUserId() + "] /shipparts process");
 		model.addAttribute("items", items);
 
 		return "viewshipreq";
 
 	}
+	
+	/*
+	 * /shipreqprocess/state2 파트너 협의요청 
+	 */
+	@RequestMapping(value = "/shipreqprocess/state2", method = RequestMethod.POST)
+	public String processPartenerConfirmReq(ShipReqItem shipreqdata, Model model, HttpServletRequest request) {
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/shipreqprocess/state2 process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state3 process");
+
+		// check state
+		int curstate = Integer.valueOf(request.getParameter("ship-StateId"));
+
+		// 이전 상태에 따른 분기
+		if (curstate == EShipState.STATE1_ADDCART.getStateInt()) {
+			// Get data from Web browser
+			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
+			shipreqdata.setShipRequestorId(request.getParameter("ship-RequestorId"));
+			shipreqdata.setShipDestination(request.getParameter("ship-Destination"));
+			shipreqdata.setShipToday(request.getParameter("ship-Today"));
+			shipreqdata.setShipTargetdate(request.getParameter("ship-Targetdate"));
+			shipreqdata.setShipProjectCode(request.getParameter("ship-ProjectCode"));
+			shipreqdata.setShipMemo(request.getParameter("ship-Memo"));
+			shipreqdata.setShipIsmyproject(Integer.valueOf(request.getParameter("ship-Ismyproject")));
+			shipreqdata.setShipStateId(EShipState.STATE2_REQCOWORKSHIPPING.getStateInt()); // move
+																						// to
+																						// state
+																						// 2
+			shipreqdata.setShipCoworkerUserid(request.getParameter("ship-CoworkerUserid"));
+
+			// Change DB query
+			itemService.stateMove1to2(shipreqdata, shipreqdata.getShipRequestorId());
+			model.addAttribute("reqresult", shipreqdata.getShipId() + "'s data is added");
+			System.out.println("/shipreqprocess/state2 processed..");
+
+			// Get DB List
+			// return "shipreqlist";
+			return "redirect:../shipreqlist";
+			// return getShipReqItems("0", model, request);
+		}
+
+		// State ERROR
+		System.out.println("[" + loginUser.getUserId() + "]reqstate is not 1(요청서작성중) or 2(합의요청중) !!");
+
+		return "shipreqlist";
+	}
+	
 
 	/*
 	 * /shipreqprocess/state3 요청서 작성중 처리
@@ -354,7 +586,7 @@ public class ShipController {
 			System.out.println("/shipreqprocess/state3 processed..");
 
 			// Get DB List
-			//return "shipreqlist";
+			// return "shipreqlist";
 			return "redirect:../shipreqlist";
 			// return getShipReqItems("0", model, request);
 		}
@@ -424,12 +656,10 @@ public class ShipController {
 			// Get data from Web browser
 			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
 			shipreqdata.setShipStateId(EShipState.STATE5_SHIPPINGFINISHED.getStateInt()); // move_to_4
-			
+
 			// Change DB query
 			itemService.stateMove4to5(shipreqdata.getShipId(), shipreqdata.getShipStateId());
 			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state5 processed..");
-			
-
 
 			// Get DB List
 			return "redirect:../shipreqlist";

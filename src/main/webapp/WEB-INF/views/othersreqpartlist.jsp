@@ -9,7 +9,7 @@
 		if (response) {
 			//do yes task
 			document.forms["form" + id].method = "post";
-			document.forms["form" + id].action = "/reqshippartsmodify"
+			document.forms["form" + id].action = "/reqshippartsmodify_others"
 			document.forms["form" + id].submit();
 		} else {
 			//do no task
@@ -21,7 +21,7 @@
 		if (response) {
 			//do yes task
 			document.forms["form" + id].method = "post";
-			document.forms["form" + id].action = "/reqshippartsremove"
+			document.forms["form" + id].action = "/reqshippartsremove_others"
 			document.forms["form" + id].submit();
 		} else {
 			//do no task
@@ -37,7 +37,7 @@
 	 -->
 <h3>${reqresult}</h3>
 <center>
-	<h3>출고요청의 파츠리스트 조회</h3>
+	<h3>파트너의 출고요청 파츠리스트 조회</h3>
 </center>
 
 
@@ -55,7 +55,7 @@
 		</td>
 		<!-- 
 			<td width="135">
-				<p align="center">출고요청 Seq</p>
+				<p align="center">파트너의 출고요청 Seq</p>
 			</td>
 			 -->
 		<td width="135">

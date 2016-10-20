@@ -182,4 +182,12 @@ public class ItemDao {
 
 	}
 
+	public List<UserItem> getUserItemsByPartsId(Map<String, String> paramMap1) {
+		return sqlSession.selectList("queryUserItemByPartId", paramMap1);
+	}
+
+	public List<UserItem> getOneUserItemsByOthersCart(Map<String, String> paramMap2) {
+		return sqlSession.selectList("queryUserItemByCartOwnerId_minus2", paramMap2);
+	}
+
 }
