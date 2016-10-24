@@ -756,4 +756,28 @@
 		LIMIT 0 , 1
 
 	</select>
+	
+	<!-- 파트너 출고요청리스트 . 내가 coworker 인 shipreq 리스트 -->
+	
+	<select id="queryMyConfirmShipReqListItems" parameterType="String"
+		resultMap="ShipReqItemMap">
+		SELECT
+		*
+		FROM
+		tb_shipreq
+		INNER JOIN (tb_shipstate, tb_project,
+		tb_user)
+		WHERE
+		tb_shipreq.`ship_state_id` = tb_shipstate.`shipstate_id`
+		AND
+		tb_shipreq.`ship_project_code` = tb_project.`project_code`
+		AND
+		tb_project.`project_shipper_id` = tb_user.`user_id`
+		AND
+		`ship_coworker_userid` =
+		#{UserId}
+		ORDER BY
+		ship_id DESC;
+	</select>
+	
 </mapper>

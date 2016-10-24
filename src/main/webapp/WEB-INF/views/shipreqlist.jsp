@@ -39,6 +39,11 @@
 			</th>
 			<th width="130">
 				<center>
+					<p>개발담당자ID</p>
+				</center>
+			</th>
+			<th width="130">
+				<center>
 					<p>수령지</p>
 				</center>
 			</th>
@@ -78,6 +83,9 @@
 						</p>
 					</td>
 					<td width="130">
+						<p>${i.shipRequestorId}</p>
+					</td>
+					<td width="130">
 						<p>${i.shipDestination}</p>
 					</td>
 					<td width="130">
@@ -101,7 +109,7 @@
 							<input type=button name="formbutton2" value="자세히"
 								class="btn btn-primary btn-xs"
 								OnClick="javascript:DetailView('${status.index}');">
-						</p>
+						</p>						
 					</td>
 				</tr>
 			</form>

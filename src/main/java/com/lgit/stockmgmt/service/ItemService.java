@@ -376,4 +376,18 @@ public class ItemService {
 
 	}
 
+	public List<ShipReqItem> getMyConfirmShipReqItems(String userId) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("UserId", userId);
+		return itemDao.queryMyConfirmShipReqItem(paramMap);
+	}
+
+	public int stateMove2to3(int shipId, int shipStateId) {
+		Map<String, String> paramMap2 = new HashMap<String, String>();
+		paramMap2.put("shipId", String.valueOf(shipId));
+		paramMap2.put("newShipStateId", String.valueOf(shipStateId));
+		return itemDao.updateShipReqState_ShipId(paramMap2);
+		
+	}
+
 }

@@ -190,4 +190,8 @@ public class ItemDao {
 		return sqlSession.selectList("queryUserItemByCartOwnerId_minus2", paramMap2);
 	}
 
+	public List<ShipReqItem> queryMyConfirmShipReqItem(Map<String, String> paramMap) {
+		return sqlSession.selectList("queryMyConfirmShipReqListItems", paramMap);
+	}
+
 }

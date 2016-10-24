@@ -22,12 +22,23 @@
 	}
 
 	//State 4 -> 6
+	//State 2 -> 6
 	function shipperRej() {
 		document.forms["formshipreq"].method = "post";
 		document.forms["formshipreq"].action = "/shipreqprocess/state6";
 		document.forms["formshipreq"].submit();
 
 	}
+
+	//State 2 -> 3
+	function coworkShipConfirm() {
+		document.forms["formshipreq"].method = "post";
+		document.forms["formshipreq"].action = "/shipreqprocess/state3";
+		document.forms["formshipreq"].submit();
+
+	}
+
+	
 </script>
 
 
@@ -346,7 +357,17 @@
 	</c:when>
 </c:choose>
 
+<!-- state 2 > 3 (coworker 승인)-->
 
+<c:choose>
+	<c:when
+		test="${(reqshipinfo.shipCoworkerUserid == sessionScope.userLoginInfo.userId)&&(2 == reqshipinfo.shipStateId) }">
+		<input type="button" value="협의출고승인" name="submitbtn4" class="btn btn-primary btn-md"
+			OnClick="javascript:coworkShipConfirm();">&nbsp;&nbsp;
+		<input type="button" value="협의출고반려" name="submitbtn5" class="btn btn-primary btn-md"
+			OnClick="javascript:shipperRej();">&nbsp;&nbsp;			
+	</c:when>
+</c:choose>
 
 <%@ include file="footer.jsp"%>
 

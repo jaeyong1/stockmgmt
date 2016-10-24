@@ -61,7 +61,7 @@ public class ShipController {
 		List<ShipReqPartsItem> items = itemService.getShipPartsListItems(-1, loginUser.getUserId());
 		System.out.println("[" + loginUser.getUserId() + "] /shipparts process");
 		model.addAttribute("items", items);
-	
+
 		return "myreqpartlist"; /* myreqpartlist.jsp */
 	}
 
@@ -352,7 +352,7 @@ public class ShipController {
 
 		///////////////////
 		// Get Parts List (Query DB List)
-		//showShipparts("0", model, request);  //내재고
+		// showShipparts("0", model, request); //내재고
 		showShippartsOthers("0", model, request);
 
 		//////////////////
@@ -382,13 +382,13 @@ public class ShipController {
 		iam.setShipStateId(EShipState.STATE1_ADDCART.getStateInt());
 
 		iam.setShipIsmyproject(0); // 내 자산이면 1로 .. 남의자산이면 0으로
-		
-		//자산협의자
-		String coworkerId ="";
+
+		// 자산협의자
+		String coworkerId = "";
 		List<UserItem> list2 = itemService.getUserItemInOthersCart(loginUser.getUserId());
 		if (list2.size() > 0) {
 			coworkerId = list2.get(0).getUserId();
-		}		
+		}
 		iam.setShipCoworkerUserid(coworkerId);
 
 		model.addAttribute("reqshipinfo", iam);
@@ -495,9 +495,9 @@ public class ShipController {
 		return "viewshipreq";
 
 	}
-	
+
 	/*
-	 * /shipreqprocess/state2 파트너 협의요청 
+	 * /shipreqprocess/state2 파트너 협의요청
 	 */
 	@RequestMapping(value = "/shipreqprocess/state2", method = RequestMethod.POST)
 	public String processPartenerConfirmReq(ShipReqItem shipreqdata, Model model, HttpServletRequest request) {
@@ -507,7 +507,7 @@ public class ShipController {
 			System.out.println("/shipreqprocess/state2 process. no session info. return login.jsp ");
 			return "login";
 		}
-		System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state3 process");
+		System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state2 process");
 
 		// check state
 		int curstate = Integer.valueOf(request.getParameter("ship-StateId"));
@@ -523,10 +523,7 @@ public class ShipController {
 			shipreqdata.setShipProjectCode(request.getParameter("ship-ProjectCode"));
 			shipreqdata.setShipMemo(request.getParameter("ship-Memo"));
 			shipreqdata.setShipIsmyproject(Integer.valueOf(request.getParameter("ship-Ismyproject")));
-			shipreqdata.setShipStateId(EShipState.STATE2_REQCOWORKSHIPPING.getStateInt()); // move
-																						// to
-																						// state
-																						// 2
+			shipreqdata.setShipStateId(EShipState.STATE2_REQCOWORKSHIPPING.getStateInt()); // move_to_state_2
 			shipreqdata.setShipCoworkerUserid(request.getParameter("ship-CoworkerUserid"));
 
 			// Change DB query
@@ -535,17 +532,14 @@ public class ShipController {
 			System.out.println("/shipreqprocess/state2 processed..");
 
 			// Get DB List
-			// return "shipreqlist";
 			return "redirect:../shipreqlist";
-			// return getShipReqItems("0", model, request);
 		}
 
 		// State ERROR
-		System.out.println("[" + loginUser.getUserId() + "]reqstate is not 1(요청서작성중) or 2(합의요청중) !!");
+		System.out.println("[" + loginUser.getUserId() + "]reqstate is not 1(요청서작성중)  !!");
 
 		return "shipreqlist";
 	}
-	
 
 	/*
 	 * /shipreqprocess/state3 요청서 작성중 처리
@@ -574,10 +568,7 @@ public class ShipController {
 			shipreqdata.setShipProjectCode(request.getParameter("ship-ProjectCode"));
 			shipreqdata.setShipMemo(request.getParameter("ship-Memo"));
 			shipreqdata.setShipIsmyproject(Integer.valueOf(request.getParameter("ship-Ismyproject")));
-			shipreqdata.setShipStateId(EShipState.STATE3_REQSHIPPING.getStateInt()); // move
-																						// to
-																						// state
-																						// 3
+			shipreqdata.setShipStateId(EShipState.STATE3_REQSHIPPING.getStateInt()); // move_to_state_3
 			shipreqdata.setShipCoworkerUserid(request.getParameter("ship-CoworkerUserid"));
 
 			// Change DB query
@@ -586,9 +577,19 @@ public class ShipController {
 			System.out.println("/shipreqprocess/state3 processed..");
 
 			// Get DB List
-			// return "shipreqlist";
 			return "redirect:../shipreqlist";
-			// return getShipReqItems("0", model, request);
+		} else if (curstate == EShipState.STATE2_REQCOWORKSHIPPING.getStateInt()) {
+			// Get data from Web browser
+			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
+			shipreqdata.setShipStateId(EShipState.STATE3_REQSHIPPING.getStateInt()); // move_to_4
+
+			// Change DB query
+			itemService.stateMove2to3(shipreqdata.getShipId(), shipreqdata.getShipStateId());
+			System.out.println("[" + loginUser.getUserId()
+					+ "] /shipreqprocess/state3 (from state2, coworker confirmed)processed..");
+
+			// Get DB List
+			return "redirect:../myconfirmshipreqlist";
 		}
 
 		// State ERROR
@@ -688,24 +689,83 @@ public class ShipController {
 		int curstate = Integer.valueOf(request.getParameter("ship-StateId"));
 
 		// 이전 상태에 따른 분기
-		if (curstate == EShipState.STATE4_LISTPRINTED.getStateInt()) {
+		if ((curstate == EShipState.STATE4_LISTPRINTED.getStateInt())) {
 			// Get data from Web browser
 			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
-			shipreqdata.setShipStateId(EShipState.STATE6_REJSHIPPING.getStateInt()); // move_to_4
+			shipreqdata.setShipStateId(EShipState.STATE6_REJSHIPPING.getStateInt()); // move_to_6
 
 			// Change DB query
 			itemService.stateMove4to6(shipreqdata.getShipId(), shipreqdata.getShipStateId());
-			// model.addAttribute("reqresult", shipreqdata.getShipId() + "'s
-			// data is added");
 			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state6 processed..");
 
 			// Get DB List
 			return "redirect:../shipreqlist";
+		} else if (curstate == EShipState.STATE2_REQCOWORKSHIPPING.getStateInt()) {
+			// Get data from Web browser
+			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
+			shipreqdata.setShipStateId(EShipState.STATE6_REJSHIPPING.getStateInt()); // move_to_6
+
+			// Change DB query
+			itemService.stateMove4to6(shipreqdata.getShipId(), shipreqdata.getShipStateId()); // sql_reuse
+			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state6 processed..");
+
+			// Get DB List
+			return "redirect:../myconfirmshipreqlist";
 		}
 
 		// State ERROR
-		System.out.println("[" + loginUser.getUserId() + "]reqstate is not 4(출고접수완료)!!");
+		System.out.println("[" + loginUser.getUserId() + "]reqstate is not 4(출고접수완료) or 2(협의출고요청)!!");
 		return "shipreq";
 
 	}
+
+	/*
+	 * /shipreqlist 요청서 리스트 뷰
+	 */
+
+	@RequestMapping(value = "/myconfirmshipreqlist", method = RequestMethod.GET)
+	public String getMyConfirmShipReqItems2(Model model, HttpServletRequest request) {
+		return getMyConfirmShipReqItems("0", model, request);
+	}
+
+	@RequestMapping(value = "/myconfirmshipreqlist/{seq}", method = RequestMethod.GET)
+	public String getMyConfirmShipReqItems(@PathVariable String seq, Model model, HttpServletRequest request) {
+
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/shipreqlist process. no session info.  ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /shipreqlist process");
+		final int rowsPer1Page = 15;
+
+		///////////////////
+		// Query DB List
+		List<ShipReqItem> items;
+		items = itemService.getMyConfirmShipReqItems(loginUser.getUserId());
+
+		System.out.println("[" + loginUser.getUserId() + "] /myconfirmshipreqlist process");
+		model.addAttribute("items", items);
+
+		// Choose current page data
+		PagedListHolder<ShipReqItem> paging = new PagedListHolder<ShipReqItem>(items);
+		paging.setPageSize(rowsPer1Page);
+		paging.setPage(Integer.parseInt(seq));
+		model.addAttribute("items", paging.getPageList());
+
+		// Add Page number information
+		model.addAttribute("pageNum", paging.getPageCount());
+		model.addAttribute("start", paging.getFirstLinkedPage());
+		model.addAttribute("end", paging.getLastLinkedPage());
+		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
+		// 인덱스..
+
+		// jsp에서 직접 한글화
+		List<String> eshipstate = EShipState.getKorList();
+		model.addAttribute("eshipstate", eshipstate);
+
+		return "shipreqlist"; /* myreqpartlist.jsp */
+	}
+
 }
