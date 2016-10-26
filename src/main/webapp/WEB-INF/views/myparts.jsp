@@ -70,6 +70,12 @@
 	}
 </script>
 
+<script>
+	function showExcelImportWindow() {
+		window.open("/mypartsimport", 'window', 'width=650,height=600');
+	}
+</script>
+
 <!-- 
 	*****************************
 	직전 작업 결과 표시
@@ -185,7 +191,9 @@
 <p>&nbsp;</p>
 
 <h5>
-	<b>[데이터수정]</b>
+	<b>[데이터수정]</b> <input type="button" value="Excel upload"
+		name="submitbtn1" class="btn btn-info btn-xs"
+		OnClick="javascript:showExcelImportWindow();">
 </h5>
 <table border="1">
 	<tr>
