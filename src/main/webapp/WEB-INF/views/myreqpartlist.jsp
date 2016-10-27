@@ -30,6 +30,14 @@
 </script>
 
 
+<!-- Excel upload -->
+<script>
+	function showExcelImportWindow() {
+		window.open("/shippartsimport", 'window', 'width=650,height=450');
+	}
+</script>
+
+<!-- Excel upload -->
 <!-- 
 	*****************************
 	직전 작업 결과 표시
@@ -40,7 +48,10 @@
 	<h3>출고요청의 파츠리스트 조회</h3>
 </center>
 
-
+<center><input type="button" value="Excel upload"
+		name="submitbtn1" class="btn btn-info btn-xs"
+		OnClick="javascript:showExcelImportWindow();"></center>
+<br>
 
 <!-- 
 	*********

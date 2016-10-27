@@ -72,7 +72,7 @@
 
 <script>
 	function showExcelImportWindow() {
-		window.open("/mypartsimport", 'window', 'width=650,height=600');
+		window.open("/mypartsimport", 'window', 'width=650,height=450');
 	}
 </script>
 

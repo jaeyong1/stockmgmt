@@ -471,15 +471,18 @@
 		,
 		t2.part_name 'part_name'
 		, t2.part_desc 'part_desc'
-		, t2.part_stock 'part_stock'
+		, t2.part_stock
+		'part_stock'
 		,
 		t2.part_location 'part_location'
-		, t2.part_cost 'part_cost'
+		, t2.part_cost
+		'part_cost'
 		,
 		t2.part_memo 'part_memo'
 		FROM
 		tb_project AS t1
-		INNER JOIN (tb_part
+		INNER JOIN
+		(tb_part
 		AS t2,
 		tb_user
 		AS t3, tb_user AS t4
@@ -756,9 +759,9 @@
 		LIMIT 0 , 1
 
 	</select>
-	
+
 	<!-- 파트너 출고요청리스트 . 내가 coworker 인 shipreq 리스트 -->
-	
+
 	<select id="queryMyConfirmShipReqListItems" parameterType="String"
 		resultMap="ShipReqItemMap">
 		SELECT
@@ -779,5 +782,30 @@
 		ORDER BY
 		ship_id DESC;
 	</select>
-	
+
+	<!-- tb_parts 에서 내 자재중에 ProjectCode&PartName검색결과 -->
+	<select id="queryPartsProjectAndParts_TBPart" resultMap="PartsItemMap"
+		parameterType="String">
+		SELECT
+		`part_id`,
+		`part_project_code`, `part_name`,
+		`part_desc`, `part_location`,
+		`part_cost`, `part_stock`, `part_memo`
+		FROM
+		tb_part as t1
+		inner join(tb_project as t2)
+		ON
+		t1.part_project_code =
+		t2.project_code
+		AND
+		t1.part_project_code =
+		#{PartProjectCode}
+		AND
+		t1.part_name =
+		#{PartName}
+		AND
+		t2.project_owner_id = #{UserId};
+	</select>
+
+
 </mapper>

@@ -194,4 +194,8 @@ public class ItemDao {
 		return sqlSession.selectList("queryMyConfirmShipReqListItems", paramMap);
 	}
 
+	public List<PartsItem> queryPart_PartsProjectAndParts(Map<String, String> paramMap) {
+		return sqlSession.selectList("queryPartsProjectAndParts_TBPart", paramMap);
+	}
+
 }

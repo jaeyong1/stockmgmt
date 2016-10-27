@@ -387,7 +387,89 @@ public class ItemService {
 		paramMap2.put("shipId", String.valueOf(shipId));
 		paramMap2.put("newShipStateId", String.valueOf(shipStateId));
 		return itemDao.updateShipReqState_ShipId(paramMap2);
-		
+
+	}
+
+	/*
+	 * project list에서 입력된 project code가 있는지 확인
+	 */
+	public boolean isExistProjectCode(List<ProjectItem> lstMyPrj, String myPartProjectCode) {
+		boolean re = false;
+		for (ProjectItem p : lstMyPrj) {
+			if (p.getProjectCode().equals(myPartProjectCode)) {
+				//System.out.println("finded prj code : " + myPartProjectCode);
+				re = true;
+
+			}
+
+		}
+		return re;
+	}
+
+	/*
+	 * 내 자재검색..
+	 */
+	public boolean isExistMyPartsName(String userId, String partProjectCode, String partName) {
+		// TODO Auto-generated method stub
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("UserId", userId);
+		paramMap.put("PartProjectCode", partProjectCode);
+		paramMap.put("PartName", partName);
+
+		List<PartsItem> list = itemDao.queryPart_PartsProjectAndParts(paramMap);
+		if (list.size() == 0) {
+			System.out.println("[error] exist item:" + partName);
+			return false;
+		}
+		return true;
+
+	}
+
+	public boolean addMyNewPartsXls(UserItem loginUser, List<PartsItem> lst, List<String> errorlog) {
+		boolean dbProcessSuccess = true;
+		int i;
+		List<ProjectItem> lstMyPrj = getMyProjectItems(loginUser.getUserId());
+
+		for (i = 0; i < lst.size(); i++) {
+			// valid project 인지 체크
+			if (isExistProjectCode(lstMyPrj, lst.get(i).getPartProjectCode())) {
+
+				// 기존에 있는 PartsP/N이 인지확인
+				if (isExistMyPartsName(loginUser.getUserId(), lst.get(i).getPartProjectCode(),
+						lst.get(i).getPartName())) {		
+					String err = "Error: 기존에 있는 LGIT P/N 입니다. " + (i+1) + "번째 : " + lst.get(i).getPartName();
+					System.out.println(err);
+					errorlog.add(err);
+					dbProcessSuccess = false;
+				}
+				else
+				{
+					//ok
+					//keep going
+				}
+			} else {
+				String err = "Error: 나의 ProjectCode가 아닙니다 " + (i+1) + "번째 : " + lst.get(i).getPartProjectCode();
+				System.out.println(err);
+				errorlog.add(err);
+				dbProcessSuccess = false;
+
+			}
+		}
+
+		// 값 DB에 추가
+		if (dbProcessSuccess) {
+			for (i = 0; i < lst.size(); i++) {
+				setPartsItem(lst.get(i));
+			}
+		} else {
+			String err = "DB에 입력되지 않았습니다.";
+			System.out.println(err);
+			errorlog.add(err);
+			return false;
+		}
+
+		return true;
+
 	}
 
 }

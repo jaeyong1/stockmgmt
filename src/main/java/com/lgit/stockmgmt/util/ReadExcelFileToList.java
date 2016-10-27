@@ -45,7 +45,7 @@ public class ReadExcelFileToList {
 		return (lst.size() == blankcnt);
 	}
 
-	public static List<PartsItem> readExcelPartsData(String fileName) {
+	public static List<PartsItem> readExcelPartsData(String fileName, List<String> errorlog) {
 		List<PartsItem> partsItems = new ArrayList<PartsItem>();
 
 		List<String> lststr = new ArrayList<String>();
@@ -117,13 +117,14 @@ public class ReadExcelFileToList {
 					item.setPartMemo(lststr.get(3).toString());// maker
 
 					if (isNum(lststr.get(4).toString())) {						
-
-						String str = lststr.get(4).trim().toString();
-						str.replaceAll(",", "");
+						String str = lststr.get(4).trim().replaceAll(",", "").toString();
 						int _n = Integer.valueOf(str);						
 						item.setPartStock(_n);
 					} else {
 						System.out.println("[exception] setPartStock parsing failed!!");
+						String err = "Error: 숫자변환에 실패했습니다. 엑셀값:" +  lststr.get(4).toString();
+						System.out.println(err);
+						errorlog.add(err);
 						item.setPartStock(0);
 
 					}
@@ -133,6 +134,9 @@ public class ReadExcelFileToList {
 						item.setPartCost(Float.valueOf(lststr.get(6).toString()));
 					} else {
 						System.out.println("[exception] setPartLocation parsing failed!!");
+						String err = "Error: 숫자변환에 실패했습니다. 엑셀값:" +  lststr.get(6).toString();
+						System.out.println(err);
+						errorlog.add(err);
 						item.setPartCost(Float.valueOf(0));
 					}
 
@@ -154,110 +158,10 @@ public class ReadExcelFileToList {
 		return partsItems;
 	}
 
-	// 값이 맞는가?
-	public static List<Item> readExcelData(String fileName) {
-		List<Item> countriesList = new ArrayList<Item>();
-
-		int numRows = 1;
-		try {
-			// Create the input stream from the xlsx/xls file
-			FileInputStream fis = new FileInputStream(fileName);
-
-			// Create Workbook instance for xlsx/xls file input stream
-			Workbook workbook = null;
-			if (fileName.toLowerCase().endsWith("xlsx")) {
-				workbook = new XSSFWorkbook(fis);
-			} else if (fileName.toLowerCase().endsWith("xls")) {
-				workbook = new HSSFWorkbook(fis);
-			}
-
-			// Get the number of sheets in the xlsx file
-			int numberOfSheets = workbook.getNumberOfSheets();
-
-			// loop through each of the sheets
-			// for (int i = 0; i < numberOfSheets; i++) {
-
-			// Get the nth sheet from the workbook
-			Sheet sheet = workbook.getSheetAt(0);// i=0
-
-			// every sheet has rows, iterate over them
-			Iterator<Row> rowIterator = sheet.iterator();
-			while (rowIterator.hasNext()) {
-
-				String notice_id = "";
-				String member_id = "";
-
-				String cellRawData = "";
-
-				// Get the row object
-				Row row = rowIterator.next();
-
-				// Every row has columns, get the column iterator and
-				// iterate over them
-				Iterator<Cell> cellIterator = row.cellIterator();
-
-				while (cellIterator.hasNext()) {
-					// Get the Cell object
-					Cell cell = cellIterator.next();
-
-					// check the cell type and process accordingly
-					switch (cell.getCellType()) {
-					case Cell.CELL_TYPE_STRING:
-						/*
-						 * if (notice_id.equalsIgnoreCase("")) { notice_id =
-						 * cell.getStringCellValue().trim();
-						 * System.out.println("1 " + notice_id); } else if
-						 * (member_id.equalsIgnoreCase("")) { member_id =
-						 * cell.getStringCellValue().trim();
-						 * System.out.println("2 " + member_id); } // else
-						 * if...순차적으로 들어감
-						 */
-						cellRawData = cell.getStringCellValue().trim();
-						break;
-					case Cell.CELL_TYPE_NUMERIC:
-						if (notice_id.equalsIgnoreCase("")) {
-							// random data, leave it
-							notice_id = Double.toString(cell.getNumericCellValue());
-							cellRawData = Double.toString(cell.getNumericCellValue());
-
-						}
-						break;
-
-					}
-
-					System.out.println("[" + numRows + "] " + cellRawData);
-
-				} // end of cell iterator
-					// notice_id = notice_id.replace(".0", "");
-					// System.out.println(" / " + notice_id);
-					// int nid = Integer.parseInt(notice_id);
-					// Item c = new Item(nid + "", member_id);
-					// countriesList.add(c);
-				numRows = numRows + 1;
-			} // end of rows iterator
-
-			// } // end of sheets for loop
-
-			// close file input stream
-			fis.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return countriesList;
-	}
 
 	public static boolean isNum(String instr) {
 		// 콤마삭제
-		instr.replaceAll(",", "");
-
-		String str = instr.trim();
-
-	asdf버그있음..	if (!str.matches("-?\\d+(\\.\\d+)?")) {
-			// match a number with optional '-' and decimal.
-			return false;
-		}
+		String str  = instr.replaceAll(",", "").trim();
 
 		try {
 			NumberFormat ukFormat = NumberFormat.getNumberInstance(Locale.UK);
@@ -269,4 +173,6 @@ public class ReadExcelFileToList {
 
 		return true;
 	}
+
+	
 }
