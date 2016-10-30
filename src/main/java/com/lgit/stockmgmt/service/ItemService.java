@@ -1,6 +1,7 @@
 package com.lgit.stockmgmt.service;
 
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -397,7 +398,7 @@ public class ItemService {
 		boolean re = false;
 		for (ProjectItem p : lstMyPrj) {
 			if (p.getProjectCode().equals(myPartProjectCode)) {
-				//System.out.println("finded prj code : " + myPartProjectCode);
+				// System.out.println("finded prj code : " + myPartProjectCode);
 				re = true;
 
 			}
@@ -436,19 +437,17 @@ public class ItemService {
 
 				// 기존에 있는 PartsP/N이 인지확인
 				if (isExistMyPartsName(loginUser.getUserId(), lst.get(i).getPartProjectCode(),
-						lst.get(i).getPartName())) {		
-					String err = "Error: 기존에 있는 LGIT P/N 입니다. " + (i+1) + "번째 : " + lst.get(i).getPartName();
+						lst.get(i).getPartName())) {
+					String err = "Error: 기존에 있는 LGIT P/N 입니다. " + (i + 1) + "번째 : " + lst.get(i).getPartName();
 					System.out.println(err);
 					errorlog.add(err);
 					dbProcessSuccess = false;
-				}
-				else
-				{
-					//ok
-					//keep going
+				} else {
+					// ok
+					// keep going
 				}
 			} else {
-				String err = "Error: 나의 ProjectCode가 아닙니다 " + (i+1) + "번째 : " + lst.get(i).getPartProjectCode();
+				String err = "Error: 나의 ProjectCode가 아닙니다 " + (i + 1) + "번째 : " + lst.get(i).getPartProjectCode();
 				System.out.println(err);
 				errorlog.add(err);
 				dbProcessSuccess = false;
@@ -470,6 +469,78 @@ public class ItemService {
 
 		return true;
 
+	}
+
+	public boolean addMyCartXls(UserItem loginUser, ArrayList<String[]> lst, List<String> errorlog) {
+		boolean dbProcessSuccess = true;
+		int i;
+		List<ProjectItem> lstMyPrj = getMyProjectItems(loginUser.getUserId());
+
+		for (i = 0; i < lst.size(); i++) {
+			// valid project 인지 체크
+			if (isExistProjectCode(lstMyPrj, lst.get(i)[0])) {
+
+				// 기존에 있는 PartsP/N이 인지확인
+				if (isExistMyPartsName(loginUser.getUserId(), lst.get(i)[0], lst.get(i)[1])) {
+					// OK. keep going
+
+				} else {
+					String err = "Error: 나에게 없는 LGIT P/N 입니다. " + (i + 1) + "번째 : " + lst.get(i)[1];
+					System.out.println(err);
+					errorlog.add(err);
+					dbProcessSuccess = false;
+				}
+			} else {
+				String err = "Error: 나의 ProjectCode가 아닙니다 " + (i + 1) + "번째 : " + lst.get(i)[0];
+				System.out.println(err);
+				errorlog.add(err);
+				dbProcessSuccess = false;
+
+			}
+		}
+
+		// 값 DB에 추가
+		if (dbProcessSuccess) {
+			for (i = 0; i < lst.size(); i++) {
+				ShipReqPartsItem shippartsdata = new ShipReqPartsItem();
+
+				// Get data from Web browser
+				shippartsdata.setUserId(loginUser.getUserId());
+				shippartsdata.setItemlistShipId(-1); // -1 은 아직 장바구니안에 아직대기
+
+				int _partId = getMyPartsIDFromPartName(loginUser.getUserId(), lst.get(i)[1]);
+				shippartsdata.setItemlistPartId(_partId);
+
+				shippartsdata.setItemlistShipId(-1);
+				shippartsdata.setItemlistAmount(Integer.valueOf(lst.get(i)[2]));
+
+				// insert db
+				addShipPartsItem(shippartsdata);
+
+			}
+		} else {
+			String err = "DB에 입력되지 않았습니다.";
+			System.out.println(err);
+			errorlog.add(err);
+			return false;
+		}
+
+		return true;
+	}
+
+	private int getMyPartsIDFromPartName(String userId, String partName) {
+
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("UserId", userId);
+		paramMap.put("PartName", partName);
+
+		List<PartsItem> pdata = itemDao.queryMyPartsItemsByPartName(paramMap);
+		if (pdata.size() == 0) {
+			System.out.println("[오류] PN으로 PartId가져오기. 갯수가 0임");
+			return -1;
+		}
+
+		return pdata.get(0).getPartId();
 	}
 
 }

@@ -198,4 +198,8 @@ public class ItemDao {
 		return sqlSession.selectList("queryPartsProjectAndParts_TBPart", paramMap);
 	}
 
+	public List<PartsItem> queryMyPartsItemsByPartName(Map<String, String> paramMap) {
+		return sqlSession.selectList("queryMyPartsIDByPartName_TBPart", paramMap);
+	}
+
 }

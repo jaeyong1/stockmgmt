@@ -2,18 +2,26 @@ package com.lgit.stockmgmt.domain;
 
 public class ShipReqPartsItem {
 	private int itemlistId; // auto increase
-	private String userId; //요청자ID.Cart에있을때만사용
+	private String userId; // 요청자ID.Cart에있을때만사용
 	private int itemlistShipId; // 출고요청 Seq
 	private int itemlistPartId; // 파츠 ID
+	private String partName; // 파츠 Name (LGIT P/N)
+
 	private int itemlistAmount; // 수량
 	// to display
 	private String partDesc;// Desc
 	private int partStock;// 재고
-	private String partProjectCode; //프로젝트코드
-	
+	private String partProjectCode; // 프로젝트코드
 
 	private String partMemo;
 
+	public String getPartName() {
+		return partName;
+	}
+
+	public void setPartName(String partName) {
+		this.partName = partName;
+	}
 
 	public String getPartMemo() {
 		return partMemo;
@@ -79,8 +87,6 @@ public class ShipReqPartsItem {
 		this.partProjectCode = partProjectCode;
 	}
 
-
-
 	public String getUserId() {
 		return userId;
 	}
@@ -88,12 +94,9 @@ public class ShipReqPartsItem {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	
-	
-	
 
 	public ShipReqPartsItem(int itemlistId, String userId, int itemlistShipId, int itemlistPartId, int itemlistAmount,
-			String partDesc, int partStock, String partProjectCode, String partMemo) {
+			String partDesc, int partStock, String partProjectCode, String partName, String partMemo) {
 		super();
 		this.itemlistId = itemlistId;
 		this.userId = userId;
@@ -104,6 +107,7 @@ public class ShipReqPartsItem {
 		this.partStock = partStock;
 		this.partProjectCode = partProjectCode;
 		this.partMemo = partMemo;
+		this.partName = partName;
 	}
 
 	public ShipReqPartsItem() {
@@ -115,7 +119,8 @@ public class ShipReqPartsItem {
 	 * mybatis 통할때 생성자 타입 추가 필요했음
 	 */
 	public ShipReqPartsItem(Integer itemlistId, Integer itemlistShipId, Integer itemlistPartId, Integer itemlistAmount,
-			String partDesc, Integer partStock, String partProjectCode, String userId , String partMemo){
+			String partDesc, Integer partStock, String partProjectCode, String userId, String partName,
+			String partMemo) {
 		super();
 
 		this.itemlistId = Integer.valueOf(itemlistId);
@@ -125,11 +130,10 @@ public class ShipReqPartsItem {
 		this.partDesc = partDesc;
 		this.partStock = Integer.valueOf(partStock);
 		this.partProjectCode = partProjectCode;
-		this.userId = userId;
-
+		this.userId = userId;		
 		this.partMemo = partMemo;
+		this.partName = partName;
 
 	}
-
 
 }

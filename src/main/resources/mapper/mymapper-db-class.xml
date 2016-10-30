@@ -67,6 +67,7 @@
 		<result property="partProjectCode" column="part_project_code" />
 		<result property="partMemo" column="part_memo" />
 		<result property="userId" column="itemlist_owner_id" />
+		<result property="partName" column="part_name" />
 		
 	</resultMap>
 

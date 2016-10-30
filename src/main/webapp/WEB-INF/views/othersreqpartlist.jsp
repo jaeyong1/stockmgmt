@@ -64,7 +64,7 @@
 		<td width="135">
 			<p align="center">LGIT P/N</p>
 		</td>
-		<td width="169">
+		<td width="210">
 			<p align="center">Item Desc</p>
 		</td>
 		<td width="86">
@@ -97,7 +97,7 @@
 				<td width="135">
 					<p align="center">${i.itemlistPartId}</p>
 				</td>
-				<td width="169">
+				<td width="210">
 					<p align="center">${i.partDesc}</p>
 				</td>
 				<td width="86">

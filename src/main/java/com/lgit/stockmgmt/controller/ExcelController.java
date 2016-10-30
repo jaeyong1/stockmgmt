@@ -32,7 +32,6 @@ public class ExcelController {
 	@Autowired
 	private ItemService itemService;
 
-
 	/*
 	 * File upload 할수 있는 창
 	 */
@@ -98,7 +97,25 @@ public class ExcelController {
 				} else {
 					dbProcessSuccess = false;
 				}
-			}  else {
+			} else if (requestedURL.equals("/shipparts")) {
+				/*
+				 * /shipparts 에서 Excel import 경우
+				 */
+				ArrayList<String[]> lst = ReadExcelFileToList.readExcelCartData(uploadFile.getAbsolutePath(), errorlog);
+				// ArrayList<String[]> addresses = new ArrayList<String[]>();
+
+				System.out.println("Loaded Excel rows : " + lst.size());
+				popupclosemsg = lst.size() + "건 로딩되었습니다.";
+
+				if (lst.size() > 0) {
+					dbProcessSuccess = itemService.addMyCartXls(loginUser, lst, errorlog);
+					for (String[] strings : lst) {
+						System.out.println(strings);
+					}
+				} else {
+					dbProcessSuccess = false;
+				}
+			} else {
 				errorlog.add("JAVA system 에서 Excel 읽는중 장애발생");
 				errorlog.add("요청된 경로를 해석하지 못했습니다. 관리자에게 연락주세요~");
 				dbProcessSuccess = false;
