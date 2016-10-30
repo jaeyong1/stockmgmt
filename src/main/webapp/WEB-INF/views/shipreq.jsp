@@ -259,7 +259,7 @@
 					<p align="center">${i.partProjectCode}</p>
 				</td>
 				<td width="135">
-					<p align="center">${i.itemlistPartId}</p>
+					<p align="center">${i.partName}</p>
 				</td>
 				<td width="169">
 					<p align="center">${i.partDesc}</p>

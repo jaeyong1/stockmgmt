@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.lgit.stockmgmt.domain.Item;
 import com.lgit.stockmgmt.domain.PartsItem;
+import com.lgit.stockmgmt.domain.ShipReqPartsItem;
 import com.lgit.stockmgmt.domain.UserItem;
 import com.lgit.stockmgmt.service.ItemService;
 import com.lgit.stockmgmt.util.ReadExcelFileToList;
@@ -99,7 +100,7 @@ public class ExcelController {
 				}
 			} else if (requestedURL.equals("/shipparts")) {
 				/*
-				 * /shipparts 에서 Excel import 경우
+				 * /shipparts(나의 출고요청 리스트) 에서 Excel import 경우
 				 */
 				ArrayList<String[]> lst = ReadExcelFileToList.readExcelCartData(uploadFile.getAbsolutePath(), errorlog);
 				// ArrayList<String[]> addresses = new ArrayList<String[]>();
@@ -115,7 +116,25 @@ public class ExcelController {
 				} else {
 					dbProcessSuccess = false;
 				}
-			} else {
+			} else if (requestedURL.equals("/shipothersparts")) {
+				/*
+				 * /shipothersparts(파트너출고요청리스트) 에서 Excel import 경우
+				 */
+				ArrayList<String[]> lst = ReadExcelFileToList.readExcelCartData(uploadFile.getAbsolutePath(), errorlog);
+				// ArrayList<String[]> addresses = new ArrayList<String[]>();
+
+				System.out.println("Loaded Excel rows : " + lst.size());
+				popupclosemsg = lst.size() + "건 로딩되었습니다.";
+
+				if (lst.size() > 0) {
+					dbProcessSuccess = itemService.addOthersCartXls(loginUser, lst, errorlog);
+					for (String[] strings : lst) {
+						System.out.println(strings);
+					}
+				} else {
+					dbProcessSuccess = false;
+				}
+			}else {
 				errorlog.add("JAVA system 에서 Excel 읽는중 장애발생");
 				errorlog.add("요청된 경로를 해석하지 못했습니다. 관리자에게 연락주세요~");
 				dbProcessSuccess = false;
@@ -186,6 +205,42 @@ public class ExcelController {
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /mypartsimport process");
 		model.addAttribute("requestedURL", "/shipparts");
+		return "fileupload";/* fileupload.jsp */
+	}
+
+	/*
+	 * /shipotherspartsimport 출고요청하기 - 출고요청 부품리스트 - Excel upload
+	 */
+	@RequestMapping(value = "/shipotherspartsimport", method = RequestMethod.GET)
+	public String addExcelOthersCartItem(PartsItem item, Model model, HttpServletRequest request) {
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/shipotherspartsimport process. no session info. return login.jsp");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /mypartsimport process");
+		model.addAttribute("requestedURL", "/shipothersparts");
+
+		List<ShipReqPartsItem> items = itemService.getShipPartsListItems(-2, loginUser.getUserId());
+
+		if (items.size() > 0) {
+			List<String> errorlog = new ArrayList<String>();
+			errorlog.add("파트리스트가 비어있지 않습니다.");
+			errorlog.add("이미 들어있는 부품리스트를 출고요청 또는 삭제후에");
+			errorlog.add("엑셀업로드를 진행해주세요.");
+			////////
+			String err = "[에러발생내역]<br>\n";
+			for (int en = 0; en < errorlog.size(); en++) {
+				err = err + errorlog.get(en) + "<br>\n";
+
+			}
+			model.addAttribute("errormsg", err);
+			model.addAttribute("requestedURL", "/shipothersparts"); /* "/mylist" */
+			return "errorpopupviewmoveto";
+
+		}
+
 		return "fileupload";/* fileupload.jsp */
 	}
 

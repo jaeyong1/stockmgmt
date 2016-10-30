@@ -419,7 +419,7 @@ public class ItemService {
 
 		List<PartsItem> list = itemDao.queryPart_PartsProjectAndParts(paramMap);
 		if (list.size() == 0) {
-			System.out.println("[error] exist item:" + partName);
+			System.out.println("[error] NOT exist item:" + partName);
 			return false;
 		}
 		return true;
@@ -541,6 +541,80 @@ public class ItemService {
 		}
 
 		return pdata.get(0).getPartId();
+	}
+
+	public boolean addOthersCartXls(UserItem loginUser, ArrayList<String[]> lst, List<String> errorlog) {
+
+		boolean dbProcessSuccess = true;
+		int i;
+		List<ProjectItem> lstMyPrj = getMyProjectItems(loginUser.getUserId());
+
+		for (i = 0; i < lst.size(); i++) {
+			// valid project 인지 체크
+
+			String othersId = getUserIdByUserName(lst.get(i)[3]);
+			if (othersId == null) {
+				String err = "엑셀정보 " + (i + 1) + "번째) 사용자가 없습니다. 확인해 주세요. 사용자이름 : " + lst.get(i)[3];
+				System.out.println(err);
+				errorlog.add(err);
+				dbProcessSuccess = false;
+			} else if (isExistMyPartsName(othersId, lst.get(i)[0], lst.get(i)[1])) {
+				// 기존에 있는 PartsP/N이 인지확인
+				// OK. keep going
+
+			} else {
+				String err = "엑셀정보 " + (i + 1) + "번째) 개발담당자: " + lst.get(i)[3] + "(id:" + othersId + ") / 프로젝트코드: " + lst.get(i)[0]
+						+ " / LGIT P/N:" + lst.get(i)[1] + "는 존재하지 않습니다.";
+				System.out.println(err);
+				errorlog.add(err);
+				dbProcessSuccess = false;
+			}
+
+		}
+
+		// 값 DB에 추가
+		if (dbProcessSuccess) {
+			for (i = 0; i < lst.size(); i++) {
+				ShipReqPartsItem shippartsdata = new ShipReqPartsItem();
+
+				// Get data from Web browser
+				String othersId = getUserIdByUserName(lst.get(i)[3]);
+
+				shippartsdata.setUserId(loginUser.getUserId());
+				shippartsdata.setItemlistShipId(-2); // -2 은 아직 타인 장바구니안에 대기
+
+				int _partId = getMyPartsIDFromPartName(othersId, lst.get(i)[1]);
+				shippartsdata.setItemlistPartId(_partId);
+
+				shippartsdata.setItemlistShipId(-2);
+				shippartsdata.setItemlistAmount(Integer.valueOf(lst.get(i)[2]));
+
+				// insert db
+				addShipPartsItem(shippartsdata);
+
+			}
+		} else {
+			String err = "DB에 입력되지 않았습니다.";
+			System.out.println(err);
+			errorlog.add(err);
+			return false;
+		}
+
+		return true;
+
+	}
+
+	public String getUserIdByUserName(String UserName) {
+		// TODO Auto-generated method stub
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("UserName", UserName);
+
+		List<UserItem> list = itemDao.queryUserItemsbyName(paramMap);
+		if (list.size() == 0) {
+			System.out.println("[ItemService] no user data");
+			return null;
+		}
+		return list.get(0).getUserId();
 	}
 
 }

@@ -202,4 +202,8 @@ public class ItemDao {
 		return sqlSession.selectList("queryMyPartsIDByPartName_TBPart", paramMap);
 	}
 
+	public List<UserItem> queryUserItemsbyName(Map<String, String> paramMap) {
+		return sqlSession.selectList("queryUserItemsbyName", paramMap);
+	}
+
 }

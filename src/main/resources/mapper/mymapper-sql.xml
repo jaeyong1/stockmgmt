@@ -827,4 +827,20 @@
 		t1.part_name = #{PartName};
 	</select>
 
+
+<!-- Parts Id로 owner의 User정보 -->
+	<select id="queryUserItemsbyName" parameterType="String"
+		resultMap="UserItemMap">
+		SELECT
+		`user_id`,
+		`user_name`,
+		`user_password`, `user_email`,
+		`user_teamname`,
+		`user_level`
+		FROM
+		tb_user as t1
+		WHERE
+		t1.user_name = #{UserName};
+	</select>
+
 </mapper>

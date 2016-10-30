@@ -253,9 +253,10 @@ public class ReadExcelFileToList {
 				} else if (xlsDataLine) {
 					// process lststr [start]
 					System.out.println(">process line");
-					String[] item = new String[3];
-					item[0] = lststr.get(0).toString(); // 프로젝트코드 A열
-					item[1] = lststr.get(4).toString(); // 프로젝트코드 E열
+					String[] item = new String[4];
+					item[0] = lststr.get(0).toString(); // 프로젝트코드 A열 (프로젝트 코드)
+					item[3] = lststr.get(1).toString(); // 프로젝트코드 B열 (개발담당자)
+					item[1] = lststr.get(4).toString(); // 프로젝트코드 E열 (LGIT P/N)
 
 					if (isNum(lststr.get(10).toString())) {
 						String str = lststr.get(10).trim().replaceAll(",", "").toString();
@@ -268,7 +269,8 @@ public class ReadExcelFileToList {
 						errorlog.add(err);
 						item[2] = "0"; // 프로젝트코드 K열
 					}
-
+					
+					
 					xlsitems.add(item);
 
 					// process lststr [end]
