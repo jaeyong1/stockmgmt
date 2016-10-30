@@ -408,7 +408,7 @@ public class WebController {
 
 		model.addAttribute("PageTitleInfoFromerver", "나의 재고 관리");
 		model.addAttribute("PostPageUrl", "/reqshippartsadd");
-		// model.addAttribute("CalledUrl","/mylist");
+		model.addAttribute("requestedURL", "/mylist");
 		return "mylist";// mylist.jsp
 	}
 
@@ -454,7 +454,7 @@ public class WebController {
 
 		model.addAttribute("PageTitleInfoFromerver", "파트너 재고 관리");
 		model.addAttribute("PostPageUrl", "/reqothersshippartsadd");
-
+		model.addAttribute("requestedURL", "/otherslist");
 		return "mylist";// mylist.jsp
 	}
 
@@ -619,11 +619,11 @@ public class WebController {
 		// session 확인
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
-			System.out.println("/mylist process. no session info. return login.jsp ");
+			System.out.println("/myparts process. no session info. return login.jsp ");
 			return "login";
 		}
 		System.out.println(
-				"[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /mylist process. req pagenum:" + seq);
+				"[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /myparts process. req pagenum:" + seq);
 
 		final int rowsPer1Page = 15;
 

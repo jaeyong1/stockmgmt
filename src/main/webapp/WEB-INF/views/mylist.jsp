@@ -34,7 +34,7 @@
 		console.log("담기");
 		var nm = document.forms["form" + id].elements["part-Id"].value;
 		var response = confirm(nm + "데이터 추가할까요?")
-		if (response) {			
+		if (response) {
 			//do yes task
 			document.forms["form" + id].method = "post";
 			document.forms["form" + id].action = "${PostPageUrl}"; //"/reqshippartsadd"
@@ -45,24 +45,50 @@
 	}
 </script>
 
+<!-- Excel download -->
+<script>
+	function showExcelExportWindow() {
+		window.open("/mylistexport${requestedURL}", 'window',
+				'width=650,height=450');
+		//  자동생성 경로..
+		//1.  /mylistexport/mylist
+		//2.  /mylistexport/otherslist
+
+	}
+</script>
+<!-- Excel download -->
+
 <!-- <center>	<h3>나의 재고 조회</h3> </center>  -->
 <center>
-	<h3>${PageTitleInfoFromerver}</h3>	
+	<h3>${PageTitleInfoFromerver}</h3>
 </center>
 
 <form name="formSearchType">
 	<p align="right">
+		<!--  not use anymore-->
+
 		&nbsp;<select name="srchtype" size="1">
 			<option selected value="projcode">프로젝트Code</option>
 			<option value="shipperid">출고담당자이름</option>
 			<option value="devid">개발담당자이름</option>
 			<option value="lgitpn">LGIT P/N</option>
 		</select> <input type="text" name="srchword"> <input type="submit"
-			name="btnsrch" value="검색"> <input type="submit"
+			name="btnsrch" value="검색">
+		<!-- 
+		 <input type="submit"
 			name="exportxls" disabled=true value="선택엑셀받기"> <input
 			type="button" name="addshiplist" value="출고요청담기" disabled=true
 			onClick="reqShipping('chk[]', 'reqnum[]')" />
+			 -->
+		<!-- Excel download -->
+		<input type="button" value="Excel download" name="submitbtn1"
+			class="btn btn-info btn-xs"
+			OnClick="javascript:showExcelExportWindow();">
 	</p>
+
+
+
+	<br>
 </form>
 
 <!-- 

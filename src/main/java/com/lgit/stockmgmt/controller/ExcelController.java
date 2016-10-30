@@ -6,24 +6,26 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lgit.stockmgmt.domain.Item;
+import com.lgit.stockmgmt.domain.JoinDBItem;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ShipReqPartsItem;
 import com.lgit.stockmgmt.domain.UserItem;
 import com.lgit.stockmgmt.service.ItemService;
 import com.lgit.stockmgmt.util.ReadExcelFileToList;
+import com.lgit.stockmgmt.util.WriteListToExcelFile;
 
 @Controller
 public class ExcelController {
@@ -32,6 +34,9 @@ public class ExcelController {
 	 */
 	@Autowired
 	private ItemService itemService;
+
+	@Autowired
+	ServletContext context;
 
 	/*
 	 * File upload 할수 있는 창
@@ -134,7 +139,7 @@ public class ExcelController {
 				} else {
 					dbProcessSuccess = false;
 				}
-			}else {
+			} else {
 				errorlog.add("JAVA system 에서 Excel 읽는중 장애발생");
 				errorlog.add("요청된 경로를 해석하지 못했습니다. 관리자에게 연락주세요~");
 				dbProcessSuccess = false;
@@ -244,4 +249,52 @@ public class ExcelController {
 		return "fileupload";/* fileupload.jsp */
 	}
 
+	/*
+	 * /mylistexport
+	 * 
+	 * 나의자재 - Excel download
+	 */
+	@RequestMapping(value = "/mylistexport/{requrl}", method = RequestMethod.GET)
+	public String exportMyParts(PartsItem item, @PathVariable String requrl, Model model, HttpServletRequest request) {
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/mylistexport process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /mylistexport process");
+		model.addAttribute("requestedURL", "/mylist");
+		String requestedURL = request.getParameter("requestedURL");
+
+		List<String> errorlog = new ArrayList<String>();
+
+		List<JoinDBItem> items = null;
+		
+		if (requrl.equals("mylist")) {
+			///////////////// List View
+			items = itemService.getMyItemsByOwnerName(loginUser.getUserName());
+
+		} else if (requrl.equals("otherslist")) {
+			///////////////// List View
+			items = itemService.getOthersItemsByOwnerName(loginUser.getUserName());
+
+		} else {
+			System.out.println("모르는 주소에서 요청됨");
+			model.addAttribute("errormsg", "[에러발생]<br>\n 모르는 주소에서 요청됨 <br>\n");
+			return "errorpopupviewmoveto";
+		}
+
+		/////////////////// Write Excel file
+		String templatefile = context.getRealPath("") + "resources/xls/shipreqdata.xlsx"; // hard
+																							// coding
+		String exportFileName = context.getRealPath("") + "resources/tempxls/" + loginUser.getUserName() + ".xlsx";
+		String exporturl = "/" + "resources/tempxls/" + loginUser.getUserName() + ".xlsx";
+		// System.out.println(templatefile);
+		// System.out.println(exportFileName);
+
+		WriteListToExcelFile.writeMyPartsToFile(templatefile, exportFileName, items, errorlog);
+
+		model.addAttribute("requestedURL", exporturl);
+		return "filedownload";/* fileupload.jsp */
+	}
 }
