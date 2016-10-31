@@ -435,7 +435,7 @@ public class WebController {
 				+ "] /otherslist process. req pagenum:" + seq);
 
 		final int rowsPer1Page = 15;
-	
+
 		/////////////////// List View
 		List<JoinDBItem> items = itemService.getOthersItemsByOwnerName(loginUser.getUserName());
 
@@ -450,7 +450,7 @@ public class WebController {
 		model.addAttribute("start", paging.getFirstLinkedPage());
 		model.addAttribute("end", paging.getLastLinkedPage());
 		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
-		// 인덱스..		
+		// 인덱스..
 
 		model.addAttribute("PageTitleInfoFromerver", "파트너 재고 관리");
 		model.addAttribute("PostPageUrl", "/reqothersshippartsadd");
@@ -458,10 +458,6 @@ public class WebController {
 		return "mylist";// mylist.jsp
 	}
 
-	
-	
-	
-	
 	/*
 	 * 
 	 * ============================== 사용자 프로젝트 관리 ==============================
@@ -527,10 +523,17 @@ public class WebController {
 		item.setProjectShipperId(request.getParameter("project-shipper-Id"));
 		System.out.println("[" + loginUser.getUserId() + "]" + item.toString());
 
-		// insert DB query
-		itemService.setProjectItem(item);
-		model.addAttribute("reqresult", item.getProjectCode() + " is added");
-
+		// isvalid shipper id?
+		String shipperId = itemService.getUserNamebyID(item.getProjectShipperId());
+		if (shipperId == null) {
+			// not valid shipper id
+			System.out.println("not valid shipper id" + item.getProjectShipperId());
+			model.addAttribute("reqresult", "[항목추가실패]<br>" + item.getProjectShipperId() + "는 유효하지않은 출고담당자 ID입니다.");
+		} else {
+			// insert DB query
+			itemService.setProjectItem(item);
+			model.addAttribute("reqresult", item.getProjectCode() + " is added");
+		}
 		// Get DB List
 		return showMyProject1("0", model, request);
 	}
@@ -546,9 +549,18 @@ public class WebController {
 		item.setProjectOwnerId(request.getParameter("project-Owner-Id"));
 		item.setProjectShipperId(request.getParameter("project-shipper-Id"));
 
-		// Change DB query
-		itemService.changeProjectItem(item);
-		model.addAttribute("reqresult", item.getProjectCode() + "'s datas are changed");
+		// isvalid shipper id?
+		String shipperId = itemService.getUserNamebyID(item.getProjectShipperId());
+		if (shipperId == null) {
+			// not valid shipper id
+			System.out.println("not valid shipper id" + item.getProjectShipperId());
+			model.addAttribute("reqresult", "[항목수정실패]<br>" + item.getProjectShipperId() + "는 유효하지않은 출고담당자 ID입니다.");
+		} else {
+			// Change DB query
+			itemService.changeProjectItem(item);
+			model.addAttribute("reqresult", item.getProjectCode() + "'s datas are changed");
+		}
+
 		System.out.println("/reqmyprojectmodify processed.. Req ID:" + item.getProjectCode());
 
 		// Get DB List
@@ -594,11 +606,23 @@ public class WebController {
 		item.setPartStock(Integer.valueOf(request.getParameter("part-Stock")));
 		item.setPartMemo(request.getParameter("part-Memo"));
 
-		// insert DB query
-		itemService.setPartsItem(item);
-		model.addAttribute("reqresult", item.getPartName() + " is added");
+		// isvalid projectcode
+		List<ProjectItem> lstPrj = itemService.getMyProjectItems(loginUser.getUserId());
+		boolean prjFinded = false;
+		for (ProjectItem prj : lstPrj) {
+			if (prj.getProjectCode().equals(item.getPartProjectCode())) {
+				prjFinded = true;
+			}
+		}
 
-		// Get DB List
+		if (prjFinded) {
+			// insert DB query
+			itemService.setPartsItem(item);
+			model.addAttribute("reqresult", item.getPartName() + " is added");
+
+		} else {
+			model.addAttribute("reqresult", "[항목생성실패] " + item.getPartProjectCode() + "는 나의 프로젝트 Code가 아닙니다.");
+		}
 
 		return showMyParts1("0", model, request);
 	}
@@ -653,6 +677,7 @@ public class WebController {
 	 */
 	@RequestMapping(value = "/reqmypartsmodify", method = RequestMethod.POST)
 	public String modifyMyParts(PartsItem item, Model model, HttpServletRequest request) {
+	
 		// Get data from Webbrowser
 		item.setPartId(Integer.valueOf(request.getParameter("part-Id")));
 		item.setPartProjectCode(request.getParameter("part-Project-Code"));

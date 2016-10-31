@@ -85,10 +85,6 @@
 			class="btn btn-info btn-xs"
 			OnClick="javascript:showExcelExportWindow();">
 	</p>
-
-
-
-	<br>
 </form>
 
 <!-- 
@@ -100,41 +96,42 @@
 
 <table border="1">
 	<tr class="danger">
+
 		<th width="42">
 			<p>&nbsp;</p>
 		</th>
-		<th width="172">
-			<p>&nbsp;Project Code</p>
+		<th width="172"><center>
+			<p>&nbsp;Project Code</p></center>
 		</th>
 		<th width="100">
-			<p>부서</p>
+			<center><p>부서</p></center>
 		</th>
 		<th width="130">
-			<p>개발담당자</p>
+			<center><p>개발담당자</p></center>
 		</th>
 		<th width="130">
-			<p>출고담당자</p>
+			<center><p>출고담당자</p></center>
 		</th>
 		<th width="112">
-			<p>LGIT P/N</p>
+			<center><p>LGIT P/N</p></center>
 		</th>
 		<th width="126">
-			<p>Item&nbsp;Desc</p>
+			<center><p>Item&nbsp;Desc</p></center>
 		</th>
 		<th width="114">
-			<p>Maker</p>
+			<center><p>Maker</p></center>
 		</th>
 		<th width="90">
-			<p>재고</p>
+			<center><p>재고</p></center>
 		</th>
 		<th width="90">
-			<p>출고요청량</p>
+			<center><p>출고요청량</p></center>
 		</th>
 		<th width="90">
-			<p>단가</p>
+			<center><p>단가</p></center>
 		</th>
 		<th width="67">
-			<p>위치</p>
+			<center><p>위치</p></center>
 		</th>
 	</tr>
 	<!-- DB 데이터 채움 (클래스 변수사용) -->
@@ -142,51 +139,56 @@
 
 		<form name="form${status.index}">
 			<tr>
+
 				<td width="42">
 					<p>
-						&nbsp;<input type="checkbox" name="chk[]" value='${i.partId}'
-							disabled=true> <input type=hidden name=part-Id
-							value='${i.partId}'>
+						&nbsp;
+						<!-- <input type="checkbox" name="chk[]" value='${i.partId}'
+							disabled=true> -->
+						<input type=hidden name=part-Id value='${i.partId}'>
 					</p>
 				</td>
+
 				<td width="192">
-					<p>${i.partProjectCode}</p>
+					<center><p>${i.partProjectCode}</p></center>
 				</td>
 				<td width="85">
-					<p>${i.userTeamname}</p>
+					<center><p>${i.userTeamname}</p></center>
 				</td>
 				<td width="129">
-					<p>${i.userOwnerName}</p>
+					<center><p>${i.userOwnerName}</p></center>
 				</td>
 				<td width="117">
-					<p>${i.userShipperName}</p>
+					<center><p>${i.userShipperName}</p></center>
 				</td>
 				<td width="112">
-					<p>${i.partName}</p>
+					<center><p>${i.partName}</p></center>
 				</td>
 				<td width="126">
-					<p>${i.partDesc}</p>
+					<center><p>${i.partDesc}</p></center>
 				</td>
 				<td width="114">
-					<p>${i.partMemo}</p>
+					<center><p>${i.partMemo}</p></center>
 				</td>
 				<td width="90">
-					<p>${i.partStock}</p>
+					<center><p>${i.partStock}</p></center>
 				</td>
 				<td width="140">
+				<center>
 					<p>
 						<input type="text" name="reqnum[]" value="0" size="4"> <input
 							type="button" class="btn btn-primary btn-xs" value="Cart"
 							name="submitbtn" OnClick="javascript:addCart('${status.index}');">
 					</p>
+					</center>
 				</td>
 
 				</td>
 				<td width="90">
-					<p>${i.partCost}</p>
+					<center><p>${i.partCost}</p></center>
 				</td>
 				<td width="67">
-					<p>${i.partLocation}</p>
+					<center><p>${i.partLocation}</p></center>
 				</td>
 
 			</tr>

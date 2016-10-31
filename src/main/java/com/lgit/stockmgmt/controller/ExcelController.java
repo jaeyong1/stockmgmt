@@ -92,7 +92,7 @@ public class ExcelController {
 
 			if (requestedURL.equals("/myparts")) {
 				/*
-				 * /myparts 에서 Excel import 경우
+				 * /myparts 에서 신규로 Excel import 경우
 				 */
 				List<PartsItem> lst = ReadExcelFileToList.readExcelPartsData(uploadFile.getAbsolutePath(), errorlog);
 				System.out.println("Loaded Excel rows : " + lst.size());
@@ -100,6 +100,19 @@ public class ExcelController {
 
 				if (lst.size() > 0) {
 					dbProcessSuccess = itemService.addMyNewPartsXls(loginUser, lst, errorlog);
+				} else {
+					dbProcessSuccess = false;
+				}
+			} else if (requestedURL.equals("/myparts/0")) {
+				/*
+				 * /myparts 에서 수정으로 Excel import 경우
+				 */
+				List<PartsItem> lst = ReadExcelFileToList.readExcelPartsData(uploadFile.getAbsolutePath(), errorlog);
+				System.out.println("Loaded Excel rows : " + lst.size());
+				popupclosemsg = lst.size() + "건 로딩되었습니다.";
+
+				if (lst.size() > 0) {
+					dbProcessSuccess = itemService.modifyMyNewPartsXls(loginUser, lst, errorlog);
 				} else {
 					dbProcessSuccess = false;
 				}
@@ -182,7 +195,7 @@ public class ExcelController {
 	/*
 	 * /mypartsimport
 	 * 
-	 * DataBase관리 - Parts관리 - Excel upload
+	 * DataBase관리 - Parts관리 - Excel upload (신규)
 	 */
 	@RequestMapping(value = "/mypartsimport", method = RequestMethod.GET)
 	public String addAdminParts(PartsItem item, Model model, HttpServletRequest request) {
@@ -198,6 +211,24 @@ public class ExcelController {
 	}
 
 	/*
+	 * /mypartsimport2
+	 * 
+	 * DataBase관리 - Parts관리 - Excel upload (수정)
+	 */
+	@RequestMapping(value = "/mypartsimport2", method = RequestMethod.GET)
+	public String addAdminParts2(PartsItem item, Model model, HttpServletRequest request) {
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/mypartsimport2 process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /mypartsimport2 process");
+		model.addAttribute("requestedURL", "/myparts/0");
+		return "fileupload";/* fileupload.jsp */
+	}
+
+	/*
 	 * /shippartsimport 출고요청하기 - 출고요청 부품리스트 - Excel upload
 	 */
 	@RequestMapping(value = "/shippartsimport", method = RequestMethod.GET)
@@ -205,10 +236,10 @@ public class ExcelController {
 		// session 확인
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
-			System.out.println("/ mypartsimport process. no session info. return login.jsp ");
+			System.out.println("/shippartsimport process. no session info. return login.jsp ");
 			return "login";
 		}
-		System.out.println("[" + loginUser.getUserId() + "] /mypartsimport process");
+		System.out.println("[" + loginUser.getUserId() + "] /shippartsimport process");
 		model.addAttribute("requestedURL", "/shipparts");
 		return "fileupload";/* fileupload.jsp */
 	}
@@ -224,7 +255,7 @@ public class ExcelController {
 			System.out.println("/shipotherspartsimport process. no session info. return login.jsp");
 			return "login";
 		}
-		System.out.println("[" + loginUser.getUserId() + "] /mypartsimport process");
+		System.out.println("[" + loginUser.getUserId() + "] /shipotherspartsimport process");
 		model.addAttribute("requestedURL", "/shipothersparts");
 
 		List<ShipReqPartsItem> items = itemService.getShipPartsListItems(-2, loginUser.getUserId());
@@ -269,7 +300,7 @@ public class ExcelController {
 		List<String> errorlog = new ArrayList<String>();
 
 		List<JoinDBItem> items = null;
-		
+
 		if (requrl.equals("mylist")) {
 			///////////////// List View
 			items = itemService.getMyItemsByOwnerName(loginUser.getUserName());
@@ -292,9 +323,51 @@ public class ExcelController {
 		// System.out.println(templatefile);
 		// System.out.println(exportFileName);
 
-		WriteListToExcelFile.writeMyPartsToFile(templatefile, exportFileName, items, errorlog);
+		WriteListToExcelFile.writeMyStockListToFile(templatefile, exportFileName, items, errorlog);
 
 		model.addAttribute("requestedURL", exporturl);
 		return "filedownload";/* fileupload.jsp */
 	}
+
+	/*
+	 * /myparts_export
+	 * 
+	 * DataBase관리 - Parts관리 - Excel download
+	 */
+	@RequestMapping(value = "/myparts_export", method = RequestMethod.GET)
+	public String exportMyParts(PartsItem item, Model model, HttpServletRequest request) {
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/myparts_export process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /mylistexport process");
+		model.addAttribute("requestedURL", "/myparts");
+		String requestedURL = request.getParameter("requestedURL");
+
+		List<String> errorlog = new ArrayList<String>();
+
+		///////////////// List View
+		List<PartsItem> items = itemService.getMyItemsByID(loginUser.getUserId());
+
+		// System.out.println("모르는 주소에서 요청됨");
+		// model.addAttribute("errormsg", "[에러발생]<br>\n 모르는 주소에서 요청됨 <br>\n");
+		// return "errorpopupviewmoveto";
+		//
+
+		/////////////////// Write Excel file
+		String templatefile = context.getRealPath("") + "resources/xls/partsdata.xlsx"; // hard_coding
+		String exportFileName = context.getRealPath("") + "resources/tempxls/" + loginUser.getUserName() + ".xlsx";
+		String exporturl = "/" + "resources/tempxls/" + loginUser.getUserName() + ".xlsx";
+		// System.out.println(templatefile);
+		// System.out.println(exportFileName);
+
+		WriteListToExcelFile.writeMyPartsToFile(templatefile, exportFileName, items, errorlog);
+
+		model.addAttribute("requestedURL", exporturl);
+
+		return "filedownload";/* fileupload.jsp */
+	}
+
 }

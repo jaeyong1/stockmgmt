@@ -48,11 +48,17 @@
 </center>
 
 <center>
-	<input type="button" value="Excel upload" name="submitbtn1"
-		class="btn btn-info btn-xs"
-		OnClick="javascript:showExcelImportWindow();">
+	<table border="0">
+		<tr>
+
+			<td width="804" align="right"><input type="button"
+				value="Excel upload" name="submitbtn1" class="btn btn-info btn-xs"
+				OnClick="javascript:showExcelImportWindow();"> <br></td>
+		</tr>
+	</table>
 </center>
-<br>
+
+
 <!-- 
 	*********
 	리스트 표시 
@@ -109,7 +115,9 @@
 						<p align="center">${i.partProjectCode}</p>
 					</td>
 					<td width="135">
-						<p align="center">${i.partName} <!-- ${i.itemlistPartId}  --></p>
+						<p align="center">${i.partName}
+							<!-- ${i.itemlistPartId}  -->
+						</p>
 					</td>
 					<td width="210">
 						<p align="center">${i.partDesc}</p>

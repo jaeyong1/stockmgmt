@@ -47,14 +47,16 @@
 <center>
 	<h3>출고요청의 파츠리스트 조회</h3>
 </center>
-
 <center>
-	<input type="button" value="Excel upload" name="submitbtn1"
-		class="btn btn-info btn-xs"
-		OnClick="javascript:showExcelImportWindow();">
+	<table border="0">
+	<tr>
+	
+		<td width="804" align="right">   <input type="button" value="Excel upload"
+			name="submitbtn1" class="btn btn-info btn-xs"
+			OnClick="javascript:showExcelImportWindow();">  <br></td>
+			</tr>			
+	</table>
 </center>
-<br>
-
 <!-- 
 	*********
 	리스트 표시 

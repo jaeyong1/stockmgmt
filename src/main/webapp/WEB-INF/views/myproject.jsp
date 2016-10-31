@@ -160,18 +160,26 @@
 <table border="1">
 	<tr>
 		<td width="204">
-			<p>프로젝트코드</p>
+			<center>
+				<p>프로젝트코드</p>
+			</center>
 		</td>
 		<td width="204">
-			<p>프로젝트이름</p>
+			<center>
+				<p>프로젝트이름</p>
+			</center>
 		</td>
-		<td width="240">
-			<p>개발담당자ID</p>
+		<td width="200">
+			<center>
+				<p>개발담당자ID</p>
+			</center>
 		</td>
-		<td width="240">
-			<p>출고담당자ID</p>
+		<td width="200">
+			<center>
+				<p>출고담당자ID</p>
+			</center>
 		</td>
-		<td></td>
+		<td width="100"></td>
 
 	</tr>
 	<!-- DB 데이터 채움 (클래스 변수사용) -->
@@ -179,35 +187,41 @@
 
 		<form name="form${status.index}">
 			<tr>
-				<td width="199">${i.projectCode}<input type=hidden
-					name=project-Code value='${i.projectCode}'>
-				</td>
-				<td width="199">
+				<td><center>${i.projectCode}</center> <input type=hidden
+					name=project-Code value='${i.projectCode}'></td>
+				<td>
 					<p>
+					<center>
 						<input name=project-Name value='${i.projectName}'>
+					</center>
 					</p>
 				</td>
-				<td width="199">
+				<td>
 					<p>
-						${i.projectOwnerId} <input type=hidden name=project-Owner-Id
+					<center>${i.projectOwnerId}
+						<input type=hidden name=project-Owner-Id
 							value='${i.projectOwnerId}'>
+					</center>
 					</p>
 				</td>
-				<td width="199">
+				<td>
 					<p>
-						<input type=text name=project-shipper-Id size=30 maxlength=30
-							value='${i.projectShipperId}'>
-					</p>
+					<center>
+						<input type=text name=project-shipper-Id size=20 maxlength=30
+							value='${i.projectShipperId}'></
+						</p>
 				</td>
 
-				<td width="199">
+				<td>
 					<p>
+					<center>
 						<input type="button" value="수정" name="submitbtn"
 							class="btn btn-primary btn-xs"
 							OnClick="javascript:modifyCheck2('${status.index}');"> <input
 							type="button" value="삭제" class="btn btn-warning btn-xs"
 							name="submitbtn2"
 							OnClick="javascript:removeItem('${status.index}');">
+					</center>
 					</p>
 
 

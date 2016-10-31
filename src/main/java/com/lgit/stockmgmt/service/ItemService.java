@@ -563,8 +563,8 @@ public class ItemService {
 				// OK. keep going
 
 			} else {
-				String err = "엑셀정보 " + (i + 1) + "번째) 개발담당자: " + lst.get(i)[3] + "(id:" + othersId + ") / 프로젝트코드: " + lst.get(i)[0]
-						+ " / LGIT P/N:" + lst.get(i)[1] + "는 존재하지 않습니다.";
+				String err = "엑셀정보 " + (i + 1) + "번째) 개발담당자: " + lst.get(i)[3] + "(id:" + othersId + ") / 프로젝트코드: "
+						+ lst.get(i)[0] + " / LGIT P/N:" + lst.get(i)[1] + "는 존재하지 않습니다.";
 				System.out.println(err);
 				errorlog.add(err);
 				dbProcessSuccess = false;
@@ -615,6 +615,53 @@ public class ItemService {
 			return null;
 		}
 		return list.get(0).getUserId();
+	}
+
+	public boolean modifyMyNewPartsXls(UserItem loginUser, List<PartsItem> lst, List<String> errorlog) {
+
+		boolean dbProcessSuccess = true;
+		int i;
+		List<ProjectItem> lstMyPrj = getMyProjectItems(loginUser.getUserId());
+
+		for (i = 0; i < lst.size(); i++) {
+			// valid project 인지 체크
+			if (isExistProjectCode(lstMyPrj, lst.get(i).getPartProjectCode())) {
+
+				// 기존에 있는 PartsP/N이 인지확인
+				if (isExistMyPartsName(loginUser.getUserId(), lst.get(i).getPartProjectCode(),
+						lst.get(i).getPartName())) {
+					// ok
+					// keep going
+
+				} else {
+					String err = "Error: 기존에 없는 LGIT P/N 입니다. " + (i + 1) + "번째 : " + lst.get(i).getPartName();
+					System.out.println(err);
+					errorlog.add(err);
+					dbProcessSuccess = false;
+				}
+			} else {
+				String err = "Error: 나의 ProjectCode가 아닙니다 " + (i + 1) + "번째 : " + lst.get(i).getPartProjectCode();
+				System.out.println(err);
+				errorlog.add(err);
+				dbProcessSuccess = false;
+
+			}
+		}
+
+		// 값 DB에 추가
+		if (dbProcessSuccess) {
+			for (i = 0; i < lst.size(); i++) {
+				changePartsItem(lst.get(i));
+			}
+		} else {
+			String err = "DB에 입력되지 않았습니다.";
+			System.out.println(err);
+			errorlog.add(err);
+			return false;
+		}
+
+		return true;
+
 	}
 
 }

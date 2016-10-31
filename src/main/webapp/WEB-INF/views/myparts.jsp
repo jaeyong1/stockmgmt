@@ -70,12 +70,26 @@
 	}
 </script>
 
+<!-- Excel upload -->
 <script>
 	function showExcelImportWindow() {
+		//신규 아이템 생성
 		window.open("/mypartsimport", 'window', 'width=650,height=450');
 	}
+	function showExcelImportWindow2() {
+		//기존 아이템 수정
+		window.open("/mypartsimport2", 'window', 'width=650,height=450');
+	}
 </script>
+<!-- Excel upload -->
 
+<!-- Excel download -->
+<script>
+	function showExcelExportWindow() {
+		window.open("/myparts_export", 'window', 'width=650,height=450');
+	}
+</script>
+<!-- Excel download -->
 <!-- 
 	*****************************
 	직전 작업 결과 표시
@@ -109,7 +123,7 @@
 			<td width="328">
 				<p>
 					<input type="text" name='part-Project-Code'><br>(나의
-					프로젝트만 기입)
+					프로젝트만 기입가능)
 
 				</p>
 			</td>
@@ -191,35 +205,70 @@
 <p>&nbsp;</p>
 
 <h5>
-	<b>[데이터수정]</b> <input type="button" value="Excel upload"
-		name="submitbtn1" class="btn btn-info btn-xs"
-		OnClick="javascript:showExcelImportWindow();">
+	<b>[데이터수정]</b>
 </h5>
+
+<center>
+	<table border="0">
+		<tr>
+
+			<td width="1004" align="right">
+				<!--  --> <input type="button" value="Excel upload(신규)"
+				name="submitbtn1" class="btn btn-info btn-xs"
+				OnClick="javascript:showExcelImportWindow();"> 				<!--  --> <input type="button" value="Excel upload(수정)"
+				name="submitbtn2" class="btn btn-info btn-xs"
+				OnClick="javascript:showExcelImportWindow2();">  <input
+				type="button" value="Excel download" name="submitbtn3"
+				class="btn btn-info btn-xs"
+				OnClick="javascript:showExcelExportWindow();"><br>
+			</td>
+		</tr>
+	</table>
+
+</center>
+<p></p>
+
 <table border="1">
 	<tr>
 		<td width="130">
-			<p>parts id(idx)</p>
+			<center>
+				<p>parts id(idx)</p>
+			</center>
 		</td>
 		<td width="130">
-			<p>프로젝트코드</p>
+			<center>
+				<p>프로젝트코드</p>
+			</center>
 		</td>
 		<td width="130">
-			<p>LGIT P/N</p>
+			<center>
+				<p>LGIT P/N</p>
+			</center>
 		</td>
 		<td width="130">
-			<p>Desc</p>
+			<center>
+				<p>Desc</p>
+			</center>
 		</td>
 		<td width="130">
-			<p>Maker</p>
+			<center>
+				<p>Maker</p>
+			</center>
 		</td>
 		<td width="130">
-			<p>위치</p>
+			<center>
+				<p>위치</p>
+			</center>
 		</td>
-		<td width="130">
-			<p>단가</p>
+		<td width="110">
+			<center>
+				<p>단가</p>
+			</center>
 		</td>
-		<td width="130">
-			<p>재고</p>
+		<td width="110">
+			<center>
+				<p>재고</p>
+			</center>
 		</td>
 
 		<td width="130">
@@ -230,47 +279,52 @@
 	<c:forEach var="i" items="${items}" varStatus="status">
 		<form name="form${status.index}">
 			<tr>
-				<td>${i.partId}<input type=hidden name=part-Id
-					value='${i.partId}'>
+				<td>
+					<center>
+						<font color="gray"> ${i.partId}<input type=hidden
+							name=part-Id value='${i.partId}'>
+					</center> </font>
 				</td>
 				<td>
-					<p>${i.partProjectCode}
-						<input type=hidden name=part-Project-Code size="14"
-							value='${i.partProjectCode}'>
-					</p>
+					<center>
+						<p>${i.partProjectCode}
+							<input type=hidden name=part-Project-Code size="14"
+								value='${i.partProjectCode}'>
+						</p>
+					</center>
 				</td>
-				<td>
-					<p>
-						<input type=text name=part-Name size="14" value='${i.partName}'>
-					</p>
-				</td>
-				<td>
-					<p>
-						<input type=text name=part-Desc size="14" value='${i.partDesc}'>
-					</p>
-				</td>
-				<td>
-					<p>
-						<input type=text name=part-Memo size="14" value='${i.partMemo}'>
-					</p>
-				</td>
+				<td><center>
+						<p>
+							<input type=text name=part-Name size="14" value='${i.partName}'>
+						</p>
+					</center></td>
+				<td><center>
+						<p>
+							<input type=text name=part-Desc size="14" value='${i.partDesc}'>
+						</p>
+					</center></td>
+				<td><center>
+						<p>
+							<input type=text name=part-Memo size="14" value='${i.partMemo}'>
+						</p>
+					</center></td>
 
-				<td>
-					<p>
-						<input type=text name=part-Location size="14"
-							value='${i.partLocation}'>
-					</p>
-				</td>
-				<td>
-					<p>
-						<input type=text name=part-Cost size="4" value='${i.partCost}'>
-					</p>
-				</td>
-				<td>
-					<p>
-						<input type=text name=part-Stock size="4" value='${i.partStock}'>
-					</p>
-				</td>
+				<td><center>
+						<p>
+							<input type=text name=part-Location size="14"
+								value='${i.partLocation}'>
+						</p>
+					</center></td>
+				<td><center>
+						<p>
+							<input type=text name=part-Cost size="6" value='${i.partCost}'>
+						</p>
+					</center></td>
+				<td><center>
+						<p>
+							<input type=text name=part-Stock size="6" value='${i.partStock}'>
+						</p>
+					</center></td>
 
 
 
@@ -282,6 +336,7 @@
 							type="button" value="삭제" name="submitbtn2"
 							class="btn btn-warning btn-xs"
 							OnClick="javascript:removeItem('${status.index}');">
+
 					</p>
 				</td>
 
@@ -339,6 +394,7 @@
 	검색 창
 	*****************************		
 		 -->
+<!-- 
 <form name="form2">
 	<p align="center">
 		&nbsp;<select name="srchtype" size="1">
@@ -351,5 +407,5 @@
 			name="btnsrch" value="검색">
 	</p>
 </form>
-
+-->
 <%@ include file="footer.jsp"%>
