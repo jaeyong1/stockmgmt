@@ -80,7 +80,7 @@ var rolekor ="";
 						<c:when test="${(3 == sessionScope.userLoginInfo.userLevel) }">
 
 							<li class="active"><a href="/shipreqlist">출고요청처리</a></li>
-							<li><a href="/mylist"><del>재물조사수행</del></a></li>
+							<li><a href="/myinventorycontrol">재물조사수행</a></li>
 						</c:when>
 					</c:choose>
 
@@ -140,7 +140,7 @@ var rolekor ="";
 
 					<li><c:choose>
 							<c:when test="${not empty sessionScope.userLoginInfo}">
-								<c:out value="${sessionScope.userLoginInfo.userId}" />님
+								<c:out value="${sessionScope.userLoginInfo.userName}" />님 로그인중
 								<div id="userinfo"></div>
 							</c:when>
 						</c:choose></li>

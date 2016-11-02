@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.lgit.stockmgmt.domain.EUserLevel;
 import com.lgit.stockmgmt.domain.Item;
 import com.lgit.stockmgmt.domain.JoinDBItem;
 import com.lgit.stockmgmt.domain.PartsItem;
@@ -367,7 +368,25 @@ public class WebController {
 	}
 
 	/*
-	 * /mylist 내정보
+	 * /myinventorycontrol 출고담당자 재고관리메뉴(view는 재활용 가져감)
+	 */
+	@RequestMapping(value = "/myinventorycontrol", method = RequestMethod.GET)
+	public String myListProcess3(Model model, HttpServletRequest request) {
+		return myListProcess4("0", model, request);
+	}
+	
+	@RequestMapping(value = "/myinventorycontrol/{seq}", method = RequestMethod.GET)
+	public String myListProcess4(@PathVariable String seq, Model model, HttpServletRequest request) {
+		myListProcess(seq, model, request);
+		model.addAttribute("PageTitleInfoFromerver", "재고수량관리");
+		model.addAttribute("requestedURL", "/myinventorycontrol");
+		return "myinventorycontrol"; /* myinventorycontrol.jsp */
+	}
+	
+	
+
+	/*
+	 * /mylist 내 자재정보
 	 */
 	@RequestMapping(value = "/mylist", method = RequestMethod.GET)
 	public String myListProcess2(Model model, HttpServletRequest request) {
@@ -391,7 +410,12 @@ public class WebController {
 		final int rowsPer1Page = 15;
 
 		/////////////////// List View
-		List<JoinDBItem> items = itemService.getMyItemsByOwnerName(loginUser.getUserName());
+		List<JoinDBItem> items = null;
+		if (loginUser.getUserLevel() == EUserLevel.Lv2_DEV.getLevelInt()) {
+			items = itemService.getMyItemsByOwnerName(loginUser.getUserName());
+		} else if (loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt()) {
+			items = itemService.getShipperItemsByShipperName(loginUser.getUserName());
+		}
 
 		// Choose current page data
 		PagedListHolder<JoinDBItem> paging = new PagedListHolder<JoinDBItem>(items);
@@ -677,7 +701,7 @@ public class WebController {
 	 */
 	@RequestMapping(value = "/reqmypartsmodify", method = RequestMethod.POST)
 	public String modifyMyParts(PartsItem item, Model model, HttpServletRequest request) {
-	
+
 		// Get data from Webbrowser
 		item.setPartId(Integer.valueOf(request.getParameter("part-Id")));
 		item.setPartProjectCode(request.getParameter("part-Project-Code"));

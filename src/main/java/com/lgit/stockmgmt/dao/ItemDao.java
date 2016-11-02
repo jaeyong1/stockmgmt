@@ -206,4 +206,29 @@ public class ItemDao {
 		return sqlSession.selectList("queryUserItemsbyName", paramMap);
 	}
 
+	public List<JoinDBItem> queryJoinItemsByShipperName(Map<String, String> paramMap) {
+
+		return sqlSession.selectList("queryJoinedPartsItemByShipperName", paramMap);
+	}
+
+	public List<ProjectItem> queryShipperProjectItemsById(Map<String, String> paramMap) {
+		
+		return sqlSession.selectList("queryProjectItemsByShipperID", paramMap);
+	}
+
+	public List<PartsItem> queryPart_PartsProjectAndPartsByShipperId(Map<String, String> paramMap) {
+		return sqlSession.selectList("queryPartsProjectAndPartsByShipperId_TBPart", paramMap);
+	}
+
+	public void deleteShipreqItemListByUserId(ShipReqPartsItem item) {
+		sqlSession.delete("deleteMyShipReqItemList", item);
+		return;
+				
+	}
+
+	public void deleteShipReqItem(ShipReqItem shippartsdata) {
+		sqlSession.delete("deleteShipReqItem", shippartsdata);
+		
+	}
+
 }

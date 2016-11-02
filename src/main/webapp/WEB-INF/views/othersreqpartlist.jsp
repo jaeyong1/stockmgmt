@@ -34,6 +34,17 @@
 	function showExcelImportWindow() {
 		window.open("/shipotherspartsimport", 'window', 'width=650,height=450');
 	}
+	
+	function removeCartAllItem() {
+		var response = confirm("모든 데이터를 삭제할까요?")
+		if (response) {
+			//do yes task
+			//아이템한개라도있으면 form0부터 시작.. form1 form2 form3..
+			document.forms["form0"].method = "post";
+			document.forms["form0"].action = "/shipothersparts_removeall"
+			document.forms["form0"].submit();
+		}
+	}
 </script>
 
 <!-- Excel upload -->
@@ -52,8 +63,10 @@
 		<tr>
 
 			<td width="804" align="right"><input type="button"
+				value="Remove ALL" name="submitbtn1" class="btn btn-info btn-xs"
+				OnClick="javascript:removeCartAllItem();"> <input type="button"
 				value="Excel upload" name="submitbtn1" class="btn btn-info btn-xs"
-				OnClick="javascript:showExcelImportWindow();"> <br></td>
+				OnClick="javascript:showExcelImportWindow();"> <p></td>
 		</tr>
 	</table>
 </center>

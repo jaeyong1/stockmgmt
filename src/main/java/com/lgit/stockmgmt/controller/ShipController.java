@@ -711,6 +711,19 @@ public class ShipController {
 
 			// Get DB List
 			return "redirect:../myconfirmshipreqlist";
+
+		} else if (curstate == EShipState.STATE3_REQSHIPPING.getStateInt()) {
+			// self rej
+			// Get data from Web browser
+			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
+			shipreqdata.setShipStateId(EShipState.STATE6_REJSHIPPING.getStateInt()); // move_to_6
+
+			// Change DB query
+			itemService.stateMove4to6(shipreqdata.getShipId(), shipreqdata.getShipStateId()); // sql_reuse
+			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state6 processed..");
+
+			// Get DB List
+			return "redirect:../shipreqlist";
 		}
 
 		// State ERROR
@@ -766,6 +779,92 @@ public class ShipController {
 		model.addAttribute("eshipstate", eshipstate);
 
 		return "shipreqlist"; /* myreqpartlist.jsp */
+	}
+
+	@RequestMapping(value = "/shipparts_removeall", method = RequestMethod.POST)
+	public String doMyCartRemoveAll(Model model, HttpServletRequest request) {
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/shipparts_removeall process. no session info.  ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /shipparts_removeall process");
+
+		///////////////////
+		// Query DB List
+		itemService.deleteAllMyCartItems(loginUser.getUserId(), -1);
+		System.out.println("[" + loginUser.getUserId() + "] /shipparts_removeall process");
+
+		// Get DB List
+		return "redirect:/shipparts";
+
+	}
+
+	@RequestMapping(value = "/shipothersparts_removeall", method = RequestMethod.POST)
+	public String doOthersCartRemoveAll(Model model, HttpServletRequest request) {
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/shipothersparts_removeall process. no session info.  ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /shipothersparts_removeall process");
+
+		///////////////////
+		// Query DB List
+		itemService.deleteAllMyCartItems(loginUser.getUserId(), -2);
+		System.out.println("[" + loginUser.getUserId() + "] /shipothersparts_removeall process");
+
+		// Get DB List
+		return "redirect:/shipothersparts";
+
+	}
+
+	/*
+	 * /shipreqprocess/state1 파트너 협의요청
+	 */
+	@RequestMapping(value = "/shipreqprocess/state1", method = RequestMethod.POST)
+	public String processBackToCartReq(ShipReqItem shipreqdata, Model model, HttpServletRequest request) {
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/shipreqprocess/state2 process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state2 process");
+
+		// check state
+		int curstate = Integer.valueOf(request.getParameter("ship-StateId"));
+
+		// 이전 상태에 따른 분기
+		if (curstate == EShipState.STATE3_REQSHIPPING.getStateInt()) {
+			// Get data from Web browser
+			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
+			shipreqdata.setShipRequestorId(request.getParameter("ship-RequestorId"));
+
+			// 1. 현재 장바구니에 있으면 되돌리기 불가
+			List<ShipReqPartsItem> lst = itemService.getShipPartsListItems(-1, shipreqdata.getShipRequestorId());
+			if (lst.size() != 0) {
+				String ret = showShipparts("0", model, request);
+				model.addAttribute("reqresult", "[되돌리기실패]<br>현재대기중인 항목이 없어야 되돌릴 수 있습니다.");
+				return ret;
+
+			}
+
+			itemService.stateMove3to1(shipreqdata, shipreqdata.getShipRequestorId());
+			model.addAttribute("reqresult", shipreqdata.getShipId() + "'s data is added");
+			System.out.println("/shipreqprocess/state3 processed..");
+
+			
+			// Get DB List
+			return "redirect:../shipparts";
+		}
+
+		// State ERROR
+		System.out.println("[" + loginUser.getUserId() + "]reqstate is not 1(요청서작성중)  !!");
+
+		return "shipreqlist";
 	}
 
 }

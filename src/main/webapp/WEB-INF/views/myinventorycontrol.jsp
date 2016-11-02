@@ -44,16 +44,24 @@
 		}
 	}
 </script>
-
+<!-- Excel upload -->
+<script>
+	function showExcelImportWindow() {
+		//신규 아이템 생성
+		window.open("/myinventorycontrolimport", 'window',
+				'width=650,height=450');
+	}
+</script>
+<!-- Excel upload -->
 <!-- Excel download -->
 <script>
 	function showExcelExportWindow() {
 		window.open("/mylistexport${requestedURL}", 'window',
 				'width=650,height=450');
-		//  자동생성 경로..
+		//  자동생성 경로 case..
 		//1.  /mylistexport/mylist
 		//2.  /mylistexport/otherslist
-
+		//3.  /mylistexport/myinventorycontrol
 	}
 </script>
 <!-- Excel download -->
@@ -65,17 +73,11 @@
 
 <form name="formSearchType">
 	<p align="right">
-		<!--  not use anymore-->
-<!-- 
-		&nbsp;<select name="srchtype" size="1">
-			<option selected value="projcode">프로젝트Code</option>
-			<option value="shipperid">출고담당자이름</option>
-			<option value="devid">개발담당자이름</option>
-			<option value="lgitpn">LGIT P/N</option>
-		</select> <input type="text" name="srchword"> <input type="submit"
-			name="btnsrch" value="검색">
-
-			 -->
+		
+		<!--  Excel upload -->
+				<input type="button" value="Excel upload(수정)" name="submitbtn1"
+					class="btn btn-info btn-xs"
+					OnClick="javascript:showExcelImportWindow();">
 		<!-- Excel download -->
 		<input type="button" value="Excel download" name="submitbtn1"
 			class="btn btn-info btn-xs"
@@ -134,11 +136,7 @@
 				<p>재고</p>
 			</center>
 		</th>
-		<th width="90">
-			<center>
-				<p>출고요청량</p>
-			</center>
-		</th>
+		
 		<th width="90">
 			<center>
 				<p>단가</p>
@@ -205,16 +203,7 @@
 						<p>${i.partStock}</p>
 					</center>
 				</td>
-
-				<td width="140">
-					<p>
-						<input type="text" name="reqnum[]" value="0" size="4"> <input
-							type="button" class="btn btn-primary btn-xs" value="Cart"
-							name="submitbtn" OnClick="javascript:addCart('${status.index}');">
-					</p>
-				</td>
-
-
+				
 				</td>
 				<td width="90">
 					<center>
@@ -248,19 +237,19 @@
 		​
 
 		<c:if test="${start-1!=0}">
-			<li><a href="/mylist/${start-1}">&laquo;</a></li>
+			<li><a href="/myinventorycontrol/${start-1}">&laquo;</a></li>
 		</c:if>
 		<!-- 5개씩 페이지 표시-->
 		​
 
 		<c:forEach var="i" begin="${start }" end="${end }">
-			<li id="page${i }"><a href="/mylist/${i}">${i}</a></li>
+			<li id="page${i }"><a href="/myinventorycontrol/${i}">${i}</a></li>
 		</c:forEach>
 		<!-- end페이지 번호가 5, 10 인데 전체 페이지 갯수가 end페이지 보다 크면 다음 페이징 바로가기 표시  (">>")​ .-->
 		​
 
 		<c:if test="${end % 5 == 0 && pageNum > end}">
-			<li><a href="/mylist/${end+1}">&raquo;</a></li>
+			<li><a href="/myinventorycontrol/${end+1}">&raquo;</a></li>
 		</c:if>
 		<!-- 마지막 페이지 번호와 전체 페이지 번호가 같으면서 5개 단위가 아니면 다음바로가기 표시 않함 -->
 		​​

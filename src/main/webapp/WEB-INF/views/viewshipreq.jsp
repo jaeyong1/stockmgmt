@@ -15,6 +15,8 @@
 
 	//State 4 -> 5
 	function shipperAccept() {
+		alert("출고완료로 변경됩니다.");
+
 		document.forms["formshipreq"].method = "post";
 		document.forms["formshipreq"].action = "/shipreqprocess/state5";
 		document.forms["formshipreq"].submit();
@@ -24,21 +26,46 @@
 	//State 4 -> 6
 	//State 2 -> 6
 	function shipperRej() {
-		document.forms["formshipreq"].method = "post";
-		document.forms["formshipreq"].action = "/shipreqprocess/state6";
-		document.forms["formshipreq"].submit();
-
+		var response = confirm("반려상태로 변경됩니다.\n계속할까요?");
+		if (response) {
+			//do yes task
+			document.forms["formshipreq"].method = "post";
+			document.forms["formshipreq"].action = "/shipreqprocess/state6";
+			document.forms["formshipreq"].submit();
+		}
 	}
 
 	//State 2 -> 3
 	function coworkShipConfirm() {
+		alert("출고요청이 진행됩니다.");
 		document.forms["formshipreq"].method = "post";
 		document.forms["formshipreq"].action = "/shipreqprocess/state3";
 		document.forms["formshipreq"].submit();
 
 	}
 
-	
+	//state 3 -> 1	
+	function myBackToCart() {
+		var response = confirm("출고요청이 취소되고, 부품리스트는 요청서작성중 상태로 이동합니다. \n계속할까요?");
+		if (response) {
+			//do yes task
+			document.forms["formshipreq"].method = "post";
+			document.forms["formshipreq"].action = "/shipreqprocess/state1";
+			document.forms["formshipreq"].submit();
+		}
+	}
+
+	//state 3 -> 6
+	function selfRej() {
+		var response = confirm("[self reject]\n 출고요청이 취소되고 반려상태가 됩니다.\n계속할까요?");
+		if (response) {
+			//do yes task
+			document.forms["formshipreq"].method = "post";
+			document.forms["formshipreq"].action = "/
+	shipreqprocess/state6";
+			document.forms["formshipreq"].submit();
+		}
+	}
 </script>
 
 
@@ -271,9 +298,9 @@
 			<tr>
 				<td width="67">
 					<p align="center">
-					${status.index}
-						<input type=hidden name=itemlist-Id value='${i.itemlistId}'>
-						
+						${status.index} <input type=hidden name=itemlist-Id
+							value='${i.itemlistId}'>
+
 					</p>
 				</td>
 				<!-- 
@@ -327,47 +354,65 @@
 	Button 
 	******************************************************** 
 	-->
-<!-- state 3 > 4 -->
+<!-- state 3 > 4 출고자 접수완료-->
 
 <c:choose>
 	<c:when
 		test="${(3 == sessionScope.userLoginInfo.userLevel) && (3 == reqshipinfo.shipStateId) }">
-		<input type="button" value="출고접수완료" name="submitbtn1" class="btn btn-primary btn-md"
-			OnClick="javascript:shipperChecked();">&nbsp;&nbsp;
+		<input type="button" value="출고접수완료" name="submitbtn1"
+			class="btn btn-primary btn-md" OnClick="javascript:shipperChecked();">&nbsp;&nbsp;
 	</c:when>
 </c:choose>
 
-<!-- state 4 > 5 -->
-
+<!-- state 4 > 5 출고자 출고완료-->
 <c:choose>
 	<c:when
 		test="${(3 == sessionScope.userLoginInfo.userLevel) && (4 == reqshipinfo.shipStateId) }">
-		<input type="button" value="출고완료" name="submitbtn2" class="btn btn-primary btn-md"
-			OnClick="javascript:shipperAccept();">&nbsp;&nbsp;
+		<input type="button" value="출고완료" name="submitbtn2"
+			class="btn btn-primary btn-md" OnClick="javascript:shipperAccept();">&nbsp;&nbsp;
 	</c:when>
 </c:choose>
 
 <!-- state 4 > 6 -->
-
 <c:choose>
 	<c:when
 		test="${(3 == sessionScope.userLoginInfo.userLevel) && (4 == reqshipinfo.shipStateId) }">
-		<input type="button" value="출고요청반려" name="submitbtn3" class="btn btn-primary btn-md"
-			OnClick="javascript:shipperRej();">&nbsp;&nbsp;
+		<input type="button" value="출고요청반려" name="submitbtn3"
+			class="btn btn-primary btn-md" OnClick="javascript:shipperRej();">&nbsp;&nbsp;
 	</c:when>
 </c:choose>
 
-<!-- state 2 > 3 (coworker 승인)-->
-
+<!-- state 2 > 3 (coworker 승인/반려)-->
 <c:choose>
 	<c:when
 		test="${(reqshipinfo.shipCoworkerUserid == sessionScope.userLoginInfo.userId)&&(2 == reqshipinfo.shipStateId) }">
-		<input type="button" value="협의출고승인" name="submitbtn4" class="btn btn-primary btn-md"
+		<input type="button" value="협의출고승인" name="submitbtn4"
+			class="btn btn-primary btn-md"
 			OnClick="javascript:coworkShipConfirm();">&nbsp;&nbsp;
-		<input type="button" value="협의출고반려" name="submitbtn5" class="btn btn-primary btn-md"
-			OnClick="javascript:shipperRej();">&nbsp;&nbsp;			
+		<input type="button" value="협의출고반려" name="submitbtn5"
+			class="btn btn-primary btn-md" OnClick="javascript:shipperRej();">&nbsp;&nbsp;			
 	</c:when>
 </c:choose>
+
+
+<!-- state 3 > 1 (개발자 back to cart)-->
+<c:choose>
+	<c:when
+		test="${(2 == sessionScope.userLoginInfo.userLevel) && (3== reqshipinfo.shipStateId) }">
+		<input type="button" value="요청되돌리기" name="submitbtn3"
+			class="btn btn-primary btn-md" OnClick="javascript:myBackToCart();">&nbsp;&nbsp;
+	</c:when>
+</c:choose>
+
+<!-- state 3 > 6 (개발자 self reject)-->
+<c:choose>
+	<c:when
+		test="${(2 == sessionScope.userLoginInfo.userLevel) && (3== reqshipinfo.shipStateId) }">
+		<input type="button" value="출고요청취소" name="submitbtn3"
+			class="btn btn-primary btn-md" OnClick="javascript:selfRej();">&nbsp;&nbsp;
+	</c:when>
+</c:choose>
+
 
 <%@ include file="footer.jsp"%>
 

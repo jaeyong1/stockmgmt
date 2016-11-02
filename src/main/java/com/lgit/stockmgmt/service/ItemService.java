@@ -209,6 +209,21 @@ public class ItemService {
 		return 0;
 
 	}
+	
+	public int stateMove3to1(ShipReqItem shippartsdata, String UserId) {
+		// 2. 기존 ship_id인 아이템들은 -1로 변경
+		// tb_part에서 myID이면서 -1인것 id로 업데이트
+		Map<String, String> paramMap2 = new HashMap<String, String>();
+		paramMap2.put("UserId", UserId);
+		paramMap2.put("OldShipId", String.valueOf(shippartsdata.getShipId()));
+		paramMap2.put("NewShipId", String.valueOf("-1"));
+		itemDao.updateShipParts_ShipId(paramMap2);
+
+		// 3. ship_id인거 reqship은 삭제
+		itemDao.deleteShipReqItem(shippartsdata);			
+		return 0;
+
+	}
 
 	public int stateMove1to2(ShipReqItem shipreqdata, String UserId) {
 
@@ -424,6 +439,39 @@ public class ItemService {
 		}
 		return true;
 
+	}
+
+	private int getShipperPartIdByPartsName(String userId, String partProjectCode, String partName) {
+		// TODO Auto-generated method stub
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("UserId", userId);
+		paramMap.put("PartProjectCode", partProjectCode);
+		paramMap.put("PartName", partName);
+
+		List<PartsItem> list = itemDao.queryPart_PartsProjectAndPartsByShipperId(paramMap);
+
+		if (list.size() == 0) {
+			System.out.println("[error] NOT exist item:" + partName);
+
+			return 0;
+		}
+		return list.get(0).getPartId();
+	}
+
+	private boolean isExistShipperPartsName(String userId, String partProjectCode, String partName) {
+		// TODO Auto-generated method stub
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("UserId", userId);
+		paramMap.put("PartProjectCode", partProjectCode);
+		paramMap.put("PartName", partName);
+
+		List<PartsItem> list = itemDao.queryPart_PartsProjectAndPartsByShipperId(paramMap);
+
+		if (list.size() == 0) {
+			System.out.println("[error] NOT exist item:" + partName);
+			return false;
+		}
+		return true;
 	}
 
 	public boolean addMyNewPartsXls(UserItem loginUser, List<PartsItem> lst, List<String> errorlog) {
@@ -662,6 +710,82 @@ public class ItemService {
 
 		return true;
 
+	}
+
+	public List<JoinDBItem> getShipperItemsByShipperName(String shipperName) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("keyWord", shipperName);
+		return itemDao.queryJoinItemsByShipperName(paramMap);
+
+	}
+
+	public boolean modifyShipperPartsXls(UserItem loginUser, List<PartsItem> lst, List<String> errorlog) {
+
+		boolean dbProcessSuccess = true;
+		int i;
+		List<ProjectItem> lstMyPrj = getShipperProjectItemsById(loginUser.getUserId());
+
+		for (i = 0; i < lst.size(); i++) {
+			// valid project 인지 체크
+			if (isExistProjectCode(lstMyPrj, lst.get(i).getPartProjectCode())) {
+
+				// 기존에 있는 PartsP/N이 인지확인
+
+				if (isExistShipperPartsName(loginUser.getUserId(), lst.get(i).getPartProjectCode(),
+						lst.get(i).getPartName())) {
+					// ok
+					// keep going
+					int _partId = getShipperPartIdByPartsName(loginUser.getUserId(), lst.get(i).getPartProjectCode(),
+							lst.get(i).getPartName());
+					// System.out.println("finded parts Id:" + _partId);
+					lst.get(i).setPartId(_partId);//엑셀에서불렀으니 PartName은 있지만 PartId는 없음
+
+				} else {
+					String err = "Error: 기존에 없는 LGIT P/N 입니다. " + (i + 1) + "번째 : " + lst.get(i).getPartName();
+					System.out.println(err);
+					errorlog.add(err);
+					dbProcessSuccess = false;
+				}
+			} else {
+				String err = "Error: 나의 ProjectCode가 아닙니다 " + (i + 1) + "번째 : " + lst.get(i).getPartProjectCode();
+				System.out.println(err);
+				errorlog.add(err);
+				dbProcessSuccess = false;
+
+			}
+		}
+		System.out.println("loaded excel file is " + dbProcessSuccess);
+		// 값 DB에 추가
+		if (dbProcessSuccess)
+
+		{
+			for (i = 0; i < lst.size(); i++) {
+				changePartsItem(lst.get(i));
+			}
+		} else {
+			String err = "DB에 입력되지 않았습니다.";
+			System.out.println(err);
+			errorlog.add(err);
+			return false;
+		}
+
+		return true;
+
+	}
+
+	private List<ProjectItem> getShipperProjectItemsById(String userId) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("UserId", userId);
+		return itemDao.queryShipperProjectItemsById(paramMap);
+	}
+
+	public void deleteAllMyCartItems(String userId, int prevShipId) {
+		ShipReqPartsItem item = new ShipReqPartsItem();
+		item.setUserId(userId);
+		item.setItemlistShipId(prevShipId);
+		itemDao.deleteShipreqItemListByUserId(item);
+		return; 
+		
 	}
 
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lgit.stockmgmt.domain.EUserLevel;
 import com.lgit.stockmgmt.domain.JoinDBItem;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ShipReqPartsItem;
@@ -98,7 +99,10 @@ public class ExcelController {
 				System.out.println("Loaded Excel rows : " + lst.size());
 				popupclosemsg = lst.size() + "건 로딩되었습니다.";
 
-				if (lst.size() > 0) {
+				if (errorlog.size() != 0) {
+					dbProcessSuccess = false;
+
+				} else if (lst.size() > 0) {
 					dbProcessSuccess = itemService.addMyNewPartsXls(loginUser, lst, errorlog);
 				} else {
 					dbProcessSuccess = false;
@@ -110,8 +114,10 @@ public class ExcelController {
 				List<PartsItem> lst = ReadExcelFileToList.readExcelPartsData(uploadFile.getAbsolutePath(), errorlog);
 				System.out.println("Loaded Excel rows : " + lst.size());
 				popupclosemsg = lst.size() + "건 로딩되었습니다.";
+				if (errorlog.size() != 0) {
+					dbProcessSuccess = false;
 
-				if (lst.size() > 0) {
+				} else if (lst.size() > 0) {
 					dbProcessSuccess = itemService.modifyMyNewPartsXls(loginUser, lst, errorlog);
 				} else {
 					dbProcessSuccess = false;
@@ -126,11 +132,12 @@ public class ExcelController {
 				System.out.println("Loaded Excel rows : " + lst.size());
 				popupclosemsg = lst.size() + "건 로딩되었습니다.";
 
-				if (lst.size() > 0) {
+				if (errorlog.size() != 0) {
+					dbProcessSuccess = false;
+
+				} else if (lst.size() > 0) {
 					dbProcessSuccess = itemService.addMyCartXls(loginUser, lst, errorlog);
-					for (String[] strings : lst) {
-						System.out.println(strings);
-					}
+
 				} else {
 					dbProcessSuccess = false;
 				}
@@ -144,7 +151,10 @@ public class ExcelController {
 				System.out.println("Loaded Excel rows : " + lst.size());
 				popupclosemsg = lst.size() + "건 로딩되었습니다.";
 
-				if (lst.size() > 0) {
+				if (errorlog.size() != 0) {
+					dbProcessSuccess = false;
+
+				} else if (lst.size() > 0) {
 					dbProcessSuccess = itemService.addOthersCartXls(loginUser, lst, errorlog);
 					for (String[] strings : lst) {
 						System.out.println(strings);
@@ -152,6 +162,25 @@ public class ExcelController {
 				} else {
 					dbProcessSuccess = false;
 				}
+			} else if (requestedURL.equals("/myinventorycontrol")) {
+				/*
+				 * /myinventorycontrol(출고담당자 재물조사수행) excel import 경우(수정)
+				 */
+
+				List<PartsItem> lst = ReadExcelFileToList.readExcelInventoryCntlData(uploadFile.getAbsolutePath(),
+						errorlog);// 출고요청엑셀재활용하니깐같은함수로파싱됨
+				System.out.println("Loaded Excel rows : " + lst.size());
+				popupclosemsg = lst.size() + "건 로딩되었습니다.";
+
+				if (errorlog.size() != 0) {
+					dbProcessSuccess = false;
+
+				} else if (lst.size() > 0) {
+					dbProcessSuccess = itemService.modifyShipperPartsXls(loginUser, lst, errorlog);
+				} else {
+					dbProcessSuccess = false;
+				}
+
 			} else {
 				errorlog.add("JAVA system 에서 Excel 읽는중 장애발생");
 				errorlog.add("요청된 경로를 해석하지 못했습니다. 관리자에게 연락주세요~");
@@ -170,7 +199,7 @@ public class ExcelController {
 			dbProcessSuccess = false;
 		}
 
-		System.out.println("/excel finish");
+		System.out.println("/excel process finish");
 
 		// return page
 		if (!dbProcessSuccess) {
@@ -245,6 +274,22 @@ public class ExcelController {
 	}
 
 	/*
+	 * /myinventorycontrolimport 출고담당자 - 재물조사 Excel upload(수정)
+	 */
+	@RequestMapping(value = "/myinventorycontrolimport", method = RequestMethod.GET)
+	public String modifyExcelMyItem(PartsItem item, Model model, HttpServletRequest request) {
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/shippartsimport process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /myinventorycontrolimport process");
+		model.addAttribute("requestedURL", "/myinventorycontrol");
+		return "fileupload";/* fileupload.jsp */
+	}
+
+	/*
 	 * /shipotherspartsimport 출고요청하기 - 출고요청 부품리스트 - Excel upload
 	 */
 	@RequestMapping(value = "/shipotherspartsimport", method = RequestMethod.GET)
@@ -302,12 +347,16 @@ public class ExcelController {
 		List<JoinDBItem> items = null;
 
 		if (requrl.equals("mylist")) {
-			///////////////// List View
+			/////////////////// List View
 			items = itemService.getMyItemsByOwnerName(loginUser.getUserName());
 
 		} else if (requrl.equals("otherslist")) {
 			///////////////// List View
 			items = itemService.getOthersItemsByOwnerName(loginUser.getUserName());
+
+		} else if (requrl.equals("myinventorycontrol")) {
+			///////////////// List View
+			items = itemService.getShipperItemsByShipperName(loginUser.getUserName());
 
 		} else {
 			System.out.println("모르는 주소에서 요청됨");
@@ -316,8 +365,15 @@ public class ExcelController {
 		}
 
 		/////////////////// Write Excel file
-		String templatefile = context.getRealPath("") + "resources/xls/shipreqdata.xlsx"; // hard
-																							// coding
+		String templatefile = "";
+
+		if (requrl.equals("myinventorycontrol")) {
+			// 재물조사 템플릿
+			templatefile = context.getRealPath("") + "resources/xls/inventorydata.xlsx"; // 재물조사템플릿
+		} else {
+			templatefile = context.getRealPath("") + "resources/xls/shipreqdata.xlsx";
+		}
+
 		String exportFileName = context.getRealPath("") + "resources/tempxls/" + loginUser.getUserName() + ".xlsx";
 		String exporturl = "/" + "resources/tempxls/" + loginUser.getUserName() + ".xlsx";
 		// System.out.println(templatefile);

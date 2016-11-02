@@ -49,7 +49,122 @@ public class ReadExcelFileToList {
 		}
 		return (lst.size() == blankcnt);
 	}
+	
+	public static List<PartsItem> readExcelInventoryCntlData(String fileName, List<String> errorlog) {
 
+		List<PartsItem> partsItems = new ArrayList<PartsItem>();
+
+		List<String> lststr = new ArrayList<String>(); // inner function process
+		boolean xlsDataLine = false;
+		int numRows = 1;
+		try {
+			FileInputStream fis = new FileInputStream(fileName);
+
+			Workbook workbook = null;
+			if (fileName.toLowerCase().endsWith("xlsx")) {
+				workbook = new XSSFWorkbook(fis);
+			} else if (fileName.toLowerCase().endsWith("xls")) {
+				workbook = new HSSFWorkbook(fis);
+			}
+
+			// Get the first sheet from the workbook
+			Sheet sheet = workbook.getSheetAt(0);
+
+			Iterator<Row> rowIterator = sheet.iterator();
+			while (rowIterator.hasNext()) {
+				lststr.clear();
+				String cellRawData = "";
+
+				Row row = rowIterator.next();
+
+				Iterator<Cell> cellIterator = row.cellIterator();
+
+				while (cellIterator.hasNext()) {
+					Cell _cell = cellIterator.next();
+
+					switch (_cell.getCellType()) {
+					case Cell.CELL_TYPE_STRING:
+						cellRawData = _cell.getStringCellValue().trim();
+						break;
+					case Cell.CELL_TYPE_NUMERIC:
+						DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
+						decimalFormatSymbols.setDecimalSeparator('.');
+						decimalFormatSymbols.setGroupingSeparator(',');
+						DecimalFormat decimalFormat = new DecimalFormat("#,###.#####", decimalFormatSymbols);
+						cellRawData = decimalFormat.format(_cell.getNumericCellValue()); // 1,237,516.25
+
+						break;
+					case Cell.CELL_TYPE_BLANK:
+						cellRawData = "";
+						break;
+					default:
+						cellRawData = _cell.getStringCellValue().trim();
+						break;
+					}
+
+					// System.out.println("[" + numRows + "] " + cellRawData);
+					lststr.add(cellRawData);
+
+				} // end of cell iterator
+					// 한줄 다 읽었으니, 처리하기..
+				System.out.println("[" + numRows + "] " + lststr.toString());
+				if (!xlsDataLine && isTitle(lststr)) {
+					System.out.println(">title line");
+					xlsDataLine = true;
+				} else if (xlsDataLine && isBlankLine(lststr)) {
+					System.out.println(">blank line.. skip");
+				} else if (xlsDataLine) {
+					// process lststr [start]
+					System.out.println(">process line");
+
+					PartsItem item = new PartsItem();
+					item.setPartProjectCode(lststr.get(0).toString());
+					item.setPartName(lststr.get(4).toString());
+					item.setPartDesc(lststr.get(5).toString());
+					item.setPartMemo(lststr.get(6).toString());// maker
+
+					if (isNum(lststr.get(8).toString())) {
+						String str = lststr.get(8).trim().replaceAll(",", "").toString();
+						int _n = Integer.valueOf(str);
+						item.setPartStock(_n);
+					} else {
+						System.out.println("[exception] setPartStock parsing failed!!");
+						String err = "Error: 숫자변환에 실패했습니다. "+numRows+"라인, 엑셀값:" + lststr.get(8).toString();						
+						System.out.println(err);
+						errorlog.add(err);
+						item.setPartStock(0);
+
+					}
+					item.setPartLocation(lststr.get(9).toString());
+
+					if (isNum(lststr.get(7).toString())) {
+						item.setPartCost(Float.valueOf(lststr.get(7).toString()));
+					} else {
+						System.out.println("[exception] setPartLocation parsing failed!!");
+						String err = "Error: 숫자변환에 실패했습니다."+numRows+"라인, 엑셀값:" + lststr.get(7).toString();
+						System.out.println(err);
+						errorlog.add(err);
+						item.setPartCost(Float.valueOf(0));
+					}
+
+					partsItems.add(item);
+
+					// process lststr [end]
+
+				}
+				numRows = numRows + 1;
+			} // end of rows iterator
+
+			// close file input stream
+			fis.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return partsItems;
+	
+	}
 	public static List<PartsItem> readExcelPartsData(String fileName, List<String> errorlog) {
 		List<PartsItem> partsItems = new ArrayList<PartsItem>();
 
@@ -128,7 +243,7 @@ public class ReadExcelFileToList {
 						item.setPartStock(_n);
 					} else {
 						System.out.println("[exception] setPartStock parsing failed!!");
-						String err = "Error: 숫자변환에 실패했습니다. 엑셀값:" + lststr.get(4).toString();
+						String err = "Error: 숫자변환에 실패했습니다. "+numRows+"라인, 엑셀값:" + lststr.get(4).toString();
 						System.out.println(err);
 						errorlog.add(err);
 						item.setPartStock(0);
@@ -140,7 +255,7 @@ public class ReadExcelFileToList {
 						item.setPartCost(Float.valueOf(lststr.get(6).toString()));
 					} else {
 						System.out.println("[exception] setPartLocation parsing failed!!");
-						String err = "Error: 숫자변환에 실패했습니다. 엑셀값:" + lststr.get(6).toString();
+						String err = "Error: 숫자변환에 실패했습니다. "+numRows+"라인,엑셀값:" + lststr.get(6).toString();
 						System.out.println(err);
 						errorlog.add(err);
 						item.setPartCost(Float.valueOf(0));
@@ -264,7 +379,7 @@ public class ReadExcelFileToList {
 						item[2] = String.valueOf(_n); // 프로젝트코드 K열
 					} else {
 						System.out.println("[exception] setPartStock parsing failed!!");
-						String err = "Error: 숫자변환에 실패했습니다. 엑셀값:" + lststr.get(10).toString();
+						String err = "Error: 숫자변환에 실패했습니다. "+numRows+"라인, 엑셀값:" + lststr.get(10).toString();
 						System.out.println(err);
 						errorlog.add(err);
 						item[2] = "0"; // 프로젝트코드 K열
