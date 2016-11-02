@@ -49,7 +49,7 @@ public class ReadExcelFileToList {
 		}
 		return (lst.size() == blankcnt);
 	}
-	
+
 	public static List<PartsItem> readExcelInventoryCntlData(String fileName, List<String> errorlog) {
 
 		List<PartsItem> partsItems = new ArrayList<PartsItem>();
@@ -129,7 +129,7 @@ public class ReadExcelFileToList {
 						item.setPartStock(_n);
 					} else {
 						System.out.println("[exception] setPartStock parsing failed!!");
-						String err = "Error: 숫자변환에 실패했습니다. "+numRows+"라인, 엑셀값:" + lststr.get(8).toString();						
+						String err = "Error: 숫자변환에 실패했습니다. " + numRows + "라인, 엑셀값:" + lststr.get(8).toString();
 						System.out.println(err);
 						errorlog.add(err);
 						item.setPartStock(0);
@@ -141,7 +141,7 @@ public class ReadExcelFileToList {
 						item.setPartCost(Float.valueOf(lststr.get(7).toString()));
 					} else {
 						System.out.println("[exception] setPartLocation parsing failed!!");
-						String err = "Error: 숫자변환에 실패했습니다."+numRows+"라인, 엑셀값:" + lststr.get(7).toString();
+						String err = "Error: 숫자변환에 실패했습니다." + numRows + "라인, 엑셀값:" + lststr.get(7).toString();
 						System.out.println(err);
 						errorlog.add(err);
 						item.setPartCost(Float.valueOf(0));
@@ -163,8 +163,9 @@ public class ReadExcelFileToList {
 		}
 
 		return partsItems;
-	
+
 	}
+
 	public static List<PartsItem> readExcelPartsData(String fileName, List<String> errorlog) {
 		List<PartsItem> partsItems = new ArrayList<PartsItem>();
 
@@ -243,7 +244,7 @@ public class ReadExcelFileToList {
 						item.setPartStock(_n);
 					} else {
 						System.out.println("[exception] setPartStock parsing failed!!");
-						String err = "Error: 숫자변환에 실패했습니다. "+numRows+"라인, 엑셀값:" + lststr.get(4).toString();
+						String err = "Error: 숫자변환에 실패했습니다. " + numRows + "라인, 엑셀값:" + lststr.get(4).toString();
 						System.out.println(err);
 						errorlog.add(err);
 						item.setPartStock(0);
@@ -255,7 +256,7 @@ public class ReadExcelFileToList {
 						item.setPartCost(Float.valueOf(lststr.get(6).toString()));
 					} else {
 						System.out.println("[exception] setPartLocation parsing failed!!");
-						String err = "Error: 숫자변환에 실패했습니다. "+numRows+"라인,엑셀값:" + lststr.get(6).toString();
+						String err = "Error: 숫자변환에 실패했습니다. " + numRows + "라인,엑셀값:" + lststr.get(6).toString();
 						System.out.println(err);
 						errorlog.add(err);
 						item.setPartCost(Float.valueOf(0));
@@ -368,26 +369,30 @@ public class ReadExcelFileToList {
 				} else if (xlsDataLine) {
 					// process lststr [start]
 					System.out.println(">process line");
-					String[] item = new String[4];
-					item[0] = lststr.get(0).toString(); // 프로젝트코드 A열 (프로젝트 코드)
-					item[3] = lststr.get(1).toString(); // 프로젝트코드 B열 (개발담당자)
-					item[1] = lststr.get(4).toString(); // 프로젝트코드 E열 (LGIT P/N)
+					System.out.println(lststr.get(10).toString().trim());
+					if (!lststr.get(10).toString().trim().equals("") && !lststr.get(10).toString().trim().equals("0")) {
+						String[] item = new String[4];
+						item[0] = lststr.get(0).toString(); // 프로젝트코드 A열(프로젝트코드)
+						item[3] = lststr.get(1).toString(); // 프로젝트코드 B열(개발담당자)
+						item[1] = lststr.get(4).toString(); // 프로젝트코드
+															// E열(LGITP/N)
 
-					if (isNum(lststr.get(10).toString())) {
-						String str = lststr.get(10).trim().replaceAll(",", "").toString();
-						int _n = Integer.valueOf(str);
-						item[2] = String.valueOf(_n); // 프로젝트코드 K열
+						if (isNum(lststr.get(10).toString())) {
+							String str = lststr.get(10).trim().replaceAll(",", "").toString();
+							int _n = Integer.valueOf(str);
+							item[2] = String.valueOf(_n); // 프로젝트코드 K열
+						} else {
+							System.out.println("[exception] setPartStock parsing failed!!");
+							String err = "Error: 숫자변환에 실패했습니다. " + numRows + "라인, 엑셀값:" + lststr.get(10).toString();
+							System.out.println(err);
+							errorlog.add(err);
+							item[2] = "0"; // 프로젝트코드 K열
+						}
+
+						xlsitems.add(item);
 					} else {
-						System.out.println("[exception] setPartStock parsing failed!!");
-						String err = "Error: 숫자변환에 실패했습니다. "+numRows+"라인, 엑셀값:" + lststr.get(10).toString();
-						System.out.println(err);
-						errorlog.add(err);
-						item[2] = "0"; // 프로젝트코드 K열
+						System.out.println(" > readed, but no req ship amount, skip line");
 					}
-					
-					
-					xlsitems.add(item);
-
 					// process lststr [end]
 
 				}

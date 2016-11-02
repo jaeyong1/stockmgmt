@@ -27,14 +27,5 @@
 	</input> <input type=hidden name=requestedURL value='${requestedURL}'>
 </form>
 
------------
-<br>
-
-<form name="formaaa" enctype="multipart/form-data" method="post" >
-	<input type="file" name="file1"> 
-	<input type="button" value="업로드2" name="submitbtn" class="btn btn-primary btn-xs"
-							OnClick="javascript:aaa();"> 
-</form>
-
 
 <%@ include file="footer.jsp"%>

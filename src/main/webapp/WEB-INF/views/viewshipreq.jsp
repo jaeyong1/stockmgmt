@@ -61,8 +61,7 @@
 		if (response) {
 			//do yes task
 			document.forms["formshipreq"].method = "post";
-			document.forms["formshipreq"].action = "/
-	shipreqprocess/state6";
+			document.forms["formshipreq"].action = "/shipreqprocess/state6";
 			document.forms["formshipreq"].submit();
 		}
 	}
