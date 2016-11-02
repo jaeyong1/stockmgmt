@@ -82,6 +82,8 @@
 		var strDate2 = document.forms["formshipreq"].elements["ship-Targetdate"].value;
 		var arr1 = strDate1.split('-');
 		var arr2 = strDate2.split('-');
+
+	
 		var dat1 = new Date(arr1[0], arr1[1], arr1[2]);
 		var dat2 = new Date(arr2[0], arr2[1], arr2[2]);
 
@@ -407,7 +409,7 @@
 <c:choose>
 	<c:when
 		test="${(2 == sessionScope.userLoginInfo.userLevel) && (3== reqshipinfo.shipStateId) }">
-		<input type="button" value="출고요청취소" name="submitbtn3"
+		<input type="button" value="요청반려" name="submitbtn3"
 			class="btn btn-primary btn-md" OnClick="javascript:selfRej();">&nbsp;&nbsp;
 	</c:when>
 </c:choose>

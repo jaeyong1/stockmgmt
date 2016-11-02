@@ -43,6 +43,13 @@
 		var strDate2 = document.forms["formshipreq"].elements["ship-Targetdate"].value;
 		var arr1 = strDate1.split('-');
 		var arr2 = strDate2.split('-');
+		
+		if ((arr2[1] < 1) || (12 < arr2[1]) || (arr2[2] < 1) || (31 < arr2[2])) {
+			alert("[에러]\n날짜확인을 다시 해 주세요.");
+			return;
+
+		}
+		
 		var dat1 = new Date(arr1[0], arr1[1], arr1[2]);
 		var dat2 = new Date(arr2[0], arr2[1], arr2[2]);
 

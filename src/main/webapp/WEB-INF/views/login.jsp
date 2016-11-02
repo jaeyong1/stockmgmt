@@ -85,7 +85,7 @@ var rolekor ="";
 					OnClick="javascript:jsLogin();">Log-in</button>
 				<button type="button" class="btn btn-default btn-block"
 					onclick="location.href='idregi/' ">ID Registration</button>
-				<button type="button" class="btn btn-default btn-block">Change
+				<button type="button" class="btn btn-default btn-block"   onclick="location.href='changepw/'" >Change
 					Password</button>
 			</form>
 		</c:otherwise>

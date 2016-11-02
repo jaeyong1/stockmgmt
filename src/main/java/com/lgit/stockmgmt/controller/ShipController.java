@@ -829,10 +829,10 @@ public class ShipController {
 		// session 확인
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
-			System.out.println("/shipreqprocess/state2 process. no session info. return login.jsp ");
+			System.out.println("/shipreqprocess/state1 process. no session info. return login.jsp ");
 			return "login";
 		}
-		System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state2 process");
+		System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state1 process");
 
 		// check state
 		int curstate = Integer.valueOf(request.getParameter("ship-StateId"));
@@ -854,7 +854,7 @@ public class ShipController {
 
 			itemService.stateMove3to1(shipreqdata, shipreqdata.getShipRequestorId());
 			model.addAttribute("reqresult", shipreqdata.getShipId() + "'s data is added");
-			System.out.println("/shipreqprocess/state3 processed..");
+			System.out.println("/shipreqprocess/state1 processed..");
 
 			
 			// Get DB List

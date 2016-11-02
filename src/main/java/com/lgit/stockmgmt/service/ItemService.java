@@ -202,14 +202,16 @@ public class ItemService {
 		// tb_part에서 myID이면서 -1인것 id로 업데이트
 		Map<String, String> paramMap2 = new HashMap<String, String>();
 		paramMap2.put("UserId", UserId);
+		System.out.println("requestor id : " + UserId);
 		paramMap2.put("OldShipId", String.valueOf(-1));
+
 		paramMap2.put("NewShipId", String.valueOf(partsShipreqId));
 		itemDao.updateShipParts_ShipId(paramMap2);
 
 		return 0;
 
 	}
-	
+
 	public int stateMove3to1(ShipReqItem shippartsdata, String UserId) {
 		// 2. 기존 ship_id인 아이템들은 -1로 변경
 		// tb_part에서 myID이면서 -1인것 id로 업데이트
@@ -220,7 +222,7 @@ public class ItemService {
 		itemDao.updateShipParts_ShipId(paramMap2);
 
 		// 3. ship_id인거 reqship은 삭제
-		itemDao.deleteShipReqItem(shippartsdata);			
+		itemDao.deleteShipReqItem(shippartsdata);
 		return 0;
 
 	}
@@ -248,10 +250,10 @@ public class ItemService {
 
 			// update;
 		}
-		// tb_part에서 myID이면서 -1인것 id로 업데이트
+		// tb_part에서 myID이면서 -2인것 id로 업데이트
 		Map<String, String> paramMap2 = new HashMap<String, String>();
 		paramMap2.put("UserId", UserId);
-		paramMap2.put("OldShipId", String.valueOf(-1));
+		paramMap2.put("OldShipId", String.valueOf(-2));
 		paramMap2.put("NewShipId", String.valueOf(partsShipreqId));
 		itemDao.updateShipParts_ShipId(paramMap2);
 
@@ -738,7 +740,8 @@ public class ItemService {
 					int _partId = getShipperPartIdByPartsName(loginUser.getUserId(), lst.get(i).getPartProjectCode(),
 							lst.get(i).getPartName());
 					// System.out.println("finded parts Id:" + _partId);
-					lst.get(i).setPartId(_partId);//엑셀에서불렀으니 PartName은 있지만 PartId는 없음
+					lst.get(i).setPartId(_partId);// 엑셀에서불렀으니 PartName은 있지만
+													// PartId는 없음
 
 				} else {
 					String err = "Error: 기존에 없는 LGIT P/N 입니다. " + (i + 1) + "번째 : " + lst.get(i).getPartName();
@@ -784,8 +787,8 @@ public class ItemService {
 		item.setUserId(userId);
 		item.setItemlistShipId(prevShipId);
 		itemDao.deleteShipreqItemListByUserId(item);
-		return; 
-		
+		return;
+
 	}
 
 }
