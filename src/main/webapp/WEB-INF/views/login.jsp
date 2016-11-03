@@ -35,6 +35,9 @@ var rolekor ="";
 		document.forms["formlogin"].submit();
 		//var response = confirm("Login Continue");
 	}
+	function chgePW() {
+		window.open("/changepw", 'window', 'width=550,height=650');
+	}
 </script>
 
 <!DOCTYPE html>
@@ -85,7 +88,7 @@ var rolekor ="";
 					OnClick="javascript:jsLogin();">Log-in</button>
 				<button type="button" class="btn btn-default btn-block"
 					onclick="location.href='idregi/' ">ID Registration</button>
-				<button type="button" class="btn btn-default btn-block"   onclick="location.href='changepw/'" >Change
+				<button type="button" class="btn btn-default btn-block"   OnClick="javascript:chgePW();"> Change
 					Password</button>
 			</form>
 		</c:otherwise>

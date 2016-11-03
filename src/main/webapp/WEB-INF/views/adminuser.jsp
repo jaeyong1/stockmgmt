@@ -73,7 +73,7 @@
 
 	function ResetPassword(id) {
 		var nm = document.forms["form" + id].elements["user-Id"].value;
-		var response = confirm(nm + "의 패스워드 리셋 시킬까요?")
+		var response = confirm(nm + "의 패스워드 리셋 시킬까요? 초기화값:defaultPassWord123")
 		if (response) {
 			//do yes task	
 			document.forms["form" + id].method = "post";

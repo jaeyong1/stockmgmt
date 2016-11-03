@@ -2,6 +2,8 @@ package com.lgit.stockmgmt.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -128,6 +130,76 @@ public class LoginController {
 
 		// Get DB List
 		return "redirect:login";
+	}
+
+	// 비밀번호 변경
+
+	@RequestMapping(value = "/changepw", method = RequestMethod.GET)
+	public String changePWForm(Model model, HttpServletRequest request) {
+		System.out.println("/changepw process. no session info.");
+		return "changepw";
+	}
+
+	/*
+	 * /adminuser 사용자 신규 등록처리
+	 */
+	@RequestMapping(value = "/changetonewpw", method = RequestMethod.POST)
+	public String modifyUserPW(UserItem userdata, Model model, HttpServletRequest request) {
+
+		boolean validUser = false;
+		boolean findedId =false;
+		List<String> errorlog = new ArrayList<String>();
+		String reqUserId = request.getParameter("user-Id");
+		String reqUserOldPw = request.getParameter("user-Password");
+		List<UserItem> items = itemService.getUserItems();
+		for (UserItem p : items) {
+			if (p.getUserId().equals(reqUserId)) {
+				findedId = true;
+				if (p.getUserPassword().equals(reqUserOldPw)) {
+					validUser = true;
+					System.out.println("ID&PW찾음");
+				} else {
+					String err = "Error: 기존 비밀번호가 잘못됐습니다. ";
+					System.out.println(err);
+					errorlog.add(err);
+				}
+			}
+
+		}
+		
+
+		if (!validUser) {
+			if(!findedId)
+			{
+				String err1 = "Error: 변경할 ID가 없습니다.";
+				System.out.println(err1);
+				errorlog.add(err1);
+			}
+			// === error finish ===
+			String err = "[에러발생내역]<br>\n";
+			for (int en = 0; en < errorlog.size(); en++) {
+				err = err + errorlog.get(en) + "<br>\n";
+
+			}
+			// not valid user
+			model.addAttribute("errormsg", err);
+			model.addAttribute("requestedURL", "/"); /* "/mylist" */
+			return "errorpopupviewmoveto_nologin";
+		}
+
+		// Get data from Webbrowser
+		userdata.setUserId(request.getParameter("user-Id"));
+		userdata.setUserPassword(request.getParameter("user-Password2"));
+
+		// Change DB query
+		itemService.changeUserPassword(userdata);
+		System.out.println("/change pw user :" + userdata.toString());
+
+		// === success finish ===
+
+		model.addAttribute("popupclosemsg", "비밀번호가 변경되었습니다."); // 없으면바로닫음
+		model.addAttribute("requestedURL", "/"); /* "/mylist" */
+		return "closememoveto_nologin";
 	}
 
 }
