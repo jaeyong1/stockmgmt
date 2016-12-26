@@ -24,7 +24,7 @@
 		SELECT
 		`part_id`,
 		`part_project_code`, `part_name`, `part_desc`, `part_location`,
-		`part_cost`, `part_stock`, `part_memo`
+		`part_cost`, `part_stock`, `part_memo`, `part_mlslevel`
 		FROM
 		tb_part
 		order by part_id desc
@@ -46,14 +46,16 @@
 		`part_location` ,
 		`part_cost` ,
 		`part_stock` ,
-		`part_memo`
+		`part_memo`,
+		`part_msllevel`
 		)
 		VALUES (
 		NULL , #{partProjectCode},
 		#{partName},
 		#{partDesc},
 		#{partLocation}, #{partCost},
-		#{partStock}, #{partMemo}
+		#{partStock},
+		#{partMemo}, #{partMsllevel}
 		);
 	</insert>
 
@@ -69,13 +71,14 @@
 		`part_location`= #{partLocation} ,
 		`part_cost`= #{partCost} ,
 		`part_stock`= #{partStock} ,
-		`part_memo` = #{partMemo}
+		`part_memo` = #{partMemo},
+		`part_msllevel`= #{partMsllevel}
 		WHERE
 		CONVERT(
 		`tb_part`.`part_id`
 		USING utf8
 		) =
-		#{partId} LIMIT 1 ;
+		#{partId} LIMIT 1;
 	</update>
 
 	<delete id="deletePartsItem">
@@ -91,7 +94,7 @@
 
 
 	<!-- *************************** USER *************************** -->
-	<!-- tb_parts 전체를 받아옴 -->
+	<!-- tb_user 전체를 받아옴 -->
 	<select id="selectUserItemList" resultMap="UserItemMap">
 		SELECT
 		`user_id`,
@@ -259,11 +262,13 @@
 		'part_cost' #단가
 		, t2.part_memo
 		'part_memo' #비고
+		, t2.part_msllevel 'part_msllevel' #MslLevel
 		FROM
 		tb_project AS t1
 		INNER
 		JOIN (tb_part AS t2, tb_user
-		AS t3, tb_user AS t4 )
+		AS t3, tb_user AS t4
+		)
 		ON
 		(t1.project_code =
 		t2.part_project_code)
@@ -274,7 +279,8 @@
 		(t1.project_shipper_id =
 		t4.user_id)
 		AND
-		(t1.project_code = #{keyWord})
+		(t1.project_code =
+		#{keyWord})
 		ORDER BY t2.part_id DESC
 	</select>
 
@@ -298,10 +304,12 @@
 		, t2.part_cost 'part_cost' #단가
 		, t2.part_memo
 		'part_memo' #비고
+		, t2.part_msllevel 'part_msllevel' #MslLevel
 		FROM
 		tb_project AS t1
 		INNER JOIN (tb_part AS t2, tb_user
-		AS t3, tb_user AS t4 )
+		AS t3, tb_user AS t4
+		)
 		ON
 		(t1.project_code = t2.part_project_code)
 		AND
@@ -311,7 +319,8 @@
 		(t1.project_shipper_id =
 		t4.user_id)
 		AND
-		(t4.user_name = #{keyWord})
+		(t4.user_name =
+		#{keyWord})
 		ORDER BY t2.part_id DESC
 	</select>
 
@@ -335,10 +344,12 @@
 		, t2.part_cost 'part_cost' #단가
 		, t2.part_memo
 		'part_memo' #비고
+		, t2.part_msllevel 'part_msllevel' #MslLevel
 		FROM
 		tb_project AS t1
 		INNER JOIN (tb_part AS t2, tb_user
-		AS t3, tb_user AS t4 )
+		AS t3, tb_user AS t4
+		)
 		ON
 		(t1.project_code = t2.part_project_code)
 		AND
@@ -348,7 +359,8 @@
 		(t1.project_shipper_id =
 		t4.user_id)
 		AND
-		(t3.user_name = #{keyWord})
+		(t3.user_name =
+		#{keyWord})
 		ORDER BY t2.part_id DESC
 	</select>
 
@@ -372,10 +384,12 @@
 		, t2.part_cost 'part_cost' #단가
 		, t2.part_memo
 		'part_memo' #비고
+		, t2.part_msllevel 'part_msllevel' #MslLevel
 		FROM
 		tb_project AS t1
 		INNER JOIN (tb_part AS t2, tb_user
-		AS t3, tb_user AS t4 )
+		AS t3, tb_user AS t4
+		)
 		ON
 		(t1.project_code = t2.part_project_code)
 		AND
@@ -385,7 +399,8 @@
 		(t1.project_shipper_id =
 		t4.user_id)
 		AND
-		(t2.part_name = #{keyWord})
+		(t2.part_name =
+		#{keyWord})
 		ORDER BY t2.part_id DESC
 	</select>
 
@@ -477,15 +492,17 @@
 		t2.part_location 'part_location'
 		, t2.part_cost
 		'part_cost'
-		,
-		t2.part_memo 'part_memo'
+		, t2.part_memo 'part_memo'
+		, t2.part_msllevel
+		'part_msllevel'
 		FROM
 		tb_project AS t1
 		INNER JOIN
 		(tb_part
 		AS t2,
 		tb_user
-		AS t3, tb_user AS t4
+		AS
+		t3, tb_user AS t4
 		)
 		ON
 		(t1.project_code =
@@ -632,7 +649,6 @@
 	</select>
 
 
-	<!-- tb_parts 전체를 받아옴 -->
 	<select id="selectPartsItemListByID" parameterType="String"
 		resultMap="PartsItemMap">
 		SELECT
@@ -645,6 +661,7 @@
 		,t2.part_cost 'part_cost'
 		,t2.part_stock 'part_stock'
 		,t2.part_memo 'part_memo'
+		, t2.part_msllevel 'part_msllevel'
 		FROM
 		tb_project AS
 		t1
@@ -790,7 +807,8 @@
 		`part_id`,
 		`part_project_code`, `part_name`,
 		`part_desc`, `part_location`,
-		`part_cost`, `part_stock`, `part_memo`
+		`part_cost`, `part_stock`,
+		`part_memo`,`part_msllevel`
 		FROM
 		tb_part as t1
 		inner join(tb_project as t2)
@@ -814,15 +832,18 @@
 		`part_id`,
 		`part_project_code`, `part_name`,
 		`part_desc`, `part_location`,
-		`part_cost`, `part_stock`, `part_memo`
+		`part_cost`, `part_stock`,
+		`part_memo`,`part_msllevel`
 		FROM
 		tb_part as t1
-		inner join(tb_project as t2)
+		inner join(tb_project as
+		t2)
 		ON
 		t1.part_project_code =
 		t2.project_code
 		AND
-		t2.project_owner_id = #{UserId}
+		t2.project_owner_id =
+		#{UserId}
 		AND
 		t1.part_name =
 		#{PartName};
@@ -865,9 +886,10 @@
 		`part_id`,
 		`part_project_code`, `part_name`,
 		`part_desc`, `part_location`,
-		`part_cost`, `part_stock`, `part_memo`
+		`part_cost`, `part_stock`, `part_memo`,`part_msllevel`
 		FROM
-		tb_part as t1
+		tb_part as
+		t1
 		inner
 		join(tb_project as t2)
 		ON
@@ -883,11 +905,12 @@
 		t2.project_shipper_id = #{UserId};
 	</select>
 
-	<delete id="deleteMyShipReqItemList" >
+	<delete id="deleteMyShipReqItemList">
 		DELETE FROM
 		tb_shipreq_itemlist
 		WHERE
-		`tb_shipreq_itemlist`.`itemlist_ship_id` = #{itemlistShipId}
+		`tb_shipreq_itemlist`.`itemlist_ship_id` =
+		#{itemlistShipId}
 		AND
 		CONVERT(
 		`tb_shipreq_itemlist`.`itemlist_owner_id`
@@ -897,11 +920,35 @@
 	</delete>
 
 
-	<delete id="deleteShipReqItem" >
+	<delete id="deleteShipReqItem">
 		DELETE FROM
 		tb_shipreq
 		WHERE
 		ship_id = #{shipId};
 	</delete>
-	
+
+
+
+	<!-- *************************** LOG for User Operation *************************** -->
+	<insert id="insertLogUserItem">
+		INSERT INTO `tb_user_log` (
+		`log_id` ,
+		`log_date` ,
+		`log_clientip` ,
+		`log_user` ,
+		`log_action`
+		)
+		VALUES (
+		NULL , #{logDate},
+		#{logClientIP}, #{logUser}, #{logAction}
+		);
+	</insert>
+
+	<select id="queryLogUserItems" resultMap="LogUserItemMap">
+		SELECT *
+		FROM
+		`tb_user_log`
+		ORDER BY `log_id` DESC
+	</select>
+
 </mapper>

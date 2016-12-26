@@ -17,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.lgit.stockmgmt.domain.EUserLevel;
 import com.lgit.stockmgmt.domain.Item;
@@ -215,6 +217,7 @@ public class WebController {
 		item.setPartCost(Float.valueOf(request.getParameter("part-Cost")));
 		item.setPartStock(Integer.valueOf(request.getParameter("part-Stock")));
 		item.setPartMemo(request.getParameter("part-Memo"));
+		item.setPartMsllevel(request.getParameter("part-Msllevel"));
 
 		// insert DB query
 		itemService.setPartsItem(item);
@@ -239,6 +242,7 @@ public class WebController {
 		item.setPartCost(Float.valueOf(request.getParameter("part-Cost")));
 		item.setPartStock(Integer.valueOf(request.getParameter("part-Stock")));
 		item.setPartMemo(request.getParameter("part-Memo"));
+		item.setPartMsllevel(request.getParameter("part-Msllevel"));
 
 		// Change DB query
 		itemService.changePartsItem(item);
@@ -324,6 +328,15 @@ public class WebController {
 		itemService.setUserItem(userdata);
 		model.addAttribute("reqresult", userdata.getUserId() + " is added");
 
+		// add user operation log
+		HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+				.getRequest();
+		String ip = req.getHeader("X-FORWARDED-FOR");
+		if (ip == null) {
+			ip = req.getRemoteAddr();
+		}
+		itemService.addUserLog(userdata.getUserId(), ip, "관리자메뉴에서 신규회원 추가됨");
+		
 		// Get DB List
 		return showAdminUser("0", model); /* adminuser.jsp */
 	}
@@ -342,6 +355,16 @@ public class WebController {
 		model.addAttribute("reqresult", userdata.getUserId() + "'s Password Reseted.");
 		System.out.println("/admin/reqresetpassword processed.. Req ID:" + userdata.getUserId());
 
+
+		// add user operation log
+		HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+				.getRequest();
+		String ip = req.getHeader("X-FORWARDED-FOR");
+		if (ip == null) {
+			ip = req.getRemoteAddr();
+		}
+		itemService.addUserLog(userdata.getUserId(), ip, "관리자메뉴에서 비밀번호 초기화됨");
+		
 		// Get DB List
 		return showAdminUser("0", model); /* adminuser.jsp */
 	}
@@ -363,6 +386,16 @@ public class WebController {
 		model.addAttribute("reqresult", userdata.getUserId() + "'s datas are changed");
 		System.out.println("/admin/reqmodify processed.. Req ID:" + userdata.getUserId());
 
+
+		// add user operation log
+		HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+				.getRequest();
+		String ip = req.getHeader("X-FORWARDED-FOR");
+		if (ip == null) {
+			ip = req.getRemoteAddr();
+		}
+		itemService.addUserLog(userdata.getUserId(), ip, "관리자메뉴에서 회원정보 변경됨");
+		
 		// Get DB List
 		return showAdminUser("0", model); /* adminuser.jsp */
 	}
@@ -629,6 +662,7 @@ public class WebController {
 		item.setPartCost(Float.valueOf(request.getParameter("part-Cost")));
 		item.setPartStock(Integer.valueOf(request.getParameter("part-Stock")));
 		item.setPartMemo(request.getParameter("part-Memo"));
+		item.setPartMsllevel(request.getParameter("part-Msllevel"));
 
 		// isvalid projectcode
 		List<ProjectItem> lstPrj = itemService.getMyProjectItems(loginUser.getUserId());
@@ -711,6 +745,8 @@ public class WebController {
 		item.setPartCost(Float.valueOf(request.getParameter("part-Cost")));
 		item.setPartStock(Integer.valueOf(request.getParameter("part-Stock")));
 		item.setPartMemo(request.getParameter("part-Memo"));
+		item.setPartMsllevel(request.getParameter("part-Msllevel"));
+		System.out.println("reqmypartsmodify msl:" + item.getPartMsllevel());
 
 		// Change DB query
 		itemService.changePartsItem(item);

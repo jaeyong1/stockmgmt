@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lgit.stockmgmt.domain.Item;
 import com.lgit.stockmgmt.domain.JoinDBItem;
+import com.lgit.stockmgmt.domain.LogUserItem;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ProjectItem;
 import com.lgit.stockmgmt.domain.ShipReqItem;
@@ -212,7 +213,7 @@ public class ItemDao {
 	}
 
 	public List<ProjectItem> queryShipperProjectItemsById(Map<String, String> paramMap) {
-		
+
 		return sqlSession.selectList("queryProjectItemsByShipperID", paramMap);
 	}
 
@@ -223,14 +224,20 @@ public class ItemDao {
 	public void deleteShipreqItemListByUserId(ShipReqPartsItem item) {
 		sqlSession.delete("deleteMyShipReqItemList", item);
 		return;
-				
+
 	}
 
 	public void deleteShipReqItem(ShipReqItem shippartsdata) {
 		sqlSession.delete("deleteShipReqItem", shippartsdata);
-		
+
 	}
 
-	
+	public int insertLogUserItem(LogUserItem logItem) {
+		return sqlSession.insert("insertLogUserItem", logItem);
+	}
+
+	public List<LogUserItem> queryUserLogItem() {
+		return sqlSession.selectList("queryLogUserItems");
+	}
 
 }

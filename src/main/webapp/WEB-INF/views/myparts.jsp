@@ -190,6 +190,17 @@
 				</p>
 			</td>
 		</tr>
+		
+		<tr>
+			<td width="143">
+				<p>MSL Level</p>
+			</td>
+			<td width="328">
+				<p>
+					<input type="text" id="aa" name='part-Msllevel'>
+				</p>
+			</td>
+		</tr>
 	</table>
 	<input type="button" value="신규" name="submitbtn1"
 		class="btn btn-success btn-md" OnClick="javascript:newItem();">
@@ -255,6 +266,11 @@
 				<p>Maker</p>
 			</center>
 		</td>
+		<td width="80">
+			<center>
+				<p>MSL Level</p>
+			</center>
+		</td>
 		<td width="130">
 			<center>
 				<p>위치</p>
@@ -308,7 +324,11 @@
 							<input type=text name=part-Memo size="14" value='${i.partMemo}'>
 						</p>
 					</center></td>
-
+				<td><center>
+						<p>
+							<input type=text name=part-Msllevel size="8" value='${i.partMsllevel}'>
+						</p>
+					</center></td>
 				<td><center>
 						<p>
 							<input type=text name=part-Location size="14"

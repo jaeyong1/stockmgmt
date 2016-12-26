@@ -121,7 +121,7 @@ public class ReadExcelFileToList {
 					item.setPartProjectCode(lststr.get(0).toString());
 					item.setPartName(lststr.get(4).toString());
 					item.setPartDesc(lststr.get(5).toString());
-					item.setPartMemo(lststr.get(6).toString());// maker
+					item.setPartMemo(lststr.get(6).toString());// maker					
 
 					if (isNum(lststr.get(8).toString())) {
 						String str = lststr.get(8).trim().replaceAll(",", "").toString();
@@ -166,6 +166,7 @@ public class ReadExcelFileToList {
 
 	}
 
+	//파츠정보조회/등록 
 	public static List<PartsItem> readExcelPartsData(String fileName, List<String> errorlog) {
 		List<PartsItem> partsItems = new ArrayList<PartsItem>();
 
@@ -250,9 +251,9 @@ public class ReadExcelFileToList {
 						item.setPartStock(0);
 
 					}
-					item.setPartLocation(lststr.get(5).toString());
+					item.setPartLocation(lststr.get(5).toString()); //F:Location
 
-					if (isNum(lststr.get(6).toString())) {
+					if (isNum(lststr.get(6).toString())) {   //G:단가
 						item.setPartCost(Float.valueOf(lststr.get(6).toString()));
 					} else {
 						System.out.println("[exception] setPartLocation parsing failed!!");
@@ -262,6 +263,8 @@ public class ReadExcelFileToList {
 						item.setPartCost(Float.valueOf(0));
 					}
 
+					item.setPartMsllevel(lststr.get(7).toString()); //H:MSL level
+					
 					partsItems.add(item);
 
 					// process lststr [end]

@@ -13,7 +13,8 @@ public class ShipReqPartsItem {
 	private int partStock;// 재고
 	private String partProjectCode; // 프로젝트코드
 
-	private String partMemo;
+	private String partMemo;	
+	private String partMsllevel;
 
 	public String getPartName() {
 		return partName;
@@ -95,8 +96,16 @@ public class ShipReqPartsItem {
 		this.userId = userId;
 	}
 
+	public String getPartMsllevel() {
+		return partMsllevel;
+	}
+
+	public void setPartMsllevel(String partMsllevel) {
+		this.partMsllevel = partMsllevel;
+	}
+
 	public ShipReqPartsItem(int itemlistId, String userId, int itemlistShipId, int itemlistPartId, int itemlistAmount,
-			String partDesc, int partStock, String partProjectCode, String partName, String partMemo) {
+			String partDesc, int partStock, String partProjectCode, String partName, String partMemo, String partMsllevel) {
 		super();
 		this.itemlistId = itemlistId;
 		this.userId = userId;
@@ -108,6 +117,7 @@ public class ShipReqPartsItem {
 		this.partProjectCode = partProjectCode;
 		this.partMemo = partMemo;
 		this.partName = partName;
+		this.partMsllevel = partMsllevel;
 	}
 
 	public ShipReqPartsItem() {
@@ -120,7 +130,7 @@ public class ShipReqPartsItem {
 	 */
 	public ShipReqPartsItem(Integer itemlistId, Integer itemlistShipId, Integer itemlistPartId, Integer itemlistAmount,
 			String partDesc, Integer partStock, String partProjectCode, String userId, String partName,
-			String partMemo) {
+			String partMemo, String partMsllevel) {
 		super();
 
 		this.itemlistId = Integer.valueOf(itemlistId);
@@ -133,6 +143,7 @@ public class ShipReqPartsItem {
 		this.userId = userId;		
 		this.partMemo = partMemo;
 		this.partName = partName;
+		this.partMsllevel = partMsllevel;				
 
 	}
 

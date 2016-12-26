@@ -6,8 +6,6 @@
 
 package com.lgit.stockmgmt.domain;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
-
 public class PartsItem {
 	private int partId;
 	private String partProjectCode;
@@ -17,6 +15,8 @@ public class PartsItem {
 	private float partCost;
 	private int partStock;
 	private String partMemo;
+	private String partMsllevel;
+
 
 	/*
 	 * Page calc [start]
@@ -135,8 +135,17 @@ public class PartsItem {
 		this.partMemo = partMemo;
 	}
 
+	public String getPartMsllevel() {
+		return partMsllevel;
+	}
+
+	public void setPartMsllevel(String partMsllevel) {
+		this.partMsllevel = partMsllevel;
+	}
+
+	
 	public PartsItem(int partId, String partProjectCode, String partName, String partDesc, String partLocation,
-			float partCost, int partStock, String partMemo) {
+			float partCost, int partStock, String partMemo, String partMsllevel) {
 		super();
 		this.partId = partId;
 		this.partProjectCode = partProjectCode;
@@ -146,17 +155,19 @@ public class PartsItem {
 		this.partCost = partCost;
 		this.partStock = partStock;
 		this.partMemo = partMemo;
+		this.partMsllevel = partMsllevel;
 
 		this._pageOffset = 0;
 		this.currentPageNum = 0;
 		this.rowsPerPage = 0;
 	}
+
 	public PartsItem(Integer partId, String partProjectCode, String partName, String partDesc, String partLocation,
-			
+
 			/*
 			 * mybatis 통할때 생성자 타입 추가 필요했음
 			 */
-			Float partCost, Integer partStock, String partMemo) {
+			Float partCost, Integer partStock, String partMemo, String partMsllevel) {
 
 		super();
 		this.partId = Integer.valueOf(partId);
@@ -167,6 +178,7 @@ public class PartsItem {
 		this.partCost = Float.valueOf(partCost);
 		this.partStock = Integer.valueOf(partStock);
 		this.partMemo = partMemo;
+		this.partMsllevel = partMsllevel;
 
 		this._pageOffset = 0;
 		this.currentPageNum = 0;
@@ -190,6 +202,7 @@ public class PartsItem {
 		this.partCost = 0;
 		this.partStock = 0;
 		this.partMemo = "";
+		this.partMsllevel = "";
 
 		this._pageOffset = 0;
 		this.currentPageNum = 0;

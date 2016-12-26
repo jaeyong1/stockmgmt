@@ -10,13 +10,21 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.lgit.stockmgmt.domain.EShipState;
 import com.lgit.stockmgmt.domain.EUserLevel;
+import com.lgit.stockmgmt.domain.LogUserItem;
+import com.lgit.stockmgmt.domain.PartsItem;
+import com.lgit.stockmgmt.domain.ShipReqItem;
 import com.lgit.stockmgmt.domain.UserItem;
 import com.lgit.stockmgmt.service.ItemService;
 
@@ -128,6 +136,15 @@ public class LoginController {
 		itemService.setUserItem(userdata);
 		System.out.println("/newuser" + userdata.toString());
 
+		// add user operation log
+		HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+				.getRequest();
+		String ip = req.getHeader("X-FORWARDED-FOR");
+		if (ip == null) {
+			ip = req.getRemoteAddr();
+		}
+		itemService.addUserLog(userdata.getUserId(), ip, "신규회원가입");
+
 		// Get DB List
 		return "redirect:login";
 	}
@@ -141,13 +158,13 @@ public class LoginController {
 	}
 
 	/*
-	 * /adminuser 사용자 신규 등록처리
+	 * /adminuser 사용자 비밀번호 변경(self)
 	 */
 	@RequestMapping(value = "/changetonewpw", method = RequestMethod.POST)
 	public String modifyUserPW(UserItem userdata, Model model, HttpServletRequest request) {
 
 		boolean validUser = false;
-		boolean findedId =false;
+		boolean findedId = false;
 		List<String> errorlog = new ArrayList<String>();
 		String reqUserId = request.getParameter("user-Id");
 		String reqUserOldPw = request.getParameter("user-Password");
@@ -166,11 +183,9 @@ public class LoginController {
 			}
 
 		}
-		
 
 		if (!validUser) {
-			if(!findedId)
-			{
+			if (!findedId) {
 				String err1 = "Error: 변경할 ID가 없습니다.";
 				System.out.println(err1);
 				errorlog.add(err1);
@@ -199,7 +214,65 @@ public class LoginController {
 
 		model.addAttribute("popupclosemsg", "비밀번호가 변경되었습니다."); // 없으면바로닫음
 		model.addAttribute("requestedURL", "/"); /* "/mylist" */
+
+		// add user operation log
+		HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+				.getRequest();
+		String ip = req.getHeader("X-FORWARDED-FOR");
+		if (ip == null) {
+			ip = req.getRemoteAddr();
+		}
+		itemService.addUserLog(userdata.getUserId(), ip, "비밀번호 직접변경");
+
 		return "closememoveto_nologin";
+	}
+
+	/*
+	 * 탈퇴처리 필요
+	 */
+
+	// ============================= LOG
+
+	/*
+	 * /logview 요청서 작성중 처리
+	 */
+	@RequestMapping(value = "/logview", method = RequestMethod.GET)
+	public String queryUserLog2(Model model, ShipReqItem shipreqdata, HttpServletRequest request) {
+		return queryUserLog1("0", shipreqdata, model, request);
+	}
+
+	@RequestMapping(value = "/logview/{seq}", method = RequestMethod.GET)
+	public String queryUserLog1(@PathVariable String seq, ShipReqItem shipreqdata, Model model,
+			HttpServletRequest request) {
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/logview process. no session info. return login.jsp ");
+			return "login";
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /logview process");
+
+		final int rowsPer1Page = 100;
+
+		/////////////////// List View
+		List<LogUserItem> items = itemService.getLogUserItems();
+		System.out.println("/logview process");
+		// model.addAttribute("items", items);
+
+		// Choose current page data
+		PagedListHolder<LogUserItem> paging = new PagedListHolder<LogUserItem>(items);
+		paging.setPageSize(rowsPer1Page);
+		paging.setPage(Integer.parseInt(seq));
+		model.addAttribute("items", paging.getPageList());
+
+		// Add Page number information
+		model.addAttribute("pageNum", paging.getPageCount());
+		model.addAttribute("start", paging.getFirstLinkedPage());
+		model.addAttribute("end", paging.getLastLinkedPage());
+		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
+		// 인덱스..
+
+		return "logview";
 	}
 
 }

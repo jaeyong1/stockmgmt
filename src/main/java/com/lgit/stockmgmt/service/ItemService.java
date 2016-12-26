@@ -1,7 +1,9 @@
 package com.lgit.stockmgmt.service;
 
-import java.awt.event.ItemListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.lgit.stockmgmt.dao.ItemDao;
 import com.lgit.stockmgmt.domain.Item;
 import com.lgit.stockmgmt.domain.JoinDBItem;
+import com.lgit.stockmgmt.domain.LogUserItem;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ProjectItem;
 import com.lgit.stockmgmt.domain.ShipReqItem;
@@ -121,7 +124,11 @@ public class ItemService {
 	public List<JoinDBItem> getMyItemsByOwnerName(String userOwnerName) {
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("keyWord", userOwnerName);
-		return itemDao.queryJoinItemsByOwnerName(paramMap);
+		List<JoinDBItem> ret = itemDao.queryJoinItemsByOwnerName(paramMap);
+		for (JoinDBItem a : ret)
+			System.out.println(a.getPartName() + ":" + a.getPartMsllevel());
+		return ret;
+		// return itemDao.queryJoinItemsByOwnerName(paramMap);
 	}
 
 	public List<JoinDBItem> getOthersItemsByOwnerName(String userOwnerName) {
@@ -443,6 +450,20 @@ public class ItemService {
 
 	}
 
+	public int getMyPartId(String userId, String partProjectCode, String partName) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("UserId", userId);
+		paramMap.put("PartProjectCode", partProjectCode);
+		paramMap.put("PartName", partName);
+
+		List<PartsItem> list = itemDao.queryPart_PartsProjectAndParts(paramMap);
+		if (list.size() == 0) {
+			System.out.println("[error] NOT exist item:" + partName);
+			return 0;
+		}
+		return list.get(0).getPartId();
+	}
+
 	private int getShipperPartIdByPartsName(String userId, String partProjectCode, String partName) {
 		// TODO Auto-generated method stub
 		Map<String, String> paramMap = new HashMap<String, String>();
@@ -681,6 +702,12 @@ public class ItemService {
 				if (isExistMyPartsName(loginUser.getUserId(), lst.get(i).getPartProjectCode(),
 						lst.get(i).getPartName())) {
 					// ok
+
+					// find my part id (엑셀에는 ID가 없음)
+					int myPartsId = getMyPartId(loginUser.getUserId(), lst.get(i).getPartProjectCode(),
+							lst.get(i).getPartName());
+					lst.get(i).setPartId(myPartsId);
+
 					// keep going
 
 				} else {
@@ -701,6 +728,8 @@ public class ItemService {
 		// 값 DB에 추가
 		if (dbProcessSuccess) {
 			for (i = 0; i < lst.size(); i++) {
+				System.out.println("[DB modify]" + lst.get(i).getPartId() + ":" + lst.get(i).getPartName() + ":"
+						+ lst.get(i).getPartMsllevel());// for test
 				changePartsItem(lst.get(i));
 			}
 		} else {
@@ -791,5 +820,24 @@ public class ItemService {
 
 	}
 
+	public void addUserLog(String userId, String ip, String userAction) {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Calendar cal = Calendar.getInstance();
+		String logDate = dateFormat.format(cal.getTime());
+		System.out.println("add log : " + logDate);
+
+		LogUserItem logItem = new LogUserItem();
+		logItem.setLogDate(logDate);
+		logItem.setLogClientIP(ip);
+		logItem.setLogUser(userId);
+		logItem.setLogAction(userAction);
+
+		itemDao.insertLogUserItem(logItem);
+		return;
+	}
+
+	public List<LogUserItem> getLogUserItems() {
+		return itemDao.queryUserLogItem();
+	}
 
 }

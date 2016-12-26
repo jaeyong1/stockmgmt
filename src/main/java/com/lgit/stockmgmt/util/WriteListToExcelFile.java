@@ -188,6 +188,7 @@ public class WriteListToExcelFile {
 			row.createCell(4).setCellValue(item.getPartStock()); // E
 			row.createCell(5).setCellValue(item.getPartLocation()); // F
 			row.createCell(6).setCellValue(item.getPartCost()); // G
+			row.createCell(7).setCellValue(item.getPartMsllevel()); // H
 		} // for i
 
 		// lets write the excel data to file now

@@ -13,6 +13,7 @@ public class JoinDBItem {
 	private String partLocation;
 	private float partCost;
 	private String partMemo;
+	private String partMsllevel;
 
 	@Override
 	public String toString() {
@@ -110,9 +111,17 @@ public class JoinDBItem {
 		this.partMemo = partMemo;
 	}
 
+	public String getPartMsllevel() {
+		return partMsllevel;
+	}
+
+	public void setPartMsllevel(String partMsllevel) {
+		this.partMsllevel = partMsllevel;
+	}
+
 	public JoinDBItem(int partId, String partProjectCode, String userTeamname, String userOwnerName,
 			String userShipperName, String partName, String partDesc, int partStock, String partLocation,
-			float partCost, String partMemo) {
+			float partCost, String partMemo, String partMsllevel) {
 		super();
 		this.partId = partId;
 		this.partProjectCode = partProjectCode;
@@ -125,6 +134,7 @@ public class JoinDBItem {
 		this.partLocation = partLocation;
 		this.partCost = partCost;
 		this.partMemo = partMemo;
+		this.partMsllevel = partMsllevel;
 	}
 
 	public JoinDBItem() {
@@ -136,7 +146,7 @@ public class JoinDBItem {
 	 */
 	public JoinDBItem(Integer partId, String partProjectCode, String userTeamname, String userOwnerName,
 			String userShipperName, String partName, String partDesc, Integer partStock, String partLocation,
-			Float partCost, String partMemo) {
+			Float partCost, String partMemo, String partMsllevel) {
 		super();
 
 		this.partId = Integer.valueOf(partId);
@@ -150,7 +160,7 @@ public class JoinDBItem {
 		this.partLocation = partLocation;
 		this.partCost = Float.valueOf(partCost);
 		this.partMemo = partMemo;
-
+		this.partMsllevel = partMsllevel;
 	}
 
 }

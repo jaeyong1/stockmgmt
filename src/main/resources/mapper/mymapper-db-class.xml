@@ -27,6 +27,7 @@
 		<result property="partCost" column="part_cost" />
 		<result property="partStock" column="part_stock" />
 		<result property="partMemo" column="part_memo" />
+		<result property="partMsllevel" column="part_msllevel" />
 	</resultMap>
 
 
@@ -54,6 +55,7 @@
 		<result property="partCost" column="part_cost" />
 
 		<result property="partMemo" column="part_memo" />
+		<result property="partMsllevel" column="part_msllevel" />
 	</resultMap>
 
 
@@ -68,7 +70,8 @@
 		<result property="partMemo" column="part_memo" />
 		<result property="userId" column="itemlist_owner_id" />
 		<result property="partName" column="part_name" />
-		
+		<result property="partMsllevel" column="part_msllevel" />
+
 	</resultMap>
 
 
@@ -83,10 +86,16 @@
 		<result property="shipIsmyproject" column="ship_ismyproject" />
 		<result property="shipStateId" column="ship_state_id" />
 		<result property="shipCoworkerUserid" column="ship_coworker_userid" />
-		<result property="shipperId" column="project_shipper_id" />		
-		<result property="shipperName" column="user_name" />		
+		<result property="shipperId" column="project_shipper_id" />
+		<result property="shipperName" column="user_name" />
 	</resultMap>
 
-
+	<resultMap id="LogUserItemMap" type="com.lgit.stockmgmt.domain.LogUserItem">
+		<result property="logId" column="log_id" />
+		<result property="logDate" column="log_date" />
+		<result property="logClientIP" column="log_clientip" />
+		<result property="logUser" column="log_user" />
+		<result property="logAction" column="log_action" />
+	</resultMap>
 
 </mapper>

@@ -149,6 +149,11 @@
 				<p>위치</p>
 			</center>
 		</th>
+		<th width="67">
+			<center>
+				<p>MSL Level</p>
+			</center>
+		</th>
 	</tr>
 	<!-- DB 데이터 채움 (클래스 변수사용) -->
 	<c:forEach var="i" items="${items}" varStatus="status">
@@ -226,7 +231,11 @@
 						<p>${i.partLocation}</p>
 					</center>
 				</td>
-
+				<td width="67">
+					<center>
+						<p>${i.partMsllevel}</p>
+					</center>
+				</td>
 			</tr>
 		</form>
 	</c:forEach>
