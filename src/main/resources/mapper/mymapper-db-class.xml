@@ -88,6 +88,11 @@
 		<result property="shipCoworkerUserid" column="ship_coworker_userid" />
 		<result property="shipperId" column="project_shipper_id" />
 		<result property="shipperName" column="user_name" />
+		
+		<result property="shipReqDeliveryMethod" column="ship_req_deliverymethod" />
+		<result property="shipDeliveredDateMethod" column="ship_delivered_datemethod" />
+		<result property="shipRejectCause" column="ship_rejectcause" />
+		
 	</resultMap>
 
 	<resultMap id="LogUserItemMap" type="com.lgit.stockmgmt.domain.LogUserItem">

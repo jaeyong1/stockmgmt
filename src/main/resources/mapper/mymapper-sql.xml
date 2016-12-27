@@ -76,7 +76,8 @@
 		WHERE
 		CONVERT(
 		`tb_part`.`part_id`
-		USING utf8
+		USING
+		utf8
 		) =
 		#{partId} LIMIT 1;
 	</update>
@@ -530,7 +531,10 @@
 		`ship_memo`,
 		`ship_ismyproject`,
 		`ship_state_id`,
-		`ship_coworker_userid`
+		`ship_coworker_userid`,
+		`ship_req_deliverymethod`,
+		`ship_delivered_datemethod`,
+		`ship_rejectcause`
 		)
 		VALUES (
 		#{shipRequestorId},
@@ -541,7 +545,10 @@
 		#{shipMemo},
 		#{shipIsmyproject},
 		#{shipStateId},
-		#{shipCoworkerUserid}
+		#{shipCoworkerUserid},
+		#{shipReqDeliveryMethod},
+		#{shipDeliveredDateMethod},
+		#{shipRejectCause}
 		)
 
 	</insert>
@@ -629,7 +636,10 @@
 	<update id="updateShipReqState_ShipId" parameterType="String">
 		UPDATE
 		tb_shipreq
-		SET `ship_state_id` = #{newShipStateId} WHERE
+		SET `ship_state_id` = #{newShipStateId},
+		`ship_rejectcause` = #{shipRejectCause},
+		`ship_delivered_datemethod` = #{shipDeliveredDateMethod}
+		 WHERE
 		`ship_id` =
 		#{shipId} ;
 	</update>
@@ -661,7 +671,8 @@
 		,t2.part_cost 'part_cost'
 		,t2.part_stock 'part_stock'
 		,t2.part_memo 'part_memo'
-		, t2.part_msllevel 'part_msllevel'
+		, t2.part_msllevel
+		'part_msllevel'
 		FROM
 		tb_project AS
 		t1
@@ -811,7 +822,8 @@
 		`part_memo`,`part_msllevel`
 		FROM
 		tb_part as t1
-		inner join(tb_project as t2)
+		inner join(tb_project as
+		t2)
 		ON
 		t1.part_project_code =
 		t2.project_code
@@ -822,7 +834,8 @@
 		t1.part_name =
 		#{PartName}
 		AND
-		t2.project_owner_id = #{UserId};
+		t2.project_owner_id =
+		#{UserId};
 	</select>
 
 	<!-- tb_parts 에서 내 자재중에 PartName으로 PartID 검색 -->

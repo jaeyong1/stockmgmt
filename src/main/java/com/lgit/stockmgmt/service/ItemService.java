@@ -125,8 +125,8 @@ public class ItemService {
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("keyWord", userOwnerName);
 		List<JoinDBItem> ret = itemDao.queryJoinItemsByOwnerName(paramMap);
-		for (JoinDBItem a : ret)
-			System.out.println(a.getPartName() + ":" + a.getPartMsllevel());
+		//for (JoinDBItem a : ret)
+		//	System.out.println(a.getPartName() + ":" + a.getPartMsllevel());
 		return ret;
 		// return itemDao.queryJoinItemsByOwnerName(paramMap);
 	}
@@ -287,23 +287,27 @@ public class ItemService {
 		return itemDao.queryShipReqItemForShipper(paramMap);
 	}
 
-	public int stateMove3to4(int shipId, int shipStateId) {
+	public int stateMove3to4(int shipId, int shipStateId, String shipRejectCause, String shipDeliveredDateMethod) {
 		Map<String, String> paramMap2 = new HashMap<String, String>();
 		paramMap2.put("shipId", String.valueOf(shipId));
 		paramMap2.put("newShipStateId", String.valueOf(shipStateId));
+		paramMap2.put("shipRejectCause", shipRejectCause);
+		paramMap2.put("shipDeliveredDateMethod", shipDeliveredDateMethod);
 		return itemDao.updateShipReqState_ShipId(paramMap2);
 
 	}
 
-	public int stateMove4to6(int shipId, int shipStateId) {
+	public int stateMove4to6(int shipId, int shipStateId, String shipRejectCause, String shipDeliveredDateMethod) {
 		Map<String, String> paramMap2 = new HashMap<String, String>();
 		paramMap2.put("shipId", String.valueOf(shipId));
 		paramMap2.put("newShipStateId", String.valueOf(shipStateId));
+		paramMap2.put("shipRejectCause", shipRejectCause);
+		paramMap2.put("shipDeliveredDateMethod", shipDeliveredDateMethod);
 		return itemDao.updateShipReqState_ShipId(paramMap2);
 
 	}
 
-	public int stateMove4to5(int shipId, int shipStateId) {
+	public int stateMove4to5(int shipId, int shipStateId,String shipRejectCause, String shipDeliveredDateMethod) {
 		// Get itemlist_ship_id
 		/**
 		 * itemlist_part_id=part_id | itemlist_amount
@@ -333,6 +337,8 @@ public class ItemService {
 		Map<String, String> paramMap2 = new HashMap<String, String>();
 		paramMap2.put("shipId", String.valueOf(shipId));
 		paramMap2.put("newShipStateId", String.valueOf(shipStateId));
+		paramMap2.put("shipRejectCause", shipRejectCause);
+		paramMap2.put("shipDeliveredDateMethod", shipDeliveredDateMethod);
 		return itemDao.updateShipReqState_ShipId(paramMap2);
 	}
 
@@ -407,10 +413,13 @@ public class ItemService {
 		return itemDao.queryMyConfirmShipReqItem(paramMap);
 	}
 
-	public int stateMove2to3(int shipId, int shipStateId) {
+	public int stateMove2to3(int shipId, int shipStateId, String shipRejectCause, String shipDeliveredDateMethod) {
 		Map<String, String> paramMap2 = new HashMap<String, String>();
 		paramMap2.put("shipId", String.valueOf(shipId));
 		paramMap2.put("newShipStateId", String.valueOf(shipStateId));
+		paramMap2.put("shipRejectCause", shipRejectCause);
+		paramMap2.put("shipDeliveredDateMethod", shipDeliveredDateMethod);
+		
 		return itemDao.updateShipReqState_ShipId(paramMap2);
 
 	}

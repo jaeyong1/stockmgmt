@@ -83,7 +83,6 @@
 		var arr1 = strDate1.split('-');
 		var arr2 = strDate2.split('-');
 
-	
 		var dat1 = new Date(arr1[0], arr1[1], arr1[2]);
 		var dat2 = new Date(arr2[0], arr2[1], arr2[2]);
 
@@ -250,7 +249,83 @@
 		</tr>
 		<!-- <input type="button" value="출고요청" name="submitbtn1"
 				OnClick="javascript:newItem();">  -->
+		<tr>
+			<td width="115" height="20">
+				<p>출고방법(요청)</p>
+			</td>
+			<td width="259" height="20">
+				<p>
+					<input type="hidden" name='ship-ReqDeliveryMethod'
+						value='${reqshipinfo.shipReqDeliveryMethod}'>${reqshipinfo.shipReqDeliveryMethod}</p>
+			</td>
+			<td width="37" height="20">
+				<p>&nbsp;</p>
+			</td>
+			<td width="126" height="20"><c:choose>
+					<c:when test="${'반려' == shipstatekor }">
+							  반려사유
+							</c:when>
+				</c:choose> <!-- state 2 > 3 (coworker 승인/반려)--> <!-- state 4 > 5 (반려) --> <c:choose>
+					<c:when
+						test="${ ((reqshipinfo.shipCoworkerUserid == sessionScope.userLoginInfo.userId)&&(2 == reqshipinfo.shipStateId)) || ((3 == sessionScope.userLoginInfo.userLevel) && (4 == reqshipinfo.shipStateId)) }">
 
+				반려사유
+					</c:when>
+				</c:choose></td>
+			<td width="225" height="20">
+				<p>
+					<!-- state 2 > 3 (coworker 승인/반려)-->
+					<!-- state 4 > 5 (반려) -->
+					<c:choose>
+						<c:when
+							test="${ ((reqshipinfo.shipCoworkerUserid == sessionScope.userLoginInfo.userId)&&(2 == reqshipinfo.shipStateId)) || ((3 == sessionScope.userLoginInfo.userLevel) && (4 == reqshipinfo.shipStateId)) }">
+
+							<input type="text" name='ship-RejectCause'
+								value='${reqshipinfo.shipRejectCause}'>
+						</c:when>
+
+						<c:otherwise>
+							<input type="hidden" name='ship-RejectCause'
+								value='${reqshipinfo.shipRejectCause}'>${reqshipinfo.shipRejectCause}
+									</c:otherwise>
+
+					</c:choose>
+			</td>
+		</tr>
+		<tr>
+			<td width="115" height="20">
+				<p>출고방법(결과)</p>
+			</td>
+			<td width="259" height="20">
+				<p>
+
+					<!-- state 4 > 5 (승인) -->
+					<c:choose>
+						<c:when
+							test="${(3 == sessionScope.userLoginInfo.userLevel) && (4 == reqshipinfo.shipStateId) }">
+
+							<input type="text" name='ship-DeliveredDateMethod'
+								value='${reqshipinfo.shipDeliveredDateMethod}'>
+						</c:when>
+						<c:otherwise>
+							<input type="hidden" name='ship-DeliveredDateMethod'
+								value='${reqshipinfo.shipDeliveredDateMethod}'>${reqshipinfo.shipDeliveredDateMethod}
+									</c:otherwise>
+					</c:choose>
+				</p>
+			</td>
+
+
+
+
+
+			</td>
+			<td width="37" height="20">
+				<p>&nbsp;</p>
+			</td>
+			<td width="126" height="20"></td>
+			<td width="225" height="20"></td>
+		</tr>
 	</form>
 </table>
 

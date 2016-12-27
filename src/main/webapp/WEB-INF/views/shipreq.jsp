@@ -204,6 +204,44 @@
 				</p>
 			</td>
 		</tr>
+		<tr>
+			<td width="115" height="20">
+				<p>출고방법(요청)</p>
+			</td>
+			<td width="259" height="20">
+				<p>
+					<input type="text" name='ship-ReqDeliveryMethod'
+						value='${reqshipinfo.shipReqDeliveryMethod}'>${reqshipinfo.shipReqDeliveryMethod}</p>
+			</td>
+			<td width="37" height="20">
+				<p>&nbsp;</p>
+			</td>
+			<td width="126" height="20"><c:choose>
+					<c:when test="${'반려' == shipstatekor }">
+							  반려사유
+							</c:when>
+				</c:choose></td>
+			<td width="225" height="20">
+				<p>
+					<input type="hidden" name='ship-RejectCause'
+						value='${reqshipinfo.shipRejectCause}'>${reqshipinfo.shipRejectCause}
+			</td>
+		</tr>
+		<tr>
+			<td width="115" height="20">
+				<p>출고방법(결과)</p>
+			</td>
+			<td width="259" height="20">
+				<p>
+					<input type="hidden" name='ship-DeliveredDateMethod'
+						value='${reqshipinfo.shipDeliveredDateMethod}'>${reqshipinfo.shipDeliveredDateMethod}</p>
+			</td>
+			<td width="37" height="20">
+				<p>&nbsp;</p>
+			</td>
+			<td width="126" height="20"></td>
+			<td width="225" height="20"></td>
+		</tr>
 	</table>
 	
 	<input type="button" value="출고요청" name="submitbtn1"

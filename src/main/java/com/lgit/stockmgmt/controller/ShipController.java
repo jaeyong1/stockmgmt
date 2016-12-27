@@ -525,6 +525,9 @@ public class ShipController {
 			shipreqdata.setShipIsmyproject(Integer.valueOf(request.getParameter("ship-Ismyproject")));
 			shipreqdata.setShipStateId(EShipState.STATE2_REQCOWORKSHIPPING.getStateInt()); // move_to_state_2
 			shipreqdata.setShipCoworkerUserid(request.getParameter("ship-CoworkerUserid"));
+			shipreqdata.setShipReqDeliveryMethod(request.getParameter("ship-ReqDeliveryMethod"));
+			shipreqdata.setShipDeliveredDateMethod(request.getParameter("ship-DeliveredDateMethod"));
+			shipreqdata.setShipRejectCause(request.getParameter("ship-RejectCause"));
 
 			// Change DB query
 			itemService.stateMove1to2(shipreqdata, shipreqdata.getShipRequestorId());
@@ -570,6 +573,9 @@ public class ShipController {
 			shipreqdata.setShipIsmyproject(Integer.valueOf(request.getParameter("ship-Ismyproject")));
 			shipreqdata.setShipStateId(EShipState.STATE3_REQSHIPPING.getStateInt()); // move_to_state_3
 			shipreqdata.setShipCoworkerUserid(request.getParameter("ship-CoworkerUserid"));
+			shipreqdata.setShipReqDeliveryMethod(request.getParameter("ship-ReqDeliveryMethod"));
+			shipreqdata.setShipDeliveredDateMethod(request.getParameter("ship-DeliveredDateMethod"));
+			shipreqdata.setShipRejectCause(request.getParameter("ship-RejectCause"));
 
 			// Change DB query
 			itemService.stateMove1to3(shipreqdata, shipreqdata.getShipRequestorId());
@@ -581,10 +587,13 @@ public class ShipController {
 		} else if (curstate == EShipState.STATE2_REQCOWORKSHIPPING.getStateInt()) {
 			// Get data from Web browser
 			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
-			shipreqdata.setShipStateId(EShipState.STATE3_REQSHIPPING.getStateInt()); // move_to_4
+			shipreqdata.setShipStateId(EShipState.STATE3_REQSHIPPING.getStateInt()); // move_to_3
+			shipreqdata.setShipRejectCause(request.getParameter("ship-RejectCause"));
+			shipreqdata.setShipDeliveredDateMethod(request.getParameter("ship-DeliveredDateMethod"));			
 
 			// Change DB query
-			itemService.stateMove2to3(shipreqdata.getShipId(), shipreqdata.getShipStateId());
+			itemService.stateMove2to3(shipreqdata.getShipId(), shipreqdata.getShipStateId(),
+					shipreqdata.getShipRejectCause(), shipreqdata.getShipDeliveredDateMethod());
 			System.out.println("[" + loginUser.getUserId()
 					+ "] /shipreqprocess/state3 (from state2, coworker confirmed)processed..");
 
@@ -619,9 +628,11 @@ public class ShipController {
 			// Get data from Web browser
 			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
 			shipreqdata.setShipStateId(EShipState.STATE4_LISTPRINTED.getStateInt()); // move_to_4
+			shipreqdata.setShipRejectCause(request.getParameter("ship-RejectCause"));
+			shipreqdata.setShipDeliveredDateMethod(request.getParameter("ship-DeliveredDateMethod"));	
 
 			// Change DB query
-			itemService.stateMove3to4(shipreqdata.getShipId(), shipreqdata.getShipStateId());
+			itemService.stateMove3to4(shipreqdata.getShipId(), shipreqdata.getShipStateId(), shipreqdata.getShipRejectCause(), shipreqdata.getShipDeliveredDateMethod());
 			// model.addAttribute("reqresult", shipreqdata.getShipId() + "'s
 			// data is added");
 			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state4 processed..");
@@ -656,10 +667,12 @@ public class ShipController {
 		if (curstate == EShipState.STATE4_LISTPRINTED.getStateInt()) {
 			// Get data from Web browser
 			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
-			shipreqdata.setShipStateId(EShipState.STATE5_SHIPPINGFINISHED.getStateInt()); // move_to_4
+			shipreqdata.setShipStateId(EShipState.STATE5_SHIPPINGFINISHED.getStateInt()); // move_to_5
+			shipreqdata.setShipRejectCause(request.getParameter("ship-RejectCause"));
+			shipreqdata.setShipDeliveredDateMethod(request.getParameter("ship-DeliveredDateMethod"));
 
 			// Change DB query
-			itemService.stateMove4to5(shipreqdata.getShipId(), shipreqdata.getShipStateId());
+			itemService.stateMove4to5(shipreqdata.getShipId(), shipreqdata.getShipStateId(), shipreqdata.getShipRejectCause(), shipreqdata.getShipDeliveredDateMethod());
 			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state5 processed..");
 
 			// Get DB List
@@ -693,9 +706,11 @@ public class ShipController {
 			// Get data from Web browser
 			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
 			shipreqdata.setShipStateId(EShipState.STATE6_REJSHIPPING.getStateInt()); // move_to_6
+			shipreqdata.setShipRejectCause(request.getParameter("ship-RejectCause"));
+			shipreqdata.setShipDeliveredDateMethod(request.getParameter("ship-DeliveredDateMethod"));	
 
 			// Change DB query
-			itemService.stateMove4to6(shipreqdata.getShipId(), shipreqdata.getShipStateId());
+			itemService.stateMove4to6(shipreqdata.getShipId(), shipreqdata.getShipStateId(), shipreqdata.getShipRejectCause(), shipreqdata.getShipDeliveredDateMethod());
 			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state6 processed..");
 
 			// Get DB List
@@ -704,9 +719,11 @@ public class ShipController {
 			// Get data from Web browser
 			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
 			shipreqdata.setShipStateId(EShipState.STATE6_REJSHIPPING.getStateInt()); // move_to_6
-
+			shipreqdata.setShipRejectCause(request.getParameter("ship-RejectCause"));
+			shipreqdata.setShipDeliveredDateMethod(request.getParameter("ship-DeliveredDateMethod"));
+			
 			// Change DB query
-			itemService.stateMove4to6(shipreqdata.getShipId(), shipreqdata.getShipStateId()); // sql_reuse
+			itemService.stateMove4to6(shipreqdata.getShipId(), shipreqdata.getShipStateId(),shipreqdata.getShipRejectCause(), shipreqdata.getShipDeliveredDateMethod()); // sql_reuse
 			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state6 processed..");
 
 			// Get DB List
@@ -719,7 +736,7 @@ public class ShipController {
 			shipreqdata.setShipStateId(EShipState.STATE6_REJSHIPPING.getStateInt()); // move_to_6
 
 			// Change DB query
-			itemService.stateMove4to6(shipreqdata.getShipId(), shipreqdata.getShipStateId()); // sql_reuse
+			itemService.stateMove4to6(shipreqdata.getShipId(), shipreqdata.getShipStateId(),shipreqdata.getShipRejectCause(), shipreqdata.getShipDeliveredDateMethod()); // sql_reuse
 			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state6 processed..");
 
 			// Get DB List
@@ -856,7 +873,6 @@ public class ShipController {
 			model.addAttribute("reqresult", shipreqdata.getShipId() + "'s data is added");
 			System.out.println("/shipreqprocess/state1 processed..");
 
-			
 			// Get DB List
 			return "redirect:../shipparts";
 		}

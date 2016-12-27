@@ -20,6 +20,35 @@ public class ShipReqItem {
 	private String shipperId;
 	private String shipperName;
 
+	// add fields
+	private String shipReqDeliveryMethod;
+	private String shipDeliveredDateMethod;
+	private String shipRejectCause;
+
+	public String getShipReqDeliveryMethod() {
+		return shipReqDeliveryMethod;
+	}
+
+	public void setShipReqDeliveryMethod(String shipReqDeliveryMethod) {
+		this.shipReqDeliveryMethod = shipReqDeliveryMethod;
+	}
+
+	public String getShipDeliveredDateMethod() {
+		return shipDeliveredDateMethod;
+	}
+
+	public void setShipDeliveredDateMethod(String shipDeliveredDateMethod) {
+		this.shipDeliveredDateMethod = shipDeliveredDateMethod;
+	}
+
+	public String getShipRejectCause() {
+		return shipRejectCause;
+	}
+
+	public void setShipRejectCause(String shipRejectCause) {
+		this.shipRejectCause = shipRejectCause;
+	}
+
 	public String getShipperId() {
 		return shipperId;
 	}
@@ -130,7 +159,8 @@ public class ShipReqItem {
 
 	public ShipReqItem(int shipId, String shipRequestorId, String shipDestination, String shipToday,
 			String shipTargetdate, String shipProjectCode, String shipMemo, int shipIsmyproject, int shipStateId,
-			String shipCoworkerUserid, String shipperId, String shipperName) {
+			String shipCoworkerUserid, String shipperId, String shipperName, String shipReqDeliveryMethod,
+			String shipDeliveredDateMethod, String shipRejectCause) {
 		super();
 		this.shipId = shipId;
 		this.shipRequestorId = shipRequestorId;
@@ -144,6 +174,9 @@ public class ShipReqItem {
 		this.shipCoworkerUserid = shipCoworkerUserid;
 		this.shipperId = shipperId;
 		this.shipperName = shipperName;
+		this.shipReqDeliveryMethod = shipReqDeliveryMethod;
+		this.shipDeliveredDateMethod = shipDeliveredDateMethod;
+		this.shipRejectCause = shipRejectCause;
 	}
 
 	/*
@@ -151,7 +184,8 @@ public class ShipReqItem {
 	 */
 	public ShipReqItem(Integer shipId, String shipRequestorId, String shipDestination, String shipToday,
 			String shipTargetdate, String shipProjectCode, String shipMemo, Integer shipIsmyproject,
-			Integer shipStateId, String shipCoworkerUserid, String shipperId, String shipperName) {
+			Integer shipStateId, String shipCoworkerUserid, String shipperId, String shipperName,
+			String shipReqDeliveryMethod, String shipDeliveredDateMethod, String shipRejectCause) {
 		super();
 		this.shipId = Integer.valueOf(shipId);
 		this.shipRequestorId = shipRequestorId;
@@ -165,6 +199,9 @@ public class ShipReqItem {
 		this.shipCoworkerUserid = shipCoworkerUserid;
 		this.shipperId = shipperId;
 		this.shipperName = shipperName;
+		this.shipReqDeliveryMethod = shipReqDeliveryMethod;
+		this.shipDeliveredDateMethod = shipDeliveredDateMethod;
+		this.shipRejectCause = shipRejectCause;
 	}
 
 }
