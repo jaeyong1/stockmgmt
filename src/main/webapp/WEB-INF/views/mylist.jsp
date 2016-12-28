@@ -214,7 +214,7 @@
 				<td width="140">
 					<p>
 						<input type="text" name="reqnum[]" value="0" size="4"> <input
-							type="button" class="btn btn-primary btn-xs" value="Cart"
+							type="button" class="btn btn-primary btn-xs" value="Box"
 							name="submitbtn" OnClick="javascript:addCart('${status.index}');">
 					</p>
 				</td>

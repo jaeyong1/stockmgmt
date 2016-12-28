@@ -15,6 +15,15 @@ public class UserItem {
 	private String userEmail;
 	private String userTeamname;
 	private int userLevel;
+	private int cartItems;
+
+	public int getCartItems() {
+		return cartItems;
+	}
+
+	public void setCartItems(int cartItems) {
+		this.cartItems = cartItems;
+	}
 
 	public String getUserId() {
 		return userId;
@@ -73,6 +82,7 @@ public class UserItem {
 		this.userEmail = userEmail;
 		this.userTeamname = userTeamname;
 		this.userLevel = userLevel;
+		
 	}
 
 	/*
@@ -88,6 +98,7 @@ public class UserItem {
 		this.userEmail = userEmail;
 		this.userTeamname = userTeamname;
 		this.userLevel = Integer.valueOf(userLevel);
+		
 	}
 
 	@Override

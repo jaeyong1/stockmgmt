@@ -25,6 +25,7 @@ import com.lgit.stockmgmt.domain.Item;
 import com.lgit.stockmgmt.domain.JoinDBItem;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ProjectItem;
+import com.lgit.stockmgmt.domain.ShipReqPartsItem;
 import com.lgit.stockmgmt.domain.UserItem;
 import com.lgit.stockmgmt.service.ItemService;
 
@@ -699,6 +700,12 @@ public class WebController {
 		if (loginUser == null) {
 			System.out.println("/myparts process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter = itemService.getShipPartsListItemsCounter(loginUser.getUserId());
+			System.out.println(
+					"[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : " + cartItemsCounter);
+			loginUser.setCartItems(cartItemsCounter);
 		}
 		System.out.println(
 				"[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /myparts process. req pagenum:" + seq);

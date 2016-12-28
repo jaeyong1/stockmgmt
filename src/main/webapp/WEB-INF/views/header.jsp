@@ -39,6 +39,10 @@ var rolekor ="";
 </script>
 
 
+<!-- Bootstrap core CSS -->
+<!-- <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
+<link href="/bootstrap/css/cerulean/bootstrap.min.css" rel="stylesheet">
+
 <!DOCTYPE html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=euc-kr">
@@ -46,15 +50,6 @@ var rolekor ="";
 <meta name="" content="">
 </head>
 
-
-
-
-
-
-
-<!-- Bootstrap core CSS -->
-<!-- <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
-<link href="/bootstrap/css/cerulean/bootstrap.min.css" rel="stylesheet">
 
 <body>
 
@@ -89,7 +84,7 @@ var rolekor ="";
 							<li class="active"><a href="/mylist">나의자재</a></li>
 							<li class="dropdown"><a href="#" class="dropdown-toggle"
 								data-toggle="dropdown" role="button" aria-haspopup="true"
-								aria-expanded="false">출고요청하기<span class="caret"></span></a>
+								aria-expanded="false">출고요청<span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li><a href="/shipparts">출고요청 부품리스트</a></li>
 									<li><a href="/shipreq">출고요청서 작성</a></li>
@@ -109,11 +104,10 @@ var rolekor ="";
 							
 						</c:when>
 					</c:choose>
-
-
+					
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
-						aria-expanded="false">DataBase관리<span class="caret"></span></a>
+						aria-expanded="false">DB관리<span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<c:choose>
 								<c:when test="${(2 == sessionScope.userLoginInfo.userLevel) }">
@@ -134,14 +128,16 @@ var rolekor ="";
 								</c:when>
 							</c:choose>
 						</ul></li>
+						<li><a href="/shipparts">Box<span class="badge">${sessionScope.userLoginInfo.cartItems}</span></a></li>
 				</ul>
 
-				<ul class="nav navbar-nav navbar-right">
+					
 
+				<ul class="nav navbar-nav navbar-right">
 					<li><c:choose>
 							<c:when test="${not empty sessionScope.userLoginInfo}">
 								<c:out value="${sessionScope.userLoginInfo.userName}" />님 로그인중
-								<div id="userinfo"></div>
+								<div id="userinfo"></div>								
 							</c:when>
 						</c:choose></li>
 					<li class="active"><c:choose>

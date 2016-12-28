@@ -240,4 +240,8 @@ public class ItemDao {
 		return sqlSession.selectList("queryLogUserItems");
 	}
 
+	public String queryShipPartsListItemsCounter(Map<String, String> paramMap) {
+		return sqlSession.selectOne("queryShipPartsListItemsCounter", paramMap);
+	}
+
 }

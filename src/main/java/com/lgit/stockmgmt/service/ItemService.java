@@ -125,8 +125,8 @@ public class ItemService {
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("keyWord", userOwnerName);
 		List<JoinDBItem> ret = itemDao.queryJoinItemsByOwnerName(paramMap);
-		//for (JoinDBItem a : ret)
-		//	System.out.println(a.getPartName() + ":" + a.getPartMsllevel());
+		// for (JoinDBItem a : ret)
+		// System.out.println(a.getPartName() + ":" + a.getPartMsllevel());
 		return ret;
 		// return itemDao.queryJoinItemsByOwnerName(paramMap);
 	}
@@ -142,6 +142,21 @@ public class ItemService {
 		paramMap.put("itemlistShipId", itemlistShipId + "");
 		paramMap.put("userId1", loginID);
 		return itemDao.queryShipPartsListItems(paramMap);
+	}
+
+	public int getShipPartsListItemsCounter(String loginID) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("itemlistShipId", -1 + "");
+		paramMap.put("userId1", loginID);
+
+		int cnt = 0;
+		try {
+			cnt = Integer.parseInt(itemDao.queryShipPartsListItemsCounter(paramMap));
+		} catch (Exception e) {
+			System.out.println("[ERROR] User's cart item get FAILED!!!!");
+			cnt = 0;
+		}
+		return cnt;
 	}
 
 	public int changeShipPartsItem(ShipReqPartsItem shippartsdata) {
@@ -307,7 +322,7 @@ public class ItemService {
 
 	}
 
-	public int stateMove4to5(int shipId, int shipStateId,String shipRejectCause, String shipDeliveredDateMethod) {
+	public int stateMove4to5(int shipId, int shipStateId, String shipRejectCause, String shipDeliveredDateMethod) {
 		// Get itemlist_ship_id
 		/**
 		 * itemlist_part_id=part_id | itemlist_amount
@@ -419,7 +434,7 @@ public class ItemService {
 		paramMap2.put("newShipStateId", String.valueOf(shipStateId));
 		paramMap2.put("shipRejectCause", shipRejectCause);
 		paramMap2.put("shipDeliveredDateMethod", shipDeliveredDateMethod);
-		
+
 		return itemDao.updateShipReqState_ShipId(paramMap2);
 
 	}

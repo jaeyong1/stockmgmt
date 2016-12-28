@@ -942,6 +942,26 @@
 
 
 
+	<!-- 출고요청파츠 List Counter -->
+	<select id="queryShipPartsListItemsCounter" parameterType="String"
+		resultType="string">
+		
+		SELECT COUNT(*) as count 
+		FROM
+		tb_shipreq_itemlist AS t1
+		INNER JOIN (tb_part AS
+		t2)
+		ON
+		(t1.itemlist_part_id = t2.part_id)
+		AND
+		t1.itemlist_owner_id =
+		#{userId1}
+		AND
+		t1.itemlist_ship_id = #{itemlistShipId}
+		ORDER BY
+		t1.itemlist_id DESC;
+	</select>
+		
 	<!-- *************************** LOG for User Operation *************************** -->
 	<insert id="insertLogUserItem">
 		INSERT INTO `tb_user_log` (
