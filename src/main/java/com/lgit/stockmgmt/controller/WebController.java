@@ -336,7 +336,7 @@ public class WebController {
 			ip = req.getRemoteAddr();
 		}
 		itemService.addUserLog(userdata.getUserId(), ip, "관리자메뉴에서 신규회원 추가됨");
-		
+
 		// Get DB List
 		return showAdminUser("0", model); /* adminuser.jsp */
 	}
@@ -355,7 +355,6 @@ public class WebController {
 		model.addAttribute("reqresult", userdata.getUserId() + "'s Password Reseted.");
 		System.out.println("/admin/reqresetpassword processed.. Req ID:" + userdata.getUserId());
 
-
 		// add user operation log
 		HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 				.getRequest();
@@ -364,7 +363,7 @@ public class WebController {
 			ip = req.getRemoteAddr();
 		}
 		itemService.addUserLog(userdata.getUserId(), ip, "관리자메뉴에서 비밀번호 초기화됨");
-		
+
 		// Get DB List
 		return showAdminUser("0", model); /* adminuser.jsp */
 	}
@@ -386,7 +385,6 @@ public class WebController {
 		model.addAttribute("reqresult", userdata.getUserId() + "'s datas are changed");
 		System.out.println("/admin/reqmodify processed.. Req ID:" + userdata.getUserId());
 
-
 		// add user operation log
 		HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 				.getRequest();
@@ -395,7 +393,7 @@ public class WebController {
 			ip = req.getRemoteAddr();
 		}
 		itemService.addUserLog(userdata.getUserId(), ip, "관리자메뉴에서 회원정보 변경됨");
-		
+
 		// Get DB List
 		return showAdminUser("0", model); /* adminuser.jsp */
 	}
@@ -407,7 +405,7 @@ public class WebController {
 	public String myListProcess3(Model model, HttpServletRequest request) {
 		return myListProcess4("0", model, request);
 	}
-	
+
 	@RequestMapping(value = "/myinventorycontrol/{seq}", method = RequestMethod.GET)
 	public String myListProcess4(@PathVariable String seq, Model model, HttpServletRequest request) {
 		myListProcess(seq, model, request);
@@ -415,8 +413,6 @@ public class WebController {
 		model.addAttribute("requestedURL", "/myinventorycontrol");
 		return "myinventorycontrol"; /* myinventorycontrol.jsp */
 	}
-	
-	
 
 	/*
 	 * /mylist 내 자재정보
@@ -823,4 +819,14 @@ public class WebController {
 		return "redirect:mylist";
 	}
 
+	/*
+	 * dbcheck 페이지
+	 */
+	@RequestMapping("/dbcheck")
+	public String doDBcheck(Model model) {
+		String err = "[DB 연결성 확인됨]<br>\n";
+		String r = itemService.getPartsItemsRow();
+		model.addAttribute("errormsg", err + "(" + r + ")");
+		return "dbcheck";
+	}
 }
