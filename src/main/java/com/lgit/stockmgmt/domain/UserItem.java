@@ -16,6 +16,15 @@ public class UserItem {
 	private String userTeamname;
 	private int userLevel;
 	private int cartItems;
+	private int cartItemsOthers;
+
+	public int getCartItemsOthers() {
+		return cartItemsOthers;
+	}
+
+	public void setCartItemsOthers(int cartItemsOthers) {
+		this.cartItemsOthers = cartItemsOthers;
+	}
 
 	public int getCartItems() {
 		return cartItems;

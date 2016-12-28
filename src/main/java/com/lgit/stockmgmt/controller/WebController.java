@@ -433,6 +433,14 @@ public class WebController {
 		if (loginUser == null) {
 			System.out.println("/mylist process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println(
 				"[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /mylist process. req pagenum:" + seq);
@@ -484,6 +492,14 @@ public class WebController {
 		if (loginUser == null) {
 			System.out.println("/otherslist process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName()
 				+ "] /otherslist process. req pagenum:" + seq);
@@ -535,6 +551,14 @@ public class WebController {
 		if (loginUser == null) {
 			System.out.println("/shipreqlist process. no session info.  ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /shipreqlist process");
 
@@ -567,6 +591,14 @@ public class WebController {
 		if (loginUser == null) {
 			System.out.println("/addmyproject process. no session info.  ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /addmyproject process");
 
@@ -650,6 +682,15 @@ public class WebController {
 		if (loginUser == null) {
 			System.out.println("/addmyproject process. no session info.  ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
+
 		}
 		// Get data from Webbrowser
 		item.setPartProjectCode(request.getParameter("part-Project-Code"));
@@ -702,10 +743,12 @@ public class WebController {
 			return "login";
 		} else {
 			// update bagde counter(cart items)
-			int cartItemsCounter = itemService.getShipPartsListItemsCounter(loginUser.getUserId());
-			System.out.println(
-					"[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : " + cartItemsCounter);
-			loginUser.setCartItems(cartItemsCounter);
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println(
 				"[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /myparts process. req pagenum:" + seq);
@@ -789,6 +832,14 @@ public class WebController {
 		if (loginUser == null) {
 			System.out.println("/shipperlist process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /shipperlist process. ");
 
@@ -812,6 +863,14 @@ public class WebController {
 		if (loginUser == null) {
 			System.out.println("/helppage process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /shipperlist process. ");
 

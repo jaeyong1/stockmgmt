@@ -84,7 +84,7 @@ var rolekor ="";
 							<li class="active"><a href="/mylist">나의자재</a></li>
 							<li class="dropdown"><a href="#" class="dropdown-toggle"
 								data-toggle="dropdown" role="button" aria-haspopup="true"
-								aria-expanded="false">출고요청<span class="caret"></span></a>
+								aria-expanded="false">출고요청<span class="badge">${sessionScope.userLoginInfo.cartItems}</span><span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li><a href="/shipparts">출고요청 부품리스트</a></li>
 									<li><a href="/shipreq">출고요청서 작성</a></li>
@@ -93,7 +93,7 @@ var rolekor ="";
 							<li><a href="/otherslist">파트너자재</a></li>							
 							<li class="dropdown"><a href="#" class="dropdown-toggle"
 								data-toggle="dropdown" role="button" aria-haspopup="true"
-								aria-expanded="false">파트너출고요청<span class="caret"></span></a>
+								aria-expanded="false">파트너출고요청<span class="badge">${sessionScope.userLoginInfo.cartItemsOthers}</span><span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li><a href="/shipothersparts">출고요청 부품리스트</a></li>
 									<li><a href="/shipothersreq">출고요청서 작성</a></li>
@@ -128,7 +128,7 @@ var rolekor ="";
 								</c:when>
 							</c:choose>
 						</ul></li>
-						<li><a href="/shipparts">Box<span class="badge">${sessionScope.userLoginInfo.cartItems}</span></a></li>
+						
 				</ul>
 
 					

@@ -50,6 +50,14 @@ public class ShipController {
 		if (loginUser == null) {
 			System.out.println("/shipparts process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName()
 				+ "] /shipparts process. req pagenum:" + seq);
@@ -148,6 +156,14 @@ public class ShipController {
 		if (loginUser == null) {
 			System.out.println("/reqshippartsadd process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out
 				.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /reqshippartsadd process. ");
@@ -186,6 +202,14 @@ public class ShipController {
 		if (loginUser == null) {
 			System.out.println("/reqothersshippartsadd process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out
 				.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /reqshippartsadd process. ");
@@ -243,6 +267,14 @@ public class ShipController {
 		if (loginUser == null) {
 			System.out.println("/shipothersparts process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName()
 				+ "] /shipothersparts process. req pagenum:" + seq);
@@ -284,6 +316,14 @@ public class ShipController {
 		if (loginUser == null) {
 			System.out.println("/shipreq process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /shipreq process");
 
@@ -347,6 +387,14 @@ public class ShipController {
 		if (loginUser == null) {
 			System.out.println("/shipothersreq process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /shipothersreq process");
 
@@ -423,6 +471,14 @@ public class ShipController {
 		if (loginUser == null) {
 			System.out.println("/shipreqlist process. no session info.  ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /shipreqlist process");
 		final int rowsPer1Page = 15;
@@ -470,6 +526,14 @@ public class ShipController {
 		if (loginUser == null) {
 			System.out.println("/shipreqlist process. no session info.  ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 
 		int reqshipid = Integer.valueOf(request.getParameter("ship-Id"));
@@ -506,6 +570,14 @@ public class ShipController {
 		if (loginUser == null) {
 			System.out.println("/shipreqprocess/state2 process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state2 process");
 
@@ -554,6 +626,14 @@ public class ShipController {
 		if (loginUser == null) {
 			System.out.println("/shipreqprocess/state3 process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state3 process");
 
@@ -589,7 +669,7 @@ public class ShipController {
 			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
 			shipreqdata.setShipStateId(EShipState.STATE3_REQSHIPPING.getStateInt()); // move_to_3
 			shipreqdata.setShipRejectCause(request.getParameter("ship-RejectCause"));
-			shipreqdata.setShipDeliveredDateMethod(request.getParameter("ship-DeliveredDateMethod"));			
+			shipreqdata.setShipDeliveredDateMethod(request.getParameter("ship-DeliveredDateMethod"));
 
 			// Change DB query
 			itemService.stateMove2to3(shipreqdata.getShipId(), shipreqdata.getShipStateId(),
@@ -617,6 +697,14 @@ public class ShipController {
 		if (loginUser == null) {
 			System.out.println("/shipreqprocess/state4 process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state4 process");
 
@@ -629,10 +717,11 @@ public class ShipController {
 			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
 			shipreqdata.setShipStateId(EShipState.STATE4_LISTPRINTED.getStateInt()); // move_to_4
 			shipreqdata.setShipRejectCause(request.getParameter("ship-RejectCause"));
-			shipreqdata.setShipDeliveredDateMethod(request.getParameter("ship-DeliveredDateMethod"));	
+			shipreqdata.setShipDeliveredDateMethod(request.getParameter("ship-DeliveredDateMethod"));
 
 			// Change DB query
-			itemService.stateMove3to4(shipreqdata.getShipId(), shipreqdata.getShipStateId(), shipreqdata.getShipRejectCause(), shipreqdata.getShipDeliveredDateMethod());
+			itemService.stateMove3to4(shipreqdata.getShipId(), shipreqdata.getShipStateId(),
+					shipreqdata.getShipRejectCause(), shipreqdata.getShipDeliveredDateMethod());
 			// model.addAttribute("reqresult", shipreqdata.getShipId() + "'s
 			// data is added");
 			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state4 processed..");
@@ -657,6 +746,14 @@ public class ShipController {
 		if (loginUser == null) {
 			System.out.println("/shipreqprocess/state5 process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state5 process");
 
@@ -672,7 +769,8 @@ public class ShipController {
 			shipreqdata.setShipDeliveredDateMethod(request.getParameter("ship-DeliveredDateMethod"));
 
 			// Change DB query
-			itemService.stateMove4to5(shipreqdata.getShipId(), shipreqdata.getShipStateId(), shipreqdata.getShipRejectCause(), shipreqdata.getShipDeliveredDateMethod());
+			itemService.stateMove4to5(shipreqdata.getShipId(), shipreqdata.getShipStateId(),
+					shipreqdata.getShipRejectCause(), shipreqdata.getShipDeliveredDateMethod());
 			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state5 processed..");
 
 			// Get DB List
@@ -695,6 +793,14 @@ public class ShipController {
 		if (loginUser == null) {
 			System.out.println("/shipreqprocess/state6 reject process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state6 process");
 
@@ -707,10 +813,11 @@ public class ShipController {
 			shipreqdata.setShipId(Integer.valueOf(request.getParameter("ship-Id")));
 			shipreqdata.setShipStateId(EShipState.STATE6_REJSHIPPING.getStateInt()); // move_to_6
 			shipreqdata.setShipRejectCause(request.getParameter("ship-RejectCause"));
-			shipreqdata.setShipDeliveredDateMethod(request.getParameter("ship-DeliveredDateMethod"));	
+			shipreqdata.setShipDeliveredDateMethod(request.getParameter("ship-DeliveredDateMethod"));
 
 			// Change DB query
-			itemService.stateMove4to6(shipreqdata.getShipId(), shipreqdata.getShipStateId(), shipreqdata.getShipRejectCause(), shipreqdata.getShipDeliveredDateMethod());
+			itemService.stateMove4to6(shipreqdata.getShipId(), shipreqdata.getShipStateId(),
+					shipreqdata.getShipRejectCause(), shipreqdata.getShipDeliveredDateMethod());
 			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state6 processed..");
 
 			// Get DB List
@@ -721,9 +828,10 @@ public class ShipController {
 			shipreqdata.setShipStateId(EShipState.STATE6_REJSHIPPING.getStateInt()); // move_to_6
 			shipreqdata.setShipRejectCause(request.getParameter("ship-RejectCause"));
 			shipreqdata.setShipDeliveredDateMethod(request.getParameter("ship-DeliveredDateMethod"));
-			
+
 			// Change DB query
-			itemService.stateMove4to6(shipreqdata.getShipId(), shipreqdata.getShipStateId(),shipreqdata.getShipRejectCause(), shipreqdata.getShipDeliveredDateMethod()); // sql_reuse
+			itemService.stateMove4to6(shipreqdata.getShipId(), shipreqdata.getShipStateId(),
+					shipreqdata.getShipRejectCause(), shipreqdata.getShipDeliveredDateMethod()); // sql_reuse
 			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state6 processed..");
 
 			// Get DB List
@@ -736,7 +844,8 @@ public class ShipController {
 			shipreqdata.setShipStateId(EShipState.STATE6_REJSHIPPING.getStateInt()); // move_to_6
 
 			// Change DB query
-			itemService.stateMove4to6(shipreqdata.getShipId(), shipreqdata.getShipStateId(),shipreqdata.getShipRejectCause(), shipreqdata.getShipDeliveredDateMethod()); // sql_reuse
+			itemService.stateMove4to6(shipreqdata.getShipId(), shipreqdata.getShipStateId(),
+					shipreqdata.getShipRejectCause(), shipreqdata.getShipDeliveredDateMethod()); // sql_reuse
 			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state6 processed..");
 
 			// Get DB List
@@ -766,6 +875,14 @@ public class ShipController {
 		if (loginUser == null) {
 			System.out.println("/shipreqlist process. no session info.  ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /shipreqlist process");
 		final int rowsPer1Page = 15;
@@ -805,6 +922,14 @@ public class ShipController {
 		if (loginUser == null) {
 			System.out.println("/shipparts_removeall process. no session info.  ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /shipparts_removeall process");
 
@@ -825,6 +950,14 @@ public class ShipController {
 		if (loginUser == null) {
 			System.out.println("/shipothersparts_removeall process. no session info.  ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /shipothersparts_removeall process");
 
@@ -848,6 +981,14 @@ public class ShipController {
 		if (loginUser == null) {
 			System.out.println("/shipreqprocess/state1 process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state1 process");
 

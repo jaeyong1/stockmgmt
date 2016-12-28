@@ -249,6 +249,14 @@ public class LoginController {
 		if (loginUser == null) {
 			System.out.println("/logview process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /logview process");
 

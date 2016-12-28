@@ -144,19 +144,34 @@ public class ItemService {
 		return itemDao.queryShipPartsListItems(paramMap);
 	}
 
-	public int getShipPartsListItemsCounter(String loginID) {
-		Map<String, String> paramMap = new HashMap<String, String>();
-		paramMap.put("itemlistShipId", -1 + "");
-		paramMap.put("userId1", loginID);
+	public int getShipPartsListItemsCounter1(String loginID) {
+		Map<String, String> paramMap1 = new HashMap<String, String>();
+		paramMap1.put("itemlistShipId", -1 + "");
+		paramMap1.put("userId1", loginID);
 
-		int cnt = 0;
+		int cnt1 = 0;
 		try {
-			cnt = Integer.parseInt(itemDao.queryShipPartsListItemsCounter(paramMap));
+			cnt1 = Integer.parseInt(itemDao.queryShipPartsListItemsCounter(paramMap1)); // 내자재_출고대기
 		} catch (Exception e) {
 			System.out.println("[ERROR] User's cart item get FAILED!!!!");
-			cnt = 0;
+			cnt1 = 0;
 		}
-		return cnt;
+		return cnt1;
+	}
+
+	public int getShipPartsListItemsCounter2(String loginID) {
+		Map<String, String> paramMap2 = new HashMap<String, String>();
+		paramMap2.put("itemlistShipId", -2 + "");
+		paramMap2.put("userId1", loginID);
+
+		int cnt2 = 0;
+		try {
+			cnt2 = Integer.parseInt(itemDao.queryShipPartsListItemsCounter(paramMap2)); // 파트너자재_출고대기
+		} catch (Exception e) {
+			System.out.println("[ERROR] User's cart item get FAILED!!!!");
+			cnt2 = 0;
+		}
+		return cnt2;
 	}
 
 	public int changeShipPartsItem(ShipReqPartsItem shippartsdata) {

@@ -60,6 +60,14 @@ public class ExcelController {
 		if (loginUser == null) {
 			System.out.println("/shipreqlist process. no session info.  ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /shipreqlist process");
 
@@ -233,6 +241,14 @@ public class ExcelController {
 		if (loginUser == null) {
 			System.out.println("/ mypartsimport process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /mypartsimport process");
 		model.addAttribute("requestedURL", "/myparts");
@@ -251,6 +267,14 @@ public class ExcelController {
 		if (loginUser == null) {
 			System.out.println("/mypartsimport2 process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /mypartsimport2 process");
 		model.addAttribute("requestedURL", "/myparts/0");
@@ -267,6 +291,14 @@ public class ExcelController {
 		if (loginUser == null) {
 			System.out.println("/shippartsimport process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /shippartsimport process");
 		model.addAttribute("requestedURL", "/shipparts");
@@ -283,6 +315,14 @@ public class ExcelController {
 		if (loginUser == null) {
 			System.out.println("/shippartsimport process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /myinventorycontrolimport process");
 		model.addAttribute("requestedURL", "/myinventorycontrol");
@@ -299,6 +339,14 @@ public class ExcelController {
 		if (loginUser == null) {
 			System.out.println("/shipotherspartsimport process. no session info. return login.jsp");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /shipotherspartsimport process");
 		model.addAttribute("requestedURL", "/shipothersparts");
@@ -337,6 +385,14 @@ public class ExcelController {
 		if (loginUser == null) {
 			System.out.println("/mylistexport process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /mylistexport process");
 		model.addAttribute("requestedURL", "/mylist");
@@ -397,6 +453,14 @@ public class ExcelController {
 		if (loginUser == null) {
 			System.out.println("/myparts_export process. no session info. return login.jsp ");
 			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
 		System.out.println("[" + loginUser.getUserId() + "] /mylistexport process");
 		model.addAttribute("requestedURL", "/myparts");
