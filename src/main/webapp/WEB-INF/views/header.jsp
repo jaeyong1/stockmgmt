@@ -72,7 +72,8 @@ var rolekor ="";
 				<ul class="nav navbar-nav">
 
 					<c:choose>
-						<c:when test="${(3 == sessionScope.userLoginInfo.userLevel) || (6 == sessionScope.userLoginInfo.userLevel) }">
+						<c:when
+							test="${(3 == sessionScope.userLoginInfo.userLevel) || (6 == sessionScope.userLoginInfo.userLevel) }">
 
 							<li class="active"><a href="/shipreqlist">출고요청처리</a></li>
 							<li><a href="/myinventorycontrol">재물조사수행</a></li>
@@ -106,13 +107,13 @@ var rolekor ="";
 
 						</c:when>
 					</c:choose>
-					
+
 					<c:choose>
-						<c:when test="${ (6 == sessionScope.userLoginInfo.userLevel) }">						
+						<c:when test="${ (6 == sessionScope.userLoginInfo.userLevel) }">
 							<li><a href="/shipreqlist_admin">출고요청 전체조회</a></li>
 						</c:when>
 					</c:choose>
-					
+
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false">DB관리<span class="caret"></span></a>
@@ -137,6 +138,11 @@ var rolekor ="";
 							</c:choose>
 						</ul></li>
 
+					<c:choose>
+						<c:when test="${ (5 == sessionScope.userLoginInfo.userLevel) }">
+							<li><a href="/logview">회원정보로그뷰</a></li>
+						</c:when>
+					</c:choose>
 				</ul>
 
 
@@ -150,7 +156,7 @@ var rolekor ="";
 						</c:choose></li>
 					<li class="active"><c:choose>
 							<c:when test="${not empty sessionScope.userLoginInfo}">
-								<a href="logout">Logout</a>
+								<a href="/logout">Logout</a>
 							</c:when>
 							<c:otherwise>
 								<!-- 로그인이 필요함 -->
