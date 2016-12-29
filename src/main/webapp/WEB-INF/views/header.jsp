@@ -36,6 +36,8 @@ var rolekor ="";
 		document.forms["formlogin"].submit();
 		//var response = confirm("Login Continue");
 	}
+	
+
 </script>
 
 

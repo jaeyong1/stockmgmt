@@ -32,19 +32,68 @@
 
 	function addCart(id) {
 		console.log("addCart");
+		
+		chk = document.getElementsByName("chk");
+		console.log("total chkbox length:" + chk.length);
+		
+		var sendStr ="";
+		var i;
+		for (i = 0; i < chk.length; i++) {
+			if (chk[i].checked) {
+				console.log("checked index : " + i );
+				console.log("    part id : " + document.forms["form" + i].elements["part-Id"].value );
+				console.log("    name : " + document.forms["form" + i].elements["part-Name"].value );
+				console.log("    amount : " + document.forms["form" + i].elements["reqnum[]"].value );
+				console.log("    myURL : " + document.forms["form" + i].elements["requestedURL"].value );
+				console.log("    page num : " + document.forms["form" + i].elements["seq"].value );
+				
+				//to do: 잘 묶어서 던지고 받기.. spring에서 필요한 항목들 추려서... 
+				//
+				//
+				//
+				//
+				//
+				//
+				//
+				sendStr = sendStr +
+				document.forms["form" + i].elements["part-Id"].value + "|" +
+				document.forms["form" + i].elements["part-Name"].value + "|" +
+				document.forms["form" + i].elements["reqnum[]"].value  + "|" +
+				document.forms["form" + i].elements["requestedURL"].value + "|" +
+				document.forms["form" + i].elements["seq"].value + "|"
+			}
+		}
+		console.log(sendStr);
 		var nm = document.forms["form" + id].elements["part-Name"].value;
 		var response = confirm(nm + " 추가할까요?")
 		if (response) {
 			//do yes task
-			var title  = "Boxing..";
-  			var status = "toolbar=no,directories=no,scrollbars=no,resizable=no,status=no,menubar=no,width=240, height=200, top=200,left=200"; 
-  			window.open("", title,status); //popup
-  			document.forms["form" + id].target = title;
+			var title = "Boxing..";
+			var status = "toolbar=no,directories=no,scrollbars=no,resizable=no,status=no,menubar=no,width=240, height=200, top=200,left=200";
+			window.open("", title, status); //popup
+			document.forms["form" + id].target = title;
 			document.forms["form" + id].method = "post";
 			document.forms["form" + id].action = "${PostPageUrl}"; //"/reqshippartsadd"
 			document.forms["form" + id].submit();
 		} else {
 			//do no task
+		}
+	}
+
+	function changedValue(obj, id) {
+		console.log("changedValue id" + id + ", value :" + obj.value);
+		if (obj.value == 0) {
+			obj.style.backgroundColor = 'white';
+			chk = document.getElementsByName("chk");
+			chk[id].checked = false;
+		} else if (obj.value < 0) {
+			obj.style.backgroundColor = 'red';
+			chk = document.getElementsByName("chk");
+			chk[id].checked = false;
+		} else {
+			obj.style.backgroundColor = 'yellow';
+			chk = document.getElementsByName("chk");
+			chk[id].checked = true;
 		}
 	}
 </script>
@@ -70,7 +119,7 @@
 <form name="formSearchType">
 	<p align="right">
 		<!--  not use anymore-->
-<!-- 
+		<!-- 
 		&nbsp;<select name="srchtype" size="1">
 			<option selected value="projcode">프로젝트Code</option>
 			<option value="shipperid">출고담당자이름</option>
@@ -159,6 +208,7 @@
 			</center>
 		</th>
 	</tr>
+
 	<!-- DB 데이터 채움 (클래스 변수사용) -->
 	<c:forEach var="i" items="${items}" varStatus="status">
 
@@ -167,12 +217,11 @@
 
 				<td width="42">
 					<p>
-						&nbsp;
-						<!-- <input type="checkbox" name="chk[]" value='${i.partId}'
-							disabled=true> -->
-						<input type=hidden name=part-Id value='${i.partId}'>
-						<input type=hidden name=requestedURL value='${requestedURL}'>
-						<input type=hidden name=seq value='${seq}'>
+						&nbsp; <input type="checkbox" name="chk"
+							value="chk${status.index}" disabled=true> <input
+							type=hidden name=part-Id value='${i.partId}'> <input
+							type=hidden name=requestedURL value='${requestedURL}'> <input
+							type=hidden name=seq value='${seq}'>
 					</p>
 				</td>
 
@@ -198,7 +247,7 @@
 				</td>
 				<td width="112">
 					<center>
-					<input type=hidden name=part-Name value='${i.partName}'>
+						<input type=hidden name=part-Name value='${i.partName}'>
 						<p>${i.partName}</p>
 					</center>
 				</td>
@@ -220,7 +269,8 @@
 
 				<td width="140">
 					<p>
-						<input type="text" name="reqnum[]" value="0" size="4"> <input
+						<input type="text" name="reqnum[]" value="0" size="4"
+							onchange="changedValue(this, '${status.index}')"> <input
 							type="button" class="btn btn-primary btn-xs" value="Box"
 							name="submitbtn" OnClick="javascript:addCart('${status.index}');">
 					</p>
