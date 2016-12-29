@@ -130,6 +130,8 @@
 					<td width="135">
 						<p align="center">${i.partName}
 							<!-- ${i.itemlistPartId}  -->
+							<input type=hidden name=itemlist-PartId size=5
+								value='${i.itemlistPartId}'>
 						</p>
 					</td>
 					<td width="210">

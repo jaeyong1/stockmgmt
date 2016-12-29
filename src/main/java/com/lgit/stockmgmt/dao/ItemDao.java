@@ -178,6 +178,20 @@ public class ItemDao {
 		return sqlSession.selectList("queryShipReqListItemsByShipid", paramMap);
 	}
 
+	public String queryStockFromTBPart(Map<String, String> paramMap2) {
+		return sqlSession.selectOne("queryPartsStockFromTBPart", paramMap2);
+	}
+
+	public int updateStockToTBPart(Map<String, String> paramMap3) {
+		return sqlSession.update("updateStockToTBPart", paramMap3);
+
+	}
+
+	public int updatePlusStockToTBPart(Map<String, String> paramMap3) {
+		return sqlSession.update("updatePlusStockToTBPart", paramMap3);
+
+	}
+
 	public int updateMinusStockToTBPart(Map<String, String> paramMap3) {
 		return sqlSession.update("updateMinusStockToTBPart", paramMap3);
 
@@ -243,5 +257,10 @@ public class ItemDao {
 	public String queryShipPartsListItemsCounter(Map<String, String> paramMap) {
 		return sqlSession.selectOne("queryShipPartsListItemsCounter", paramMap);
 	}
+
+	public String queryItemlistAmountbyItemlistId(Map<String, String> paramMap) {
+		return sqlSession.selectOne("queryItemlistAmountbyItemlistId", paramMap);
+	}
+
 
 }

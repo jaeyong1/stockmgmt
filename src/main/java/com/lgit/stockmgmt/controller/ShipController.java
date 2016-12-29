@@ -81,11 +81,17 @@ public class ShipController {
 	public String removeShipParts(ShipReqPartsItem shippartsdata, Model model, HttpServletRequest request) {
 		// Get data from Web browser
 		shippartsdata.setItemlistId(Integer.valueOf(request.getParameter("itemlist-Id")));
+		shippartsdata.setItemlistPartId(Integer.valueOf(request.getParameter("itemlist-PartId")));
+		shippartsdata.setItemlistAmount(Integer.valueOf(request.getParameter("itemlist-Amount")));
 
 		// Change DB query
 		itemService.removeShipPartsItem(shippartsdata);
 		model.addAttribute("reqresult", shippartsdata.getItemlistId() + " is removed");
-		System.out.println("/reqshippartsremove processed.. Req ID:" + shippartsdata.getItemlistId());
+		System.out.println("/reqshippartsremove processed.. Req ID:" + shippartsdata.getItemlistId() + "(pid:"
+				+ shippartsdata.getItemlistPartId() + "," + shippartsdata.getItemlistAmount() + "ea)");
+
+		// Update total stock(카트에 담기면 총재고 변동, 추가수정사항)
+		itemService.increasePartStock(shippartsdata.getItemlistPartId(), shippartsdata.getItemlistAmount());
 
 		// Get DB List
 		return showShipparts("0", model, request); /* adminuser.jsp */
@@ -98,12 +104,20 @@ public class ShipController {
 	public String modifyShipParts(ShipReqPartsItem shippartsdata, Model model, HttpServletRequest request) {
 		// Get data from Web browser
 		shippartsdata.setItemlistId(Integer.valueOf(request.getParameter("itemlist-Id")));
+		shippartsdata.setItemlistPartId(Integer.valueOf(request.getParameter("itemlist-PartId")));
 		shippartsdata.setItemlistAmount(Integer.valueOf(request.getParameter("itemlist-Amount")));
+
+		// before change, get current cart value
+		int currentCartAmount = itemService.getAmountFromItemlist(shippartsdata.getItemlistId());
 
 		// Change DB query
 		itemService.changeShipPartsItem(shippartsdata);
 		model.addAttribute("reqresult", shippartsdata.getItemlistId() + "'s data is changed");
 		System.out.println("/reqshippartsmodify processed.. Req ID:" + shippartsdata.getItemlistId());
+
+		// Update total stock(카트에 담기면 총재고 변동, 추가수정사항)
+		int diff = currentCartAmount - shippartsdata.getItemlistAmount();
+		itemService.increasePartStock(shippartsdata.getItemlistPartId(), diff);
 
 		// Get DB List
 		return showShipparts("0", model, request); /* adminuser.jsp */
@@ -111,18 +125,25 @@ public class ShipController {
 
 	/*
 	 * /reqshippartsmodify_others 타인 장바구니 - 값수정
-	 * 
 	 */
 	@RequestMapping(value = "/reqshippartsmodify_others", method = RequestMethod.POST)
 	public String modifyShipPartsOthers(ShipReqPartsItem shippartsdata, Model model, HttpServletRequest request) {
 		// Get data from Web browser
 		shippartsdata.setItemlistId(Integer.valueOf(request.getParameter("itemlist-Id")));
+		shippartsdata.setItemlistPartId(Integer.valueOf(request.getParameter("itemlist-PartId")));
 		shippartsdata.setItemlistAmount(Integer.valueOf(request.getParameter("itemlist-Amount")));
+
+		// before change, get current cart value
+		int currentCartAmount = itemService.getAmountFromItemlist(shippartsdata.getItemlistId());
 
 		// Change DB query
 		itemService.changeShipPartsItem(shippartsdata);
 		model.addAttribute("reqresult", shippartsdata.getItemlistId() + "'s data is changed");
 		System.out.println("/reqshippartsmodify_others processed.. Req ID:" + shippartsdata.getItemlistId());
+
+		// Update total stock(카트에 담기면 총재고 변동, 추가수정사항)
+		int diff = currentCartAmount - shippartsdata.getItemlistAmount();
+		itemService.increasePartStock(shippartsdata.getItemlistPartId(), diff);
 
 		// Get DB List
 		return showShippartsOthers("0", model, request); /* adminuser.jsp */
@@ -136,11 +157,16 @@ public class ShipController {
 	public String removeShipPartsOthers(ShipReqPartsItem shippartsdata, Model model, HttpServletRequest request) {
 		// Get data from Web browser
 		shippartsdata.setItemlistId(Integer.valueOf(request.getParameter("itemlist-Id")));
+		shippartsdata.setItemlistPartId(Integer.valueOf(request.getParameter("itemlist-PartId")));
+		shippartsdata.setItemlistAmount(Integer.valueOf(request.getParameter("itemlist-Amount")));
 
 		// Change DB query
 		itemService.removeShipPartsItem(shippartsdata);
 		model.addAttribute("reqresult", shippartsdata.getItemlistId() + " is removed");
-		System.out.println("/reqshippartsremove processed.. Req ID:" + shippartsdata.getItemlistId());
+		System.out.println("/reqshippartsremove_others processed.. Req ID:" + shippartsdata.getItemlistId());
+
+		// Update total stock(카트에 담기면 총재고 변동, 추가수정사항)
+		itemService.increasePartStock(shippartsdata.getItemlistPartId(), shippartsdata.getItemlistAmount());
 
 		// Get DB List
 		return showShippartsOthers("0", model, request); /* adminuser.jsp */
@@ -179,6 +205,9 @@ public class ShipController {
 		model.addAttribute("reqresult", shippartsdata.getItemlistId() + "'s data is added");
 		System.out.println("/reqshippartsadd processed.. Req ID:" + shippartsdata.getItemlistId() + " reqNum:"
 				+ shippartsdata.getItemlistAmount());
+
+		// Update total stock(카트에 담기면 총재고 변동, 추가수정사항)
+		itemService.decreasePartStock(shippartsdata.getItemlistPartId(), shippartsdata.getItemlistAmount());
 
 		// Change DB query
 		// itemService.removeShipPartsItem(shippartsdata);
@@ -235,6 +264,9 @@ public class ShipController {
 		model.addAttribute("reqresult", "(" + shippartsdata.getItemlistPartId() + ")아이템 담기완료");
 		System.out.println("/reqothersshippartsadd processed.. Req ID:" + shippartsdata.getItemlistId() + " reqNum:"
 				+ shippartsdata.getItemlistAmount());
+
+		// Update total stock(카트에 담기면 총재고 변동, 추가수정사항)
+		itemService.decreasePartStock(shippartsdata.getItemlistPartId(), shippartsdata.getItemlistAmount());
 
 		// Change DB query
 		// itemService.removeShipPartsItem(shippartsdata);
@@ -934,7 +966,15 @@ public class ShipController {
 		System.out.println("[" + loginUser.getUserId() + "] /shipparts_removeall process");
 
 		///////////////////
-		// Query DB List
+		// Query DB List (아이템 삭제전 전체재고 되돌리기)
+		List<ShipReqPartsItem> items = itemService.getShipPartsListItems(-1, loginUser.getUserId());
+		for (ShipReqPartsItem item : items) {
+			int diff = item.getItemlistAmount();
+			itemService.increasePartStock(item.getItemlistPartId(), diff);
+		}
+
+		///////////////////
+		// Query DB List (CART안 항목 삭제)
 		itemService.deleteAllMyCartItems(loginUser.getUserId(), -1);
 		System.out.println("[" + loginUser.getUserId() + "] /shipparts_removeall process");
 
@@ -962,7 +1002,15 @@ public class ShipController {
 		System.out.println("[" + loginUser.getUserId() + "] /shipothersparts_removeall process");
 
 		///////////////////
-		// Query DB List
+		// Query DB List (아이템 삭제전 전체재고 되돌리기)
+		List<ShipReqPartsItem> items = itemService.getShipPartsListItems(-2, loginUser.getUserId());
+		for (ShipReqPartsItem item : items) {
+			int diff = item.getItemlistAmount();
+			itemService.increasePartStock(item.getItemlistPartId(), diff);
+		}
+
+		///////////////////
+		// Query DB List (CART안 항목 삭제)
 		itemService.deleteAllMyCartItems(loginUser.getUserId(), -2);
 		System.out.println("[" + loginUser.getUserId() + "] /shipothersparts_removeall process");
 
