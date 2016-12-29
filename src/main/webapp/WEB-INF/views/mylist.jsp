@@ -37,6 +37,7 @@
 		console.log("total chkbox length:" + chk.length);
 		
 		var sendStr ="";
+		var cnt = 0 ;
 		var i;
 		for (i = 0; i < chk.length; i++) {
 			if (chk[i].checked) {
@@ -46,7 +47,7 @@
 				console.log("    amount : " + document.forms["form" + i].elements["reqnum[]"].value );
 				console.log("    myURL : " + document.forms["form" + i].elements["requestedURL"].value );
 				console.log("    page num : " + document.forms["form" + i].elements["seq"].value );
-				
+				cnt = cnt + 1;
 				//to do: 잘 묶어서 던지고 받기.. spring에서 필요한 항목들 추려서... 
 				//
 				//
@@ -63,6 +64,16 @@
 				document.forms["form" + i].elements["seq"].value + "|"
 			}
 		}
+		var response = confirm(cnt + "건 추가할까요?")
+			//to do: 잘 묶어서 던지고 받기.. spring에서 필요한 항목들 추려서... 
+				//
+				//
+				//
+				//
+				//
+				//
+				// 갈라놓고..
+				
 		console.log(sendStr);
 		var nm = document.forms["form" + id].elements["part-Name"].value;
 		var response = confirm(nm + " 추가할까요?")
