@@ -518,7 +518,8 @@ public class ShipController {
 		///////////////////
 		// Query DB List
 		List<ShipReqItem> items;
-		if (loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt()) {
+		if ((loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt())
+				|| (loginUser.getUserLevel() == EUserLevel.Lv6_SHIPPERADMIN.getLevelInt())) {
 			System.out.println("query for 출고담당자");
 			items = itemService.getShipReqItemsForShipper(loginUser.getUserId());
 		} else {
@@ -545,6 +546,69 @@ public class ShipController {
 		model.addAttribute("eshipstate", eshipstate);
 
 		return "shipreqlist"; /* myreqpartlist.jsp */
+	}
+
+	/*
+	 * /shipreqlist_admin 요청서 리스트 뷰
+	 */
+
+	@RequestMapping(value = "/shipreqlist_admin", method = RequestMethod.GET)
+	public String getShipReqItemsAdmin2(Model model, HttpServletRequest request) {
+		return getShipReqItemsAdmin("0", model, request);
+	}
+
+	@RequestMapping(value = "/shipreqlist_admin/{seq}", method = RequestMethod.GET)
+	public String getShipReqItemsAdmin(@PathVariable String seq, Model model, HttpServletRequest request) {
+
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/shipreqlist process. no session info.  ");
+			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /shipreqlist process");
+		final int rowsPer1Page = 15;
+
+		///////////////////
+		// Query DB List
+		List<ShipReqItem> items;
+		if (loginUser.getUserLevel() == EUserLevel.Lv6_SHIPPERADMIN.getLevelInt()) {
+			System.out.println("query for 출고담당자 MASTER");
+			// items =
+			// itemService.getShipReqItemsForShipper(loginUser.getUserId());
+			items = itemService.getShipReqItemsForAdminShipper();
+		} else {
+			items = itemService.getShipReqItems(loginUser.getUserId());
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /shipreqlist process");
+		model.addAttribute("items", items);
+
+		// Choose current page data
+		PagedListHolder<ShipReqItem> paging = new PagedListHolder<ShipReqItem>(items);
+		paging.setPageSize(rowsPer1Page);
+		paging.setPage(Integer.parseInt(seq));
+		model.addAttribute("items", paging.getPageList());
+
+		// Add Page number information
+		model.addAttribute("pageNum", paging.getPageCount());
+		model.addAttribute("start", paging.getFirstLinkedPage());
+		model.addAttribute("end", paging.getLastLinkedPage());
+		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
+		// 인덱스..
+
+		// jsp에서 직접 한글화
+		List<String> eshipstate = EShipState.getKorList();
+		model.addAttribute("eshipstate", eshipstate);
+
+		return "shipreqlist_admin"; /* shipreqlist_admin.jsp */
 	}
 
 	/*
@@ -891,7 +955,7 @@ public class ShipController {
 	}
 
 	/*
-	 * /shipreqlist 요청서 리스트 뷰
+	 * /myconfirmshipreqlist 요청서 리스트 뷰
 	 */
 
 	@RequestMapping(value = "/myconfirmshipreqlist", method = RequestMethod.GET)
@@ -905,7 +969,7 @@ public class ShipController {
 		// session 확인
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
-			System.out.println("/shipreqlist process. no session info.  ");
+			System.out.println("/myconfirmshipreqlist process. no session info.  ");
 			return "login";
 		} else {
 			// update bagde counter(cart items)
@@ -916,7 +980,7 @@ public class ShipController {
 			loginUser.setCartItems(cartItemsCounter1);
 			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
-		System.out.println("[" + loginUser.getUserId() + "] /shipreqlist process");
+		System.out.println("[" + loginUser.getUserId() + "] /myconfirmshipreqlist process");
 		final int rowsPer1Page = 15;
 
 		///////////////////

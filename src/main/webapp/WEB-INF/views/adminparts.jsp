@@ -160,17 +160,28 @@
 
 		<tr>
 			<td width="143">
-				<p>비고</p>
+				<p>Maker</p>
 			</td>
 			<td width="328">
 				<p>
 					<input type="text" id="aa" name='part-Memo'>
 				</p>
 			</td>
+
+		</tr>
+		<tr>
+			<td width="143">
+				<p>MSL Level</p>
+			</td>
+			<td width="328">
+				<p>
+					<input type="text" id="aa" name='part-Msllevel'>
+				</p>
+			</td>
 		</tr>
 	</table>
-	<input type="button" value="신규" name="submitbtn1" class="btn btn-success btn-md" 
-		OnClick="javascript:newItem();">
+	<input type="button" value="신규" name="submitbtn1"
+		class="btn btn-success btn-md" OnClick="javascript:newItem();">
 </form>
 
 
@@ -209,7 +220,12 @@
 			<p>재고</p>
 		</td>
 		<td width="130">
-			<p>비고</p>
+			<p>Maker</p>
+		</td>
+		<td width="80">
+			<center>
+				<p>MSL Level</p>
+			</center>
 		</td>
 		<td width="130">
 			<p>&nbsp;</p>
@@ -224,7 +240,8 @@
 				</td>
 				<td>
 					<p>
-						<input name=part-Project-Code size="14" value='${i.partProjectCode}'>
+						<input name=part-Project-Code size="14"
+							value='${i.partProjectCode}'>
 					</p>
 				</td>
 				<td>
@@ -239,7 +256,8 @@
 				</td>
 				<td>
 					<p>
-						<input type=text name=part-Location size="14" value='${i.partLocation}'>
+						<input type=text name=part-Location size="14"
+							value='${i.partLocation}'>
 					</p>
 				</td>
 				<td>
@@ -249,7 +267,7 @@
 				</td>
 				<td>
 					<p>
-						<input type=text name=part-Stock  size="4" value='${i.partStock}'>
+						<input type=text name=part-Stock size="4" value='${i.partStock}'>
 					</p>
 				</td>
 				<td>
@@ -257,13 +275,20 @@
 						<input type=text name=part-Memo size="14" value='${i.partMemo}'>
 					</p>
 				</td>
-
+				<td>
+						<p>
+							<input type=text name=part-Msllevel size="8"
+								value='${i.partMsllevel}'>
+						</p>
+					</td>
 
 				<td>
 					<p>
-						<input type="button" value="수정" name="submitbtn" class="btn btn-primary btn-xs"
+						<input type="button" value="수정" name="submitbtn"
+							class="btn btn-primary btn-xs"
 							OnClick="javascript:modifyCheck2('${status.index}');"> <input
-							type="button" value="삭제" name="submitbtn2" class="btn btn-warning btn-xs"
+							type="button" value="삭제" name="submitbtn2"
+							class="btn btn-warning btn-xs"
 							OnClick="javascript:removeItem('${status.index}');">
 					</p>
 				</td>

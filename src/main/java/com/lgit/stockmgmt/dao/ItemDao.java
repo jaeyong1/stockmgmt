@@ -152,6 +152,10 @@ public class ItemDao {
 	public List<ShipReqItem> queryShipReqItemForShipper(Map<String, String> paramMap) {
 		return sqlSession.selectList("queryShipReqListItemsForShipper", paramMap);
 	}
+	public List<ShipReqItem> queryShipReqItemForAdminShipper(Map<String, String> paramMap) {
+		return sqlSession.selectList("queryShipReqListItemsForAdminShipper", paramMap);
+	}
+
 
 	public int updateShipReqState_ShipId(Map<String, String> paramMap2) {
 		return sqlSession.update("updateShipReqState_ShipId", paramMap2);

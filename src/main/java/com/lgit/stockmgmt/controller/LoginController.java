@@ -100,7 +100,7 @@ public class LoginController {
 			session.setAttribute("userLoginInfo", loginUser);
 		}
 
-		if (loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt()) {
+		if ((loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt()) || (loginUser.getUserLevel() == EUserLevel.Lv6_SHIPPERADMIN.getLevelInt())) {
 			mav.setViewName("redirect:shipreqlist");
 		} else {
 			mav.setViewName("redirect:mylist");

@@ -6,6 +6,7 @@
  */
 package com.lgit.stockmgmt.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +26,6 @@ import com.lgit.stockmgmt.domain.Item;
 import com.lgit.stockmgmt.domain.JoinDBItem;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ProjectItem;
-import com.lgit.stockmgmt.domain.ShipReqPartsItem;
 import com.lgit.stockmgmt.domain.UserItem;
 import com.lgit.stockmgmt.service.ItemService;
 
@@ -453,6 +453,9 @@ public class WebController {
 			items = itemService.getMyItemsByOwnerName(loginUser.getUserName());
 		} else if (loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt()) {
 			items = itemService.getShipperItemsByShipperName(loginUser.getUserName());
+		} else
+		{
+			items = new ArrayList<JoinDBItem>();
 		}
 
 		// Choose current page data

@@ -267,7 +267,7 @@
 							</c:when>
 				</c:choose> <!-- state 2 > 3 (coworker 승인/반려)--> <!-- state 4 > 5 (반려) --> <c:choose>
 					<c:when
-						test="${ ((reqshipinfo.shipCoworkerUserid == sessionScope.userLoginInfo.userId)&&(2 == reqshipinfo.shipStateId)) || ((3 == sessionScope.userLoginInfo.userLevel) && (4 == reqshipinfo.shipStateId)) }">
+						test="${ ((reqshipinfo.shipCoworkerUserid == sessionScope.userLoginInfo.userId)&&(2 == reqshipinfo.shipStateId)) || (((3 == sessionScope.userLoginInfo.userLevel) || (6 == sessionScope.userLoginInfo.userLevel)) && (4 == reqshipinfo.shipStateId)) }">
 
 				반려사유
 					</c:when>
@@ -278,7 +278,7 @@
 					<!-- state 4 > 5 (반려) -->
 					<c:choose>
 						<c:when
-							test="${ ((reqshipinfo.shipCoworkerUserid == sessionScope.userLoginInfo.userId)&&(2 == reqshipinfo.shipStateId)) || ((3 == sessionScope.userLoginInfo.userLevel) && (4 == reqshipinfo.shipStateId)) }">
+							test="${ ((reqshipinfo.shipCoworkerUserid == sessionScope.userLoginInfo.userId)&&(2 == reqshipinfo.shipStateId)) || (((3 == sessionScope.userLoginInfo.userLevel) || (6 == sessionScope.userLoginInfo.userLevel)) && (4 == reqshipinfo.shipStateId)) }">
 
 							<input type="text" name='ship-RejectCause'
 								value='${reqshipinfo.shipRejectCause}'>
@@ -302,7 +302,7 @@
 					<!-- state 4 > 5 (승인) -->
 					<c:choose>
 						<c:when
-							test="${(3 == sessionScope.userLoginInfo.userLevel) && (4 == reqshipinfo.shipStateId) }">
+							test="${((3 == sessionScope.userLoginInfo.userLevel) || (6 == sessionScope.userLoginInfo.userLevel)) && (4 == reqshipinfo.shipStateId) }">
 
 							<input type="text" name='ship-DeliveredDateMethod'
 								value='${reqshipinfo.shipDeliveredDateMethod}'>
@@ -434,7 +434,7 @@
 
 <c:choose>
 	<c:when
-		test="${(3 == sessionScope.userLoginInfo.userLevel) && (3 == reqshipinfo.shipStateId) }">
+		test="${((3 == sessionScope.userLoginInfo.userLevel) || (6 == sessionScope.userLoginInfo.userLevel)) && (3 == reqshipinfo.shipStateId) }">
 		<input type="button" value="출고접수완료" name="submitbtn1"
 			class="btn btn-primary btn-md" OnClick="javascript:shipperChecked();">&nbsp;&nbsp;
 	</c:when>
@@ -443,7 +443,7 @@
 <!-- state 4 > 5 출고자 출고완료-->
 <c:choose>
 	<c:when
-		test="${(3 == sessionScope.userLoginInfo.userLevel) && (4 == reqshipinfo.shipStateId) }">
+		test="${((3 == sessionScope.userLoginInfo.userLevel) || (6 == sessionScope.userLoginInfo.userLevel)) && (4 == reqshipinfo.shipStateId) }">
 		<input type="button" value="출고완료" name="submitbtn2"
 			class="btn btn-primary btn-md" OnClick="javascript:shipperAccept();">&nbsp;&nbsp;
 	</c:when>
@@ -452,7 +452,7 @@
 <!-- state 4 > 6 -->
 <c:choose>
 	<c:when
-		test="${(3 == sessionScope.userLoginInfo.userLevel) && (4 == reqshipinfo.shipStateId) }">
+		test="${((3 == sessionScope.userLoginInfo.userLevel) || (6 == sessionScope.userLoginInfo.userLevel)) && (4 == reqshipinfo.shipStateId) }">
 		<input type="button" value="출고요청반려" name="submitbtn3"
 			class="btn btn-primary btn-md" OnClick="javascript:shipperRej();">&nbsp;&nbsp;
 	</c:when>

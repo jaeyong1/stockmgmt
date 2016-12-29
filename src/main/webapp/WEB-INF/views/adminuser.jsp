@@ -162,7 +162,7 @@
 		</tr>
 		<tr>
 			<td width="143">
-				<p>level(숫자로..)</p>
+				<p>Level</p>
 			</td>
 			<td width="328">
 				<p>
@@ -172,15 +172,16 @@
 						<option selected value="1">==선택하세요==</option>
 						<option value="2">개발담당자</option>
 						<option value="3">출고담당자</option>
-						<option value="4">손님(입출고권한없음)</option>
-						<option value="5">관리자</option>
+						<option value="4">손님(입출고권한없음,탈퇴용)</option>
+						<option value="5">시스템관리자</option>
+						<option value="6">출고담당자.관리자</option>
 					</select>
 				</p>
 			</td>
 		</tr>
 	</table>
-	<input type="button" value="신규가입" name="submitbtn1" class="btn btn-success btn-md" 
-		OnClick="javascript:newUser();">
+	<input type="button" value="신규가입" name="submitbtn1"
+		class="btn btn-success btn-md" OnClick="javascript:newUser();">
 </form>
 
 
@@ -193,6 +194,12 @@
 <p>&nbsp;</p>
 <h5>
 	<b>[회원정보 수정]</b>
+</h5>
+
+<h5>
+	Level 2: 개발담당자 / Level 3: 출고담당자 / Level 4: 손님(탈퇴용) / Level 5: 시스템관리자 /
+	Level 6: 출고담당자.관리자
+	<p>
 </h5>
 <table border="1">
 	<tr>
@@ -210,7 +217,7 @@
 			<p>team</p>
 		</td>
 		<td width="199">
-			<p>level</p>
+			<p>Level</p>
 		</td>
 		<td width="199">
 			<p>&nbsp;</p>
@@ -252,9 +259,11 @@
 					<p>
 
 
-						<input type="button" value="수정" class="btn btn-primary btn-xs"  name="submitbtn"
+						<input type="button" value="수정" class="btn btn-primary btn-xs"
+							name="submitbtn"
 							OnClick="javascript:modifyCheck2('${status.index}');"> <input
-							type=button name="formbutton2" value="비번초기화" class="btn btn-warning btn-xs" 
+							type=button name="formbutton2" value="비번초기화"
+							class="btn btn-warning btn-xs"
 							OnClick="javascript:ResetPassword('${status.index}');">
 					</p>
 

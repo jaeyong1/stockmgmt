@@ -9,7 +9,8 @@ public enum EUserLevel {
 	Lv2_DEV(2, "개발담당자"),
 	Lv3_SHIPPER(3, "출고담당자"),
 	Lv4_GUEST(4, "손님"), 
-	Lv5_ADMIN(5, "관리자");
+	Lv5_ADMIN(5, "관리자"),
+	Lv6_SHIPPERADMIN(6, "출고업무-관리자");
 
 	private int curr = 0;
 	private String korcurr = "";
@@ -43,6 +44,8 @@ public enum EUserLevel {
 			return EUserLevel.Lv4_GUEST.getLevelKor();
 		case 5:
 			return EUserLevel.Lv5_ADMIN.getLevelKor();
+		case 6:
+			return EUserLevel.Lv6_SHIPPERADMIN.getLevelKor();
 		
 		default:
 			return "잘못된 데이터";
@@ -57,6 +60,7 @@ public enum EUserLevel {
 			add(EUserLevel.Lv3_SHIPPER.getLevelKor());
 			add(EUserLevel.Lv4_GUEST.getLevelKor());
 			add(EUserLevel.Lv5_ADMIN.getLevelKor());
+			add(EUserLevel.Lv6_SHIPPERADMIN.getLevelKor());
 
 		}
 	};

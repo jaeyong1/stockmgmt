@@ -72,7 +72,7 @@ var rolekor ="";
 				<ul class="nav navbar-nav">
 
 					<c:choose>
-						<c:when test="${(3 == sessionScope.userLoginInfo.userLevel) }">
+						<c:when test="${(3 == sessionScope.userLoginInfo.userLevel) || (6 == sessionScope.userLoginInfo.userLevel) }">
 
 							<li class="active"><a href="/shipreqlist">출고요청처리</a></li>
 							<li><a href="/myinventorycontrol">재물조사수행</a></li>
@@ -84,24 +84,32 @@ var rolekor ="";
 							<li class="active"><a href="/mylist">나의자재</a></li>
 							<li class="dropdown"><a href="#" class="dropdown-toggle"
 								data-toggle="dropdown" role="button" aria-haspopup="true"
-								aria-expanded="false">출고요청<span class="badge">${sessionScope.userLoginInfo.cartItems}</span><span class="caret"></span></a>
+								aria-expanded="false">출고요청<span class="badge">${sessionScope.userLoginInfo.cartItems}</span><span
+									class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li><a href="/shipparts">출고요청 부품리스트</a></li>
 									<li><a href="/shipreq">출고요청서 작성</a></li>
 								</ul></li>
 							<li><a href="/shipreqlist">출고진행상황</a></li>
-							<li><a href="/otherslist">파트너자재</a></li>							
+							<li><a href="/otherslist">파트너자재</a></li>
 							<li class="dropdown"><a href="#" class="dropdown-toggle"
 								data-toggle="dropdown" role="button" aria-haspopup="true"
-								aria-expanded="false">파트너출고요청<span class="badge">${sessionScope.userLoginInfo.cartItemsOthers}</span><span class="caret"></span></a>
+								aria-expanded="false">파트너출고요청<span class="badge">${sessionScope.userLoginInfo.cartItemsOthers}</span><span
+									class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li><a href="/shipothersparts">출고요청 부품리스트</a></li>
 									<li><a href="/shipothersreq">출고요청서 작성</a></li>
 									<li role="separator" class="divider"></li>
 									<li><a href="/myconfirmshipreqlist">파트너출고 승인하기</a></li>
 								</ul></li>
-								
-							
+
+
+						</c:when>
+					</c:choose>
+					
+					<c:choose>
+						<c:when test="${ (6 == sessionScope.userLoginInfo.userLevel) }">						
+							<li><a href="/shipreqlist_admin">출고요청 전체조회</a></li>
 						</c:when>
 					</c:choose>
 					
@@ -128,16 +136,16 @@ var rolekor ="";
 								</c:when>
 							</c:choose>
 						</ul></li>
-						
+
 				</ul>
 
-					
+
 
 				<ul class="nav navbar-nav navbar-right">
 					<li><c:choose>
 							<c:when test="${not empty sessionScope.userLoginInfo}">
 								<c:out value="${sessionScope.userLoginInfo.userName}" />님 로그인중
-								<div id="userinfo"></div>								
+								<div id="userinfo"></div>
 							</c:when>
 						</c:choose></li>
 					<li class="active"><c:choose>

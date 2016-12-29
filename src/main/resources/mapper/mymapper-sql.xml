@@ -24,7 +24,7 @@
 		SELECT
 		`part_id`,
 		`part_project_code`, `part_name`, `part_desc`, `part_location`,
-		`part_cost`, `part_stock`, `part_memo`, `part_mlslevel`
+		`part_cost`, `part_stock`, `part_memo`, `part_msllevel`
 		FROM
 		tb_part
 		order by part_id desc
@@ -634,6 +634,30 @@
 		DESC;
 	</select>
 
+	<select id="queryShipReqListItemsForAdminShipper" parameterType="String"
+		resultMap="ShipReqItemMap">
+		SELECT
+		*
+		FROM
+		tb_shipreq
+		INNER JOIN (tb_shipstate, tb_project,
+		tb_user)
+		WHERE
+		tb_shipreq.`ship_state_id` = tb_shipstate.`shipstate_id`
+		AND
+		tb_shipreq.`ship_project_code` = tb_project.`project_code`
+		AND
+		tb_project.`project_shipper_id` = tb_user.`user_id`
+		AND
+		(`ship_state_id` = 3
+		or `ship_state_id` = 4
+		or `ship_state_id` = 5
+		or
+		`ship_state_id` = 6)	
+		ORDER BY
+		ship_id
+		DESC;
+	</select>
 
 	<update id="updateShipReqState_ShipId" parameterType="String">
 		UPDATE
