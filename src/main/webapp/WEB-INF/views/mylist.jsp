@@ -31,11 +31,15 @@
 	}
 
 	function addCart(id) {
-		console.log("담기");
-		var nm = document.forms["form" + id].elements["part-Id"].value;
-		var response = confirm(nm + "데이터 추가할까요?")
+		console.log("addCart");
+		var nm = document.forms["form" + id].elements["part-Name"].value;
+		var response = confirm(nm + " 추가할까요?")
 		if (response) {
 			//do yes task
+			var title  = "Boxing..";
+  			var status = "toolbar=no,directories=no,scrollbars=no,resizable=no,status=no,menubar=no,width=240, height=200, top=200,left=200"; 
+  			window.open("", title,status); //popup
+  			document.forms["form" + id].target = title;
 			document.forms["form" + id].method = "post";
 			document.forms["form" + id].action = "${PostPageUrl}"; //"/reqshippartsadd"
 			document.forms["form" + id].submit();
@@ -167,6 +171,8 @@
 						<!-- <input type="checkbox" name="chk[]" value='${i.partId}'
 							disabled=true> -->
 						<input type=hidden name=part-Id value='${i.partId}'>
+						<input type=hidden name=requestedURL value='${requestedURL}'>
+						<input type=hidden name=seq value='${seq}'>
 					</p>
 				</td>
 
@@ -192,6 +198,7 @@
 				</td>
 				<td width="112">
 					<center>
+					<input type=hidden name=part-Name value='${i.partName}'>
 						<p>${i.partName}</p>
 					</center>
 				</td>

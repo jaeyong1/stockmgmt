@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lgit.stockmgmt.domain.EShipState;
 import com.lgit.stockmgmt.domain.EUserLevel;
@@ -173,7 +174,7 @@ public class ShipController {
 	}
 
 	/*
-	 * /shipparts/add
+	 * /shipparts/add (WITH POPUP)
 	 */
 	@RequestMapping(value = "/reqshippartsadd", method = RequestMethod.POST)
 	public String addShipParts(ShipReqPartsItem shippartsdata, Model model, HttpServletRequest request) {
@@ -198,7 +199,36 @@ public class ShipController {
 		shippartsdata.setUserId(loginUser.getUserId());
 		shippartsdata.setItemlistShipId(-1); // -1 은 아직 장바구니안에 아직대기
 		shippartsdata.setItemlistPartId(Integer.valueOf(request.getParameter("part-Id")));
+		String pn = request.getParameter("part-Name");
 		shippartsdata.setItemlistAmount(Integer.valueOf(request.getParameter("reqnum[]")));
+
+		// get inbox requested page info
+		String requestedURL = request.getParameter("requestedURL");
+		String requestedSeq = request.getParameter("seq");
+		String requestedFullURL = requestedURL + "/" + requestedSeq;
+
+		// Validation check
+		int failcause = itemService.isValidItemForMyCart(loginUser.getUserId(), shippartsdata.getItemlistPartId(),
+				shippartsdata.getItemlistAmount());
+		if (failcause == 1) {
+			String errmsgs = "[수량입력오류]" + pn + "의 요청량이 0!!";
+			model.addAttribute("popupclosemsg", errmsgs);
+			System.out.println(errmsgs);
+			model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
+			return "closememoveto";
+		} else if (failcause == 2) {
+			String errmsgs = "[중복담기오류]" + pn + "이 이미 존재합니다.";
+			model.addAttribute("popupclosemsg", errmsgs);
+			System.out.println(errmsgs);
+			model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
+			return "closememoveto";
+		} else if (failcause == 3) {
+			String errmsgs = "[잔여재고오류]" + pn + "의 수량이 부족합니다.";
+			model.addAttribute("popupclosemsg", errmsgs);
+			System.out.println(errmsgs);
+			model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
+			return "closememoveto";
+		}
 
 		// Change DB query
 		itemService.addShipPartsItem(shippartsdata);
@@ -217,7 +247,11 @@ public class ShipController {
 																// shippartsdata.getItemlistId());
 
 		// Get DB List
-		return showShipparts("0", model, request); /* adminuser.jsp */
+
+		// [before main win]return showShipparts("0", model, request);
+		// [after popup]
+		model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
+		return "closememoveto";
 	}
 
 	// == 파트너 출고부품 추가
@@ -247,16 +281,51 @@ public class ShipController {
 		shippartsdata.setUserId(loginUser.getUserId());
 		shippartsdata.setItemlistShipId(-2); // -2 은 아직 장바구니안에 아직대기. 파트너용 부품
 		shippartsdata.setItemlistPartId(Integer.valueOf(request.getParameter("part-Id")));
+		String pn = request.getParameter("part-Name");
 		shippartsdata.setItemlistAmount(Integer.valueOf(request.getParameter("reqnum[]")));
+
+		// get inbox requested page info
+		String requestedURL = request.getParameter("requestedURL");
+		String requestedSeq = request.getParameter("seq");
+		String requestedFullURL = requestedURL + "/" + requestedSeq;
+
+		// Validation check
+		int failcause = itemService.isValidItemForOthersCart(loginUser.getUserId(), shippartsdata.getItemlistPartId(),
+				shippartsdata.getItemlistAmount());
+		if (failcause == 1) {
+			String errmsgs = "[수량입력오류]" + pn + "의 요청량이 0!!";
+			model.addAttribute("popupclosemsg", errmsgs);
+			System.out.println(errmsgs);
+			model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
+			return "closememoveto";
+		} else if (failcause == 2) {
+			String errmsgs = "[중복담기오류]" + pn + "이 이미 존재합니다.";
+			model.addAttribute("popupclosemsg", errmsgs);
+			System.out.println(errmsgs);
+			model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
+			return "closememoveto";
+		} else if (failcause == 3) {
+			String errmsgs = "[잔여재고오류]" + pn + "의 수량이 부족합니다.";
+			model.addAttribute("popupclosemsg", errmsgs);
+			System.out.println(errmsgs);
+			model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
+			return "closememoveto";
+		}
 
 		// 해당 PartsId를 카트에담을수 있는지
 		boolean isValidItem = itemService.isVaildOthersCartItem(Integer.valueOf(request.getParameter("part-Id")),
 				loginUser.getUserId());
 
 		if (!isValidItem) {
-			model.addAttribute("reqresult",
-					"[담기실패]<br> 현재 출고요청 준비중인 아이템과 같은 개발담당자의 아이템만 담을 수 있습니다.<br> 현재 담겨있는 Item을 출고요청 후에 다른 개발담당자의 아이템을 담아주세요.<br>");
-			return showShippartsOthers("0", model, request);
+			// model.addAttribute("reqresult","[담기실패]<br> 현재 출고요청 준비중인 아이템과 같은
+			// 개발담당자의 아이템만 담을 수 있습니다.<br> 현재 담겨있는 Item을 출고요청 후에 다른 개발담당자의 아이템을
+			// 담아주세요.<br>");
+			// return showShippartsOthers("0", model, request);
+			String errmsgs = "[담기실패]<br> 현재 출고요청 준비중인 아이템과 같은 개발담당자의 아이템만 담을 수 있습니다.<br> 현재 담겨있는 Item을 출고요청 후에 다른 개발담당자의 아이템을 담아주세요.<br>";
+			model.addAttribute("popupclosemsg", errmsgs);
+			System.out.println(errmsgs);
+			model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
+			return "closememoveto";
 		}
 
 		// Change DB query
@@ -276,13 +345,14 @@ public class ShipController {
 																	// shippartsdata.getItemlistId());
 
 		// Get DB List
-		return showShippartsOthers("0", model, request); /* adminuser.jsp */
-
-		/// test
+		// [before main win]return showShippartsOthers("0", model, request);
+		// [after popup]
+		model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
+		return "closememoveto";
 	}
 
 	/*
-	 * /shipparts 파트너출고요청 부품리스트(장바구니)
+	 * /shipothersparts 파트너출고요청 부품리스트(장바구니)
 	 */
 	@RequestMapping(value = "/shipothersparts", method = RequestMethod.GET)
 	public String showShippartsOthers2(Model model, HttpServletRequest request) {
@@ -316,7 +386,7 @@ public class ShipController {
 		///////////////////
 		// Query DB List
 		List<ShipReqPartsItem> items = itemService.getShipPartsListItems(-2, loginUser.getUserId());
-		System.out.println("[" + loginUser.getUserId() + "] /shipparts process");
+		System.out.println("[" + loginUser.getUserId() + "] /shipothersparts process");
 		model.addAttribute("items", items);
 		/*
 		 * // Choose current page data PagedListHolder<UserItem> paging = new
@@ -649,7 +719,7 @@ public class ShipController {
 		// Query DB List
 		List<ShipReqPartsItem> items = itemService.getShipPartsListItems(reqshipid,
 				main_items.get(0).getShipRequestorId());
-		System.out.println("[" + loginUser.getUserId() + "] /shipparts process");
+		System.out.println("[" + loginUser.getUserId() + "] /viewshipreq process");
 		model.addAttribute("items", items);
 
 		return "viewshipreq";

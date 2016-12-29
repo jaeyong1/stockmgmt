@@ -316,14 +316,13 @@ public class ItemService {
 		paramMap.put("UserId", userId);
 		return itemDao.queryShipReqItemForShipper(paramMap);
 	}
-	
 
 	public List<ShipReqItem> getShipReqItemsForAdminShipper() {
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("nothing", null);
 		return itemDao.queryShipReqItemForAdminShipper(paramMap);
 	}
-	
+
 	public int stateMove3to4(int shipId, int shipStateId, String shipRejectCause, String shipDeliveredDateMethod) {
 		Map<String, String> paramMap2 = new HashMap<String, String>();
 		paramMap2.put("shipId", String.valueOf(shipId));
@@ -918,5 +917,58 @@ public class ItemService {
 		return Integer.valueOf(amount);
 
 	}
+
+	public int isValidItemForMyCart(String userId, int itemlistPartId, int reqAmount) {
+		// 출고요청수량 0 입력
+		if (reqAmount == 0) {
+			return 1;
+		}
+
+		// 중복 생성 체크
+		boolean exist = false;
+		for (ShipReqPartsItem shipReqPartsItem : getShipPartsListItems(-1, userId)) {
+			if (Integer.valueOf(itemlistPartId) == shipReqPartsItem.getItemlistPartId()) {
+				exist = true;
+			}
+
+		}
+		if (exist)
+			return 2;
+
+		// 수량 부족 체크
+		int currAm = getPartStock(itemlistPartId);
+		if (reqAmount > currAm) {
+			return 3;
+		}
+
+		return 0;
+	}
+
+	public int isValidItemForOthersCart(String userId, int itemlistPartId, int reqAmount) {
+		// 출고요청수량 0 입력
+		if (reqAmount == 0) {
+			return 1;
+		}
+
+		// 중복 생성 체크
+		boolean exist = false;
+		for (ShipReqPartsItem shipReqPartsItem : getShipPartsListItems(-2, userId)) {
+			if (Integer.valueOf(itemlistPartId) == shipReqPartsItem.getItemlistPartId()) {
+				exist = true;
+			}
+
+		}
+		if (exist)
+			return 2;
+
+		// 수량 부족 체크
+		int currAm = getPartStock(itemlistPartId);
+		if (reqAmount > currAm) {
+			return 3;
+		}
+
+		return 0;
+	}
+	
 
 }

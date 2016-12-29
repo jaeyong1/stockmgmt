@@ -468,6 +468,7 @@ public class WebController {
 		model.addAttribute("pageNum", paging.getPageCount());
 		model.addAttribute("start", paging.getFirstLinkedPage());
 		model.addAttribute("end", paging.getLastLinkedPage());
+		model.addAttribute("seq", seq);
 		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
 		// 인덱스..
 
@@ -522,6 +523,7 @@ public class WebController {
 		model.addAttribute("pageNum", paging.getPageCount());
 		model.addAttribute("start", paging.getFirstLinkedPage());
 		model.addAttribute("end", paging.getLastLinkedPage());
+		model.addAttribute("seq", seq);
 		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
 		// 인덱스..
 
