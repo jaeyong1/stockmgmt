@@ -2,6 +2,7 @@ package com.lgit.stockmgmt.controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -195,61 +196,83 @@ public class ShipController {
 		System.out
 				.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /reqshippartsadd process. ");
 
+		// Local variable
+		String[] reqArray;
+		int i; // for loop
+		String requestedFullURL = "";
+		List<String> errorlog = new ArrayList<String>();
+
 		// Get data from Web browser
-		shippartsdata.setUserId(loginUser.getUserId());
-		shippartsdata.setItemlistShipId(-1); // -1 은 아직 장바구니안에 아직대기
-		shippartsdata.setItemlistPartId(Integer.valueOf(request.getParameter("part-Id")));
-		String pn = request.getParameter("part-Name");
-		shippartsdata.setItemlistAmount(Integer.valueOf(request.getParameter("reqnum[]")));
+		String reqInfoStr = request.getParameter("reqInfoStr");
+		int numOfMultiReq = Integer.valueOf(request.getParameter("reqInfoStrLength"));
+		System.out.println("Items:" + numOfMultiReq + ", reqInfo : " + reqInfoStr);
 
-		// get inbox requested page info
-		String requestedURL = request.getParameter("requestedURL");
-		String requestedSeq = request.getParameter("seq");
-		String requestedFullURL = requestedURL + "/" + requestedSeq;
+		// Parsing String Data
+		reqArray = reqInfoStr.split("[|]");
 
-		// Validation check
-		int failcause = itemService.isValidItemForMyCart(loginUser.getUserId(), shippartsdata.getItemlistPartId(),
-				shippartsdata.getItemlistAmount());
-		if (failcause == 1) {
-			String errmsgs = "[수량입력오류]" + pn + "의 요청량이 0!!";
-			model.addAttribute("popupclosemsg", errmsgs);
-			System.out.println(errmsgs);
-			model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
-			return "closememoveto";
-		} else if (failcause == 2) {
-			String errmsgs = "[중복담기오류]" + pn + "이 이미 존재합니다.";
-			model.addAttribute("popupclosemsg", errmsgs);
-			System.out.println(errmsgs);
-			model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
-			return "closememoveto";
-		} else if (failcause == 3) {
-			String errmsgs = "[잔여재고오류]" + pn + "의 수량이 부족합니다.";
-			model.addAttribute("popupclosemsg", errmsgs);
-			System.out.println(errmsgs);
-			model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
-			return "closememoveto";
-		}
+		// Process each item
+		for (i = 0; i < numOfMultiReq; i++) {
+			boolean isError = false;
+			shippartsdata.setUserId(loginUser.getUserId());
+			shippartsdata.setItemlistShipId(-1); // -1 은 아직 장바구니안에 아직대기
+			shippartsdata.setItemlistPartId(Integer.valueOf(reqArray[(i * 5) + 0]));
+			String pn = reqArray[(i * 5) + 1];
+			shippartsdata.setItemlistAmount(Integer.valueOf(reqArray[(i * 5) + 2]));
 
-		// Change DB query
-		itemService.addShipPartsItem(shippartsdata);
-		model.addAttribute("reqresult", shippartsdata.getItemlistId() + "'s data is added");
-		System.out.println("/reqshippartsadd processed.. Req ID:" + shippartsdata.getItemlistId() + " reqNum:"
-				+ shippartsdata.getItemlistAmount());
+			// get inbox requested page info
+			String requestedURL = reqArray[(i * 5) + 3];
+			String requestedSeq = reqArray[(i * 5) + 4];
+			requestedFullURL = requestedURL + "/" + requestedSeq;
 
-		// Update total stock(카트에 담기면 총재고 변동, 추가수정사항)
-		itemService.decreasePartStock(shippartsdata.getItemlistPartId(), shippartsdata.getItemlistAmount());
+			// Validation check
+			int failcause = itemService.isValidItemForMyCart(loginUser.getUserId(), shippartsdata.getItemlistPartId(),
+					shippartsdata.getItemlistAmount());
 
-		// Change DB query
-		// itemService.removeShipPartsItem(shippartsdata);
-		// model.addAttribute("reqresult", shippartsdata.getItemlistId() + " is
-		// removed");
-		System.out.println("/reqshippartsadd processed.. "); // Req ID:" +
-																// shippartsdata.getItemlistId());
+			if (failcause == 1) {
+				errorlog.add("[수량입력오류]" + pn + "의 요청량이 0!!");
+				isError = true;
+
+			} else if (failcause == 2) {
+				errorlog.add("[중복담기오류]" + pn + "이 이미 존재합니다.");
+				isError = true;
+
+			} else if (failcause == 3) {
+				errorlog.add("[잔여재고오류]" + pn + "의 수량이 부족합니다.");
+				isError = true;
+
+			}
+
+			if (!isError) {
+				// Change DB query
+				itemService.addShipPartsItem(shippartsdata);
+				model.addAttribute("reqresult", shippartsdata.getItemlistId() + "'s data is added");
+				System.out.println("/reqshippartsadd processed.. Req ID:" + shippartsdata.getItemlistId() + " reqNum:"
+						+ shippartsdata.getItemlistAmount());
+
+				// Update total stock(카트에 담기면 총재고 변동, 추가수정사항)
+				itemService.decreasePartStock(shippartsdata.getItemlistPartId(), shippartsdata.getItemlistAmount());
+
+				// Change DB query
+				// itemService.removeShipPartsItem(shippartsdata);
+				// model.addAttribute("reqresult", shippartsdata.getItemlistId()
+				// + "
+				// is
+				// removed");
+				System.out.println("/reqshippartsadd processed.. "); // Req ID:"
+																		// +
+																		// shippartsdata.getItemlistId());
+			}
+		} // for per ONE req item
 
 		// Get DB List
+		if (errorlog.size() != 0) {
+			String errmsgs = "< 에러발생 " + errorlog.size() + "건 >\\r\\n";
+			// make error message
+			for (String e : errorlog)
+				errmsgs = errmsgs + e + "\\r\\n";
+			model.addAttribute("popupclosemsg", errmsgs);
+		}
 
-		// [before main win]return showShipparts("0", model, request);
-		// [after popup]
 		model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
 		return "closememoveto";
 	}
@@ -277,76 +300,93 @@ public class ShipController {
 		System.out
 				.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /reqshippartsadd process. ");
 
+		// Local variable
+		String[] reqArray;
+		int i; // for loop
+		String requestedFullURL = "";
+		List<String> errorlog = new ArrayList<String>();
+
 		// Get data from Web browser
-		shippartsdata.setUserId(loginUser.getUserId());
-		shippartsdata.setItemlistShipId(-2); // -2 은 아직 장바구니안에 아직대기. 파트너용 부품
-		shippartsdata.setItemlistPartId(Integer.valueOf(request.getParameter("part-Id")));
-		String pn = request.getParameter("part-Name");
-		shippartsdata.setItemlistAmount(Integer.valueOf(request.getParameter("reqnum[]")));
+		String reqInfoStr = request.getParameter("reqInfoStr");
+		int numOfMultiReq = Integer.valueOf(request.getParameter("reqInfoStrLength"));
+		System.out.println("Items:" + numOfMultiReq + ", reqInfo : " + reqInfoStr);
 
-		// get inbox requested page info
-		String requestedURL = request.getParameter("requestedURL");
-		String requestedSeq = request.getParameter("seq");
-		String requestedFullURL = requestedURL + "/" + requestedSeq;
+		// Parsing String Data
+		reqArray = reqInfoStr.split("[|]");
 
-		// Validation check
-		int failcause = itemService.isValidItemForOthersCart(loginUser.getUserId(), shippartsdata.getItemlistPartId(),
-				shippartsdata.getItemlistAmount());
-		if (failcause == 1) {
-			String errmsgs = "[수량입력오류]" + pn + "의 요청량이 0!!";
-			model.addAttribute("popupclosemsg", errmsgs);
-			System.out.println(errmsgs);
-			model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
-			return "closememoveto";
-		} else if (failcause == 2) {
-			String errmsgs = "[중복담기오류]" + pn + "이 이미 존재합니다.";
-			model.addAttribute("popupclosemsg", errmsgs);
-			System.out.println(errmsgs);
-			model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
-			return "closememoveto";
-		} else if (failcause == 3) {
-			String errmsgs = "[잔여재고오류]" + pn + "의 수량이 부족합니다.";
-			model.addAttribute("popupclosemsg", errmsgs);
-			System.out.println(errmsgs);
-			model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
-			return "closememoveto";
-		}
+		// Process each item
+		for (i = 0; i < numOfMultiReq; i++) {
+			boolean isError = false;
+			shippartsdata.setUserId(loginUser.getUserId());
+			shippartsdata.setItemlistShipId(-2); // -2은 아직 파트너 장바구니안에 아직대기
+			shippartsdata.setItemlistPartId(Integer.valueOf(reqArray[(i * 5) + 0]));
+			String pn = reqArray[(i * 5) + 1];
+			shippartsdata.setItemlistAmount(Integer.valueOf(reqArray[(i * 5) + 2]));
 
-		// 해당 PartsId를 카트에담을수 있는지
-		boolean isValidItem = itemService.isVaildOthersCartItem(Integer.valueOf(request.getParameter("part-Id")),
-				loginUser.getUserId());
+			// get inbox requested page info
+			String requestedURL = reqArray[(i * 5) + 3];
+			String requestedSeq = reqArray[(i * 5) + 4];
+			requestedFullURL = requestedURL + "/" + requestedSeq;
 
-		if (!isValidItem) {
-			// model.addAttribute("reqresult","[담기실패]<br> 현재 출고요청 준비중인 아이템과 같은
-			// 개발담당자의 아이템만 담을 수 있습니다.<br> 현재 담겨있는 Item을 출고요청 후에 다른 개발담당자의 아이템을
-			// 담아주세요.<br>");
-			// return showShippartsOthers("0", model, request);
-			String errmsgs = "[담기실패]<br> 현재 출고요청 준비중인 아이템과 같은 개발담당자의 아이템만 담을 수 있습니다.<br> 현재 담겨있는 Item을 출고요청 후에 다른 개발담당자의 아이템을 담아주세요.<br>";
-			model.addAttribute("popupclosemsg", errmsgs);
-			System.out.println(errmsgs);
-			model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
-			return "closememoveto";
-		}
+			// Validation check
+			int failcause = itemService.isValidItemForOthersCart(loginUser.getUserId(),
+					shippartsdata.getItemlistPartId(), shippartsdata.getItemlistAmount());
 
-		// Change DB query
-		itemService.addShipPartsItem(shippartsdata);
-		model.addAttribute("reqresult", "(" + shippartsdata.getItemlistPartId() + ")아이템 담기완료");
-		System.out.println("/reqothersshippartsadd processed.. Req ID:" + shippartsdata.getItemlistId() + " reqNum:"
-				+ shippartsdata.getItemlistAmount());
+			if (failcause == 1) {
+				errorlog.add("[수량입력오류]" + pn + "의 요청량이 0!!");
+				isError = true;
 
-		// Update total stock(카트에 담기면 총재고 변동, 추가수정사항)
-		itemService.decreasePartStock(shippartsdata.getItemlistPartId(), shippartsdata.getItemlistAmount());
+			} else if (failcause == 2) {
+				errorlog.add("[중복담기오류]" + pn + "이 이미 존재합니다.");
+				isError = true;
 
-		// Change DB query
-		// itemService.removeShipPartsItem(shippartsdata);
-		// model.addAttribute("reqresult", shippartsdata.getItemlistId() + " is
-		// removed");
-		System.out.println("/reqothersshippartsadd processed.. "); // Req ID:" +
-																	// shippartsdata.getItemlistId());
+			} else if (failcause == 3) {
+				errorlog.add("[잔여재고오류]" + pn + "의 수량이 부족합니다.");
+				isError = true;
+
+			}
+
+			// 해당 PartsId를 카트에담을수 있는지
+			boolean isValidItem = itemService.isVaildOthersCartItem(
+					Integer.valueOf(reqArray[(i * 5) + 0]/* Part-Id */), loginUser.getUserId());
+
+			if (!isValidItem) {
+				errorlog.add("[단일개발자아님]" + pn
+						+ "의 개발자를 확인해주세요. 현재 출고요청 준비중인 아이템과 같은 개발담당자의 아이템만 담을 수 있습니다. 현재 담겨있는 Item을 출고요청 후에 다른 개발담당자의 아이템을 담아주세요.");
+				isError = true;
+			}
+
+			if (!isError) {
+				// Change DB query
+				itemService.addShipPartsItem(shippartsdata);
+				model.addAttribute("reqresult", "(" + shippartsdata.getItemlistPartId() + ")아이템 담기완료");
+				System.out.println("/reqothersshippartsadd processed.. Req ID:" + shippartsdata.getItemlistId()
+						+ " reqNum:" + shippartsdata.getItemlistAmount());
+
+				// Update total stock(카트에 담기면 총재고 변동, 추가수정사항)
+				itemService.decreasePartStock(shippartsdata.getItemlistPartId(), shippartsdata.getItemlistAmount());
+
+				// Change DB query
+				// itemService.removeShipPartsItem(shippartsdata);
+				// model.addAttribute("reqresult", shippartsdata.getItemlistId()
+				// + " is
+				// removed");
+				System.out.println("/reqothersshippartsadd processed.. "); // Req
+																			// ID:"
+																			// +
+																			// shippartsdata.getItemlistId());
+			}
+		} // for per ONE req item
 
 		// Get DB List
-		// [before main win]return showShippartsOthers("0", model, request);
-		// [after popup]
+		if (errorlog.size() != 0) {
+			String errmsgs = "< 에러발생 " + errorlog.size() + "건 >\\r\\n";
+			// make error message
+			for (String e : errorlog)
+				errmsgs = errmsgs + e + "\\r\\n";
+			model.addAttribute("popupclosemsg", errmsgs);
+		}
+
 		model.addAttribute("requestedURL", requestedFullURL); /* "/mylist" */
 		return "closememoveto";
 	}

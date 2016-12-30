@@ -30,61 +30,83 @@
 
 	}
 
-	function addCart(id) {
-		console.log("addCart");
-		
+	function addAllCart() {
+		console.log("addAllCart");
+
 		chk = document.getElementsByName("chk");
 		console.log("total chkbox length:" + chk.length);
-		
-		var sendStr ="";
-		var cnt = 0 ;
+
+		var sendStr = "";
+		var cnt = 0;
 		var i;
 		for (i = 0; i < chk.length; i++) {
 			if (chk[i].checked) {
-				console.log("checked index : " + i );
-				console.log("    part id : " + document.forms["form" + i].elements["part-Id"].value );
-				console.log("    name : " + document.forms["form" + i].elements["part-Name"].value );
-				console.log("    amount : " + document.forms["form" + i].elements["reqnum[]"].value );
-				console.log("    myURL : " + document.forms["form" + i].elements["requestedURL"].value );
-				console.log("    page num : " + document.forms["form" + i].elements["seq"].value );
+				console.log("checked index : " + i);
+				console.log("    part id : "
+						+ document.forms["form" + i].elements["part-Id"].value);
+				console
+						.log("    name : "
+								+ document.forms["form" + i].elements["part-Name"].value);
+				console
+						.log("    amount : "
+								+ document.forms["form" + i].elements["reqnum[]"].value);
+				console
+						.log("    myURL : "
+								+ document.forms["form" + i].elements["requestedURL"].value);
+				console.log("    page num : "
+						+ document.forms["form" + i].elements["seq"].value);
 				cnt = cnt + 1;
-				//to do: 잘 묶어서 던지고 받기.. spring에서 필요한 항목들 추려서... 
-				//
-				//
-				//
-				//
-				//
-				//
-				//
-				sendStr = sendStr +
-				document.forms["form" + i].elements["part-Id"].value + "|" +
-				document.forms["form" + i].elements["part-Name"].value + "|" +
-				document.forms["form" + i].elements["reqnum[]"].value  + "|" +
-				document.forms["form" + i].elements["requestedURL"].value + "|" +
-				document.forms["form" + i].elements["seq"].value + "|"
+				// spring에서 필요한 항목들 추려서... 
+				sendStr = sendStr
+						+ document.forms["form" + i].elements["part-Id"].value
+						+ "|"
+						+ document.forms["form" + i].elements["part-Name"].value
+						+ "|"
+						+ document.forms["form" + i].elements["reqnum[]"].value
+						+ "|"
+						+ document.forms["form" + i].elements["requestedURL"].value
+						+ "|"
+						+ document.forms["form" + i].elements["seq"].value
+						+ "|"
 			}
 		}
-		var response = confirm(cnt + "건 추가할까요?")
-			//to do: 잘 묶어서 던지고 받기.. spring에서 필요한 항목들 추려서... 
-				//
-				//
-				//
-				//
-				//
-				//
-				// 갈라놓고..
-				
+
+		var id = 0;
+		//for send to server
+		document.forms["form" + id].elements["reqInfoStr"].value = sendStr;
+		document.forms["form" + id].elements["reqInfoStrLength"].value = cnt;
 		console.log(sendStr);
+
+		if (cnt == 0) {
+			return;
+		}
+
+		var title = "Boxing..";
+		var status = "toolbar=no,directories=no,scrollbars=no,resizable=no,status=no,menubar=no,width=540, height=100, top=200,left=300";
+		window.open("", title, status); //popup
+		document.forms["form" + id].target = title;
+		document.forms["form" + id].method = "post";
+		document.forms["form" + id].action = "${PostPageUrl}"; //"/reqshippartsadd"
+		document.forms["form" + id].submit();
+
+	}
+	function addCart(id) {
+
+		console.log("addCart");
+
 		var nm = document.forms["form" + id].elements["part-Name"].value;
 		var response = confirm(nm + " 추가할까요?")
 		if (response) {
 			//do yes task
 			var title = "Boxing..";
-			var status = "toolbar=no,directories=no,scrollbars=no,resizable=no,status=no,menubar=no,width=240, height=200, top=200,left=200";
+			var status = "toolbar=no,directories=no,scrollbars=no,resizable=no,status=no,menubar=no,width=540, height=100, top=200,left=500";
 			window.open("", title, status); //popup
 			document.forms["form" + id].target = title;
 			document.forms["form" + id].method = "post";
 			document.forms["form" + id].action = "${PostPageUrl}"; //"/reqshippartsadd"
+
+			document.forms["form" + id].elements["reqInfoStr"].value = '';
+
 			document.forms["form" + id].submit();
 		} else {
 			//do no task
@@ -140,13 +162,15 @@
 			name="btnsrch" value="검색">
 
 			 -->
+
+		<input type="button" class="btn btn-info btn-xs" value="출고요청준비"
+			name="submitbtn" OnClick="javascript:addAllCart()">
 		<!-- Excel download -->
 		<input type="button" value="Excel download" name="submitbtn1"
 			class="btn btn-info btn-xs"
 			OnClick="javascript:showExcelExportWindow();">
 	</p>
 </form>
-
 <!-- 
 	*********
 	리스트 표시 
@@ -224,6 +248,8 @@
 	<c:forEach var="i" items="${items}" varStatus="status">
 
 		<form name="form${status.index}">
+
+
 			<tr>
 
 				<td width="42">
@@ -232,7 +258,9 @@
 							value="chk${status.index}" disabled=true> <input
 							type=hidden name=part-Id value='${i.partId}'> <input
 							type=hidden name=requestedURL value='${requestedURL}'> <input
-							type=hidden name=seq value='${seq}'>
+							type=hidden name=seq value='${seq}'> <input type=hidden
+							name=reqInfoStr value=''> <input type=hidden
+							name=reqInfoStrLength value=''>
 					</p>
 				</td>
 
@@ -281,9 +309,10 @@
 				<td width="140">
 					<p>
 						<input type="text" name="reqnum[]" value="0" size="4"
-							onchange="changedValue(this, '${status.index}')"> <input
+							onchange="changedValue(this, '${status.index}')">
+						<!--  <input
 							type="button" class="btn btn-primary btn-xs" value="Box"
-							name="submitbtn" OnClick="javascript:addCart('${status.index}');">
+							name="submitbtn" OnClick="javascript:addCart('${status.index}');">  -->
 					</p>
 				</td>
 
@@ -309,6 +338,10 @@
 	</c:forEach>
 
 </table>
+<p align="right">
+	<input type="button" class="btn btn-info btn-xs" value="출고요청준비"
+		name="submitbtn" OnClick="javascript:addAllCart()">
+</p>
 <!-- 
 	*****************************
 	페이지 표시
