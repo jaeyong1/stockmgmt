@@ -282,14 +282,14 @@ public class ExcelController {
 	}
 
 	/*
-	 * /shippartsimport 출고요청하기 - 출고요청 부품리스트 - Excel upload
+	 * /shippartsimport/mylist 나의자재 - Excel upload
 	 */
-	@RequestMapping(value = "/shippartsimport", method = RequestMethod.GET)
+	@RequestMapping(value = "/shippartsimport/mylist", method = RequestMethod.GET)
 	public String addExcelMyCartItem(PartsItem item, Model model, HttpServletRequest request) {
 		// session 확인
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
-			System.out.println("/shippartsimport process. no session info. return login.jsp ");
+			System.out.println("/shippartsimport/mylist process. no session info. return login.jsp ");
 			return "login";
 		} else {
 			// update bagde counter(cart items)
@@ -300,7 +300,7 @@ public class ExcelController {
 			loginUser.setCartItems(cartItemsCounter1);
 			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
-		System.out.println("[" + loginUser.getUserId() + "] /shippartsimport process");
+		System.out.println("[" + loginUser.getUserId() + "] /shippartsimport/mylist process");
 		model.addAttribute("requestedURL", "/shipparts");
 		return "fileupload";/* fileupload.jsp */
 	}
@@ -330,14 +330,14 @@ public class ExcelController {
 	}
 
 	/*
-	 * /shipotherspartsimport 출고요청하기 - 출고요청 부품리스트 - Excel upload
+	 * //shippartsimport/otherslist 출고요청하기 - 파트너자재 - Excel upload
 	 */
-	@RequestMapping(value = "/shipotherspartsimport", method = RequestMethod.GET)
+	@RequestMapping(value = "/shippartsimport/otherslist", method = RequestMethod.GET)
 	public String addExcelOthersCartItem(PartsItem item, Model model, HttpServletRequest request) {
 		// session 확인
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
-			System.out.println("/shipotherspartsimport process. no session info. return login.jsp");
+			System.out.println("/shippartsimport/otherslist process. no session info. return login.jsp");
 			return "login";
 		} else {
 			// update bagde counter(cart items)
@@ -348,7 +348,7 @@ public class ExcelController {
 			loginUser.setCartItems(cartItemsCounter1);
 			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
-		System.out.println("[" + loginUser.getUserId() + "] /shipotherspartsimport process");
+		System.out.println("[" + loginUser.getUserId() + "] /shippartsimport/otherslist process");
 		model.addAttribute("requestedURL", "/shipothersparts");
 
 		List<ShipReqPartsItem> items = itemService.getShipPartsListItems(-2, loginUser.getUserId());
@@ -469,7 +469,13 @@ public class ExcelController {
 		List<String> errorlog = new ArrayList<String>();
 
 		///////////////// List View
-		List<PartsItem> items = itemService.getMyItemsByID(loginUser.getUserId());
+		List<PartsItem> items;
+		if (loginUser.getUserLevel() == EUserLevel.Lv2_DEV.getLevelInt()) {
+			// lv2. dev
+			items = itemService.getMyItemsByID(loginUser.getUserId());
+		} else {// lv3. lv6 shipper
+			items = itemService.getMyItemsByID4Shipper(loginUser.getUserId());
+		}
 
 		// System.out.println("모르는 주소에서 요청됨");
 		// model.addAttribute("errormsg", "[에러발생]<br>\n 모르는 주소에서 요청됨 <br>\n");

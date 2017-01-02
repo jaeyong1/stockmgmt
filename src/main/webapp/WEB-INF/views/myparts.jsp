@@ -108,11 +108,11 @@
 	<table border="1" width="487">
 		<tr>
 			<td width="143">
-				<p>parts id(idx)</p>
+				<p><!--  parts id(idx) --></p>
 			</td>
 			<td width="328">
 				<p>
-					<input type="hidden" name='part-Id'>
+					<input type="hidden" name='part-Id'> 
 				</p>
 			</td>
 		</tr>
@@ -151,6 +151,26 @@
 		</tr>
 		<tr>
 			<td width="143">
+				<p>Maker</p>
+			</td>
+			<td width="328">
+				<p>
+					<input type="text" id="aa" name='part-Memo'>
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td width="143">
+				<p>재고</p>
+			</td>
+			<td width="328">
+				<p>
+					<input type="text" name='part-Stock'>
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td width="143">
 				<p>위치</p>
 			</td>
 			<td width="328">
@@ -169,28 +189,7 @@
 				</p>
 			</td>
 		</tr>
-		<tr>
-			<td width="143">
-				<p>재고</p>
-			</td>
-			<td width="328">
-				<p>
-					<input type="text" name='part-Stock'>
-				</p>
-			</td>
-		</tr>
 
-		<tr>
-			<td width="143">
-				<p>Maker</p>
-			</td>
-			<td width="328">
-				<p>
-					<input type="text" id="aa" name='part-Memo'>
-				</p>
-			</td>
-		</tr>
-		
 		<tr>
 			<td width="143">
 				<p>MSL Level</p>
@@ -226,9 +225,10 @@
 			<td width="1004" align="right">
 				<!--  --> <input type="button" value="Excel upload(신규)"
 				name="submitbtn1" class="btn btn-info btn-xs"
-				OnClick="javascript:showExcelImportWindow();"> 				<!--  --> <input type="button" value="Excel upload(수정)"
-				name="submitbtn2" class="btn btn-info btn-xs"
-				OnClick="javascript:showExcelImportWindow2();">  <input
+				OnClick="javascript:showExcelImportWindow();"> <!--  --> <input
+				type="button" value="Excel upload(수정)" name="submitbtn2"
+				class="btn btn-info btn-xs"
+				OnClick="javascript:showExcelImportWindow2();"> <input
 				type="button" value="Excel download" name="submitbtn3"
 				class="btn btn-info btn-xs"
 				OnClick="javascript:showExcelExportWindow();"><br>
@@ -241,10 +241,11 @@
 
 <table border="1">
 	<tr>
-		<td width="130">
-			<center>
+		<td width="3">
+			<!-- <center>
 				<p>parts id(idx)</p>
 			</center>
+			 -->
 		</td>
 		<td width="130">
 			<center>
@@ -266,28 +267,29 @@
 				<p>Maker</p>
 			</center>
 		</td>
-		<td width="80">
-			<center>
-				<p>MSL Level</p>
-			</center>
-		</td>
-		<td width="130">
-			<center>
-				<p>위치</p>
-			</center>
-		</td>
-		<td width="110">
-			<center>
-				<p>단가</p>
-			</center>
-		</td>
-		<td width="110">
+		<td width="100">
 			<center>
 				<p>재고</p>
 			</center>
 		</td>
 
-		<td width="130">
+		<td width="100">
+			<center>
+				<p>위치</p>
+			</center>
+		</td>
+		<td width="100">
+			<center>
+				<p>단가</p>
+			</center>
+		</td>
+		<td width="100">
+			<center>
+				<p>MSL Level</p>
+			</center>
+		</td>
+
+		<td width="110">
 			<p>&nbsp;</p>
 		</td>
 	</tr>
@@ -297,8 +299,8 @@
 			<tr>
 				<td>
 					<center>
-						<font color="gray"> ${i.partId}<input type=hidden
-							name=part-Id value='${i.partId}'>
+						<font color="gray"> <input type=hidden name=part-Id
+							value='${i.partId}'>
 					</center> </font>
 				</td>
 				<td>
@@ -326,39 +328,41 @@
 					</center></td>
 				<td><center>
 						<p>
-							<input type=text name=part-Msllevel size="8" value='${i.partMsllevel}'>
+							<input type=text name=part-Stock size="8" value='${i.partStock}'>
 						</p>
 					</center></td>
+
 				<td><center>
 						<p>
-							<input type=text name=part-Location size="14"
+							<input type=text name=part-Location size="8"
 								value='${i.partLocation}'>
 						</p>
 					</center></td>
 				<td><center>
 						<p>
-							<input type=text name=part-Cost size="6" value='${i.partCost}'>
+							<input type=text name=part-Cost size="8" value='${i.partCost}'>
 						</p>
 					</center></td>
 				<td><center>
 						<p>
-							<input type=text name=part-Stock size="6" value='${i.partStock}'>
+							<input type=text name=part-Msllevel size="8"
+								value='${i.partMsllevel}'>
 						</p>
 					</center></td>
 
 
 
-				<td>
-					<p>
-						<input type="button" value="수정" name="submitbtn"
-							class="btn btn-primary btn-xs"
-							OnClick="javascript:modifyCheck2('${status.index}');"> <input
-							type="button" value="삭제" name="submitbtn2"
-							class="btn btn-warning btn-xs"
-							OnClick="javascript:removeItem('${status.index}');">
+				<td><center>
+						<p>
+							<input type="button" value="수정" name="submitbtn"
+								class="btn btn-primary btn-xs"
+								OnClick="javascript:modifyCheck2('${status.index}');"> <input
+								type="button" value="삭제" name="submitbtn2"
+								class="btn btn-warning btn-xs"
+								OnClick="javascript:removeItem('${status.index}');">
 
-					</p>
-				</td>
+						</p>
+					</center></td>
 
 			</tr>
 

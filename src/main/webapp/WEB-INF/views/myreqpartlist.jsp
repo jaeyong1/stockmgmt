@@ -64,10 +64,11 @@
 
 			<td width="804" align="right"><input type="button"
 				value="Remove ALL" name="submitbtn1" class="btn btn-info btn-xs"
-				OnClick="javascript:removeCartAllItem();"> <input
+				OnClick="javascript:removeCartAllItem();"> 
+				<!-- <input
 				type="button" value="Excel upload" name="submitbtn1"
 				class="btn btn-info btn-xs"
-				OnClick="javascript:showExcelImportWindow();">
+				OnClick="javascript:showExcelImportWindow();">  -->
 			<p></p></td>
 		</tr>
 	</table>

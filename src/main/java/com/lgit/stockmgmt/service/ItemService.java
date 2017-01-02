@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lgit.stockmgmt.dao.ItemDao;
+import com.lgit.stockmgmt.domain.EUserLevel;
 import com.lgit.stockmgmt.domain.Item;
 import com.lgit.stockmgmt.domain.JoinDBItem;
 import com.lgit.stockmgmt.domain.LogUserItem;
@@ -408,15 +409,32 @@ public class ItemService {
 		return itemDao.queryMyProjectItems(paramMap);
 	}
 
+	public List<ProjectItem> getMyProjectItems4shipper(String userId) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("UserId", userId);
+		return itemDao.queryMyProjectItems4shipper(paramMap);
+	}
+
 	public List<PartsItem> getMyItemsByID(String userId) {
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("UserId", userId);
 		return itemDao.queryMyPartsItemsById(paramMap);
 	}
 
+	public List<PartsItem> getMyItemsByID4Shipper(String userId) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("UserId", userId);
+		return itemDao.queryMyPartsItemsById4Shipper(paramMap);
+	}
+
 	public List<UserItem> getShipperUserItems() {
 		// 출고담당자 리스트
 		return itemDao.queryShipperUserItems();
+	}
+
+	// 개발담당자 리스트
+	public List<UserItem> getDevUserItems() {
+		return itemDao.queryDevUserItems();
 	}
 
 	public boolean isVaildOthersCartItem(Integer partsId, String userId) {
@@ -503,14 +521,21 @@ public class ItemService {
 	/*
 	 * 내 자재검색..
 	 */
-	public boolean isExistMyPartsName(String userId, String partProjectCode, String partName) {
+	public boolean isExistMyPartsName(String userId, String partProjectCode, String partName, int userLevel) {
 		// TODO Auto-generated method stub
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("UserId", userId);
 		paramMap.put("PartProjectCode", partProjectCode);
 		paramMap.put("PartName", partName);
 
-		List<PartsItem> list = itemDao.queryPart_PartsProjectAndParts(paramMap);
+		List<PartsItem> list;
+		if (userLevel == EUserLevel.Lv2_DEV.getLevelInt()) {
+			// lv2. dev
+			list = itemDao.queryPart_PartsProjectAndParts(paramMap);
+		} else {// lv3. lv6 shipper
+			list = itemDao.queryPart_PartsProjectAndParts4Shipper(paramMap);
+		}
+
 		if (list.size() == 0) {
 			System.out.println("[error] NOT exist item:" + partName);
 			return false;
@@ -519,17 +544,19 @@ public class ItemService {
 
 	}
 
-	public int getMyPartId(String userId, String partProjectCode, String partName) {
+	public int getMyPartId(String userId, String partProjectCode, String partName, int userLevel) {
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("UserId", userId);
 		paramMap.put("PartProjectCode", partProjectCode);
 		paramMap.put("PartName", partName);
 
-		List<PartsItem> list = itemDao.queryPart_PartsProjectAndParts(paramMap);
-		if (list.size() == 0) {
-			System.out.println("[error] NOT exist item:" + partName);
-			return 0;
+		List<PartsItem> list;
+		if (userLevel == EUserLevel.Lv2_DEV.getLevelInt()) {
+			list = itemDao.queryPart_PartsProjectAndParts(paramMap);
+		} else {// lv3. lv6 shipper
+			list = itemDao.queryPart_PartsProjectAndParts4Shipper(paramMap);
 		}
+
 		return list.get(0).getPartId();
 	}
 
@@ -566,18 +593,29 @@ public class ItemService {
 		return true;
 	}
 
+	/*
+	 * /myparts 에서 신규로 Excel import 경우
+	 */
 	public boolean addMyNewPartsXls(UserItem loginUser, List<PartsItem> lst, List<String> errorlog) {
 		boolean dbProcessSuccess = true;
 		int i;
-		List<ProjectItem> lstMyPrj = getMyProjectItems(loginUser.getUserId());
+		List<ProjectItem> lstMyPrj;
+		if (loginUser.getUserLevel() == EUserLevel.Lv2_DEV.getLevelInt()) {
+			// lv2. dev
+			lstMyPrj = getMyProjectItems(loginUser.getUserId());
+		} else {// lv3. lv6 shipper
+			lstMyPrj = getMyProjectItems4shipper(loginUser.getUserId());
+		}
+		if (lstMyPrj == null)
+			return false;
 
 		for (i = 0; i < lst.size(); i++) {
 			// valid project 인지 체크
 			if (isExistProjectCode(lstMyPrj, lst.get(i).getPartProjectCode())) {
 
 				// 기존에 있는 PartsP/N이 인지확인
-				if (isExistMyPartsName(loginUser.getUserId(), lst.get(i).getPartProjectCode(),
-						lst.get(i).getPartName())) {
+				if (isExistMyPartsName(loginUser.getUserId(), lst.get(i).getPartProjectCode(), lst.get(i).getPartName(),
+						loginUser.getUserLevel())) {
 					String err = "Error: 기존에 있는 LGIT P/N 입니다. " + (i + 1) + "번째 : " + lst.get(i).getPartName();
 					System.out.println(err);
 					errorlog.add(err);
@@ -611,17 +649,27 @@ public class ItemService {
 
 	}
 
+	/*
+	 * Excel upload(신규)
+	 */
 	public boolean addMyCartXls(UserItem loginUser, ArrayList<String[]> lst, List<String> errorlog) {
 		boolean dbProcessSuccess = true;
 		int i;
-		List<ProjectItem> lstMyPrj = getMyProjectItems(loginUser.getUserId());
+
+		List<ProjectItem> lstMyPrj;
+		if (loginUser.getUserLevel() == EUserLevel.Lv2_DEV.getLevelInt()) {
+			// lv2. dev
+			lstMyPrj = getMyProjectItems(loginUser.getUserId());
+		} else {// lv3. lv6 shipper
+			lstMyPrj = getMyProjectItems4shipper(loginUser.getUserId());
+		}
 
 		for (i = 0; i < lst.size(); i++) {
 			// valid project 인지 체크
 			if (isExistProjectCode(lstMyPrj, lst.get(i)[0])) {
 
 				// 기존에 있는 PartsP/N이 인지확인
-				if (isExistMyPartsName(loginUser.getUserId(), lst.get(i)[0], lst.get(i)[1])) {
+				if (isExistMyPartsName(loginUser.getUserId(), lst.get(i)[0], lst.get(i)[1], loginUser.getUserLevel())) {
 					// OK. keep going
 
 				} else {
@@ -683,11 +731,23 @@ public class ItemService {
 		return pdata.get(0).getPartId();
 	}
 
+	/*
+	 * /shipothersparts(파트너출고요청리스트) 에서 Excel import 경우
+	 */
 	public boolean addOthersCartXls(UserItem loginUser, ArrayList<String[]> lst, List<String> errorlog) {
 
 		boolean dbProcessSuccess = true;
 		int i;
-		List<ProjectItem> lstMyPrj = getMyProjectItems(loginUser.getUserId());
+
+		List<ProjectItem> lstMyPrj;
+		if (loginUser.getUserLevel() == EUserLevel.Lv2_DEV.getLevelInt()) {
+			// lv2. dev
+			lstMyPrj = getMyProjectItems(loginUser.getUserId());
+		} else {// lv3. lv6 shipper
+			lstMyPrj = getMyProjectItems4shipper(loginUser.getUserId());
+		}
+		if (lstMyPrj == null)
+			return false;
 
 		for (i = 0; i < lst.size(); i++) {
 			// valid project 인지 체크
@@ -698,7 +758,7 @@ public class ItemService {
 				System.out.println(err);
 				errorlog.add(err);
 				dbProcessSuccess = false;
-			} else if (isExistMyPartsName(othersId, lst.get(i)[0], lst.get(i)[1])) {
+			} else if (isExistMyPartsName(othersId, lst.get(i)[0], lst.get(i)[1], EUserLevel.Lv2_DEV.getLevelInt())) {
 				// 기존에 있는 PartsP/N이 인지확인
 				// OK. keep going
 
@@ -757,24 +817,33 @@ public class ItemService {
 		return list.get(0).getUserId();
 	}
 
+	/*
+	 * DB관리 - 파츠관리
+	 */
 	public boolean modifyMyNewPartsXls(UserItem loginUser, List<PartsItem> lst, List<String> errorlog) {
 
 		boolean dbProcessSuccess = true;
 		int i;
-		List<ProjectItem> lstMyPrj = getMyProjectItems(loginUser.getUserId());
+		List<ProjectItem> lstMyPrj;
+		if (loginUser.getUserLevel() == EUserLevel.Lv2_DEV.getLevelInt()) {
+			// lv2. dev
+			lstMyPrj = getMyProjectItems(loginUser.getUserId());
+		} else {// lv3. lv6 shipper
+			lstMyPrj = getMyProjectItems4shipper(loginUser.getUserId());
+		}
 
 		for (i = 0; i < lst.size(); i++) {
 			// valid project 인지 체크
 			if (isExistProjectCode(lstMyPrj, lst.get(i).getPartProjectCode())) {
 
 				// 기존에 있는 PartsP/N이 인지확인
-				if (isExistMyPartsName(loginUser.getUserId(), lst.get(i).getPartProjectCode(),
-						lst.get(i).getPartName())) {
+				if (isExistMyPartsName(loginUser.getUserId(), lst.get(i).getPartProjectCode(), lst.get(i).getPartName(),
+						loginUser.getUserLevel())) {
 					// ok
 
 					// find my part id (엑셀에는 ID가 없음)
 					int myPartsId = getMyPartId(loginUser.getUserId(), lst.get(i).getPartProjectCode(),
-							lst.get(i).getPartName());
+							lst.get(i).getPartName(), loginUser.getUserLevel());
 					lst.get(i).setPartId(myPartsId);
 
 					// keep going
@@ -819,6 +888,10 @@ public class ItemService {
 
 	}
 
+	/*
+	 * 출고담당자 - 재물조사 - Excel upload(수정하기)
+	 * 
+	 */
 	public boolean modifyShipperPartsXls(UserItem loginUser, List<PartsItem> lst, List<String> errorlog) {
 
 		boolean dbProcessSuccess = true;
@@ -969,6 +1042,5 @@ public class ItemService {
 
 		return 0;
 	}
-	
 
 }

@@ -6,7 +6,7 @@
 <script language="javascript">
 	function popup() {
 		//출고담당자 리스트 호출
-		window.open("/shipperlist", 'window', 'width=650,height=600');
+		window.open("/devuserlist", 'window', 'width=650,height=600');
 	}
 
 	function newItem() {
@@ -23,13 +23,13 @@
 		}
 
 		if (!document.forms["newitemform"].elements["project-Owner-Id"].value) {
-			alert("본인 아이디를 기입해주세요");
+			alert("개발담당자 아이디를 기입해주세요(아래도움말과 찾기기능 사용)");
 			document.forms["newitemform"].elements["project-Owner-Id"].focus();
 			return;
 		}
 
 		if (!document.forms["newitemform"].elements["project-shipper-Id"].value) {
-			alert("출고담당자 ID를 기입해주세요(아래도움말과 찾기기능 사용)");
+			alert("본인의 ID를 기입해주세요");
 			document.forms["newitemform"].elements["project-shipper-Id"]
 					.focus();
 			return;
@@ -120,9 +120,8 @@
 			</td>
 			<td width="328">
 				<p>
-					${sessionScope.userLoginInfo.userId} <input type="hidden"
-						name='project-Owner-Id'
-						value='${sessionScope.userLoginInfo.userId}'>
+					 <input type="text"
+						name='project-Owner-Id'>
 				</p>
 			</td>
 		</tr>
@@ -131,8 +130,9 @@
 				<p>출고담당자ID</p>
 			</td>
 			<td width="328">
-				<p>
-					<input type="text" name='project-shipper-Id'>
+				<p>${sessionScope.userLoginInfo.userId}
+					<input type="hidden" name='project-shipper-Id' 
+						value='${sessionScope.userLoginInfo.userId}'>
 				</p>
 			</td>
 		</tr>
@@ -146,7 +146,7 @@
 		data-toggle="modal" data-target="#myModal">도움말</button>
 
 	<button type="button" class="btn btn-info btn-md"
-		OnClick="javascript:popup();">출고담당자찾기</button>
+		OnClick="javascript:popup();">개발담당자 보기</button>
 
 </form>
 
@@ -201,16 +201,16 @@
 				</td>
 				<td>
 					<p>
-					<center>${i.projectOwnerId}
-						<input type=hidden name=project-Owner-Id
+					<center>
+						<input type=text name=project-Owner-Id
 							value='${i.projectOwnerId}'>
 					</center>
 					</p>
 				</td>
 				<td>
 					<p>
-					<center>
-						<input type=text name=project-shipper-Id size=20 maxlength=30
+					<center>${i.projectShipperId}
+						<input type=hidden name=project-shipper-Id size=20 maxlength=30
 							value='${i.projectShipperId}'></
 						</p>
 				</td>
@@ -292,13 +292,9 @@
 			</div>
 			<div class="modal-body">
 				<p>
-					- <b>개발담당자</b>는 자신의 프로젝트를 생성후에 자산을 등록할 수 있습니다.
-				<p>
-					- 개발담당자는 프로젝트 생성시에 시작담당자(출고담당자)를 꼭 <b>지정</b>해야 합니다. <br>
+					- <b>개발담당자</b>가 출고요청 작성하므로 프로젝트 생성시에 시작담당자(출고담당자)를 꼭 <b>지정</b>해야 합니다. <br>
 					&nbsp;&nbsp;잘모를경우 "ADMIN"이라 써놓고 관리자에게 연락주세요.
-				<p>
-					- 시작담당자(출고담당자)가 지정되지 않으면 출고업무를 진행 할 수 없으므로, <br>&nbsp;&nbsp; 꼭
-					지정해 주세요.
+				
 				<p>
 				<p>- 관리운영자 : jaeyong1.park@lginnotek.com</p>
 			</div>

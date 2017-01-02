@@ -73,11 +73,11 @@
 
 <form name="formSearchType">
 	<p align="right">
-		
+
 		<!--  Excel upload -->
-				<input type="button" value="Excel upload(수정)" name="submitbtn1"
-					class="btn btn-info btn-xs"
-					OnClick="javascript:showExcelImportWindow();">
+		<input type="button" value="Excel upload(수정)" name="submitbtn1"
+			class="btn btn-info btn-xs"
+			OnClick="javascript:showExcelImportWindow();">
 		<!-- Excel download -->
 		<input type="button" value="Excel download" name="submitbtn1"
 			class="btn btn-info btn-xs"
@@ -101,16 +101,17 @@
 		<th width="172"><center>
 				<p>&nbsp;Project Code</p>
 			</center></th>
-		<th width="100">
-			<center>
-				<p>부서</p>
-			</center>
-		</th>
 		<th width="130">
 			<center>
 				<p>개발담당자</p>
 			</center>
 		</th>
+		<th width="100">
+			<center>
+				<p>부서</p>
+			</center>
+		</th>
+
 		<th width="130">
 			<center>
 				<p>출고담당자</p>
@@ -133,18 +134,26 @@
 		</th>
 		<th width="90">
 			<center>
-				<p>재고</p>
-			</center>
-		</th>
-		
-		<th width="90">
-			<center>
 				<p>단가</p>
 			</center>
 		</th>
+		<th width="90">
+			<center>
+				<p>재고</p>
+			</center>
+		</th>
+
+
 		<th width="67">
 			<center>
 				<p>위치</p>
+			</center>
+		</th>
+		<th width="70">
+			<center>
+				<p>
+					MSL<br>Level
+				</p>
 			</center>
 		</th>
 	</tr>
@@ -168,16 +177,17 @@
 						<p>${i.partProjectCode}</p>
 					</center>
 				</td>
-				<td width="85">
-					<center>
-						<p>${i.userTeamname}</p>
-					</center>
-				</td>
 				<td width="129">
 					<center>
 						<p>${i.userOwnerName}</p>
 					</center>
 				</td>
+				<td width="85">
+					<center>
+						<p>${i.userTeamname}</p>
+					</center>
+				</td>
+
 				<td width="117">
 					<center>
 						<p>${i.userShipperName}</p>
@@ -200,22 +210,27 @@
 				</td>
 				<td width="90">
 					<center>
-						<p>${i.partStock}</p>
-					</center>
-				</td>
-				
-				</td>
-				<td width="90">
-					<center>
 						<p>${i.partCost}</p>
 					</center>
 				</td>
+				<td width="90">
+					<center>
+						<p>${i.partStock}</p>
+					</center>
+				</td>
+
+				</td>
+
 				<td width="67">
 					<center>
 						<p>${i.partLocation}</p>
 					</center>
 				</td>
-
+				<td width="70">
+					<center>
+						<p>${i.partMsllevel}</p>
+					</center>
+				</td>
 			</tr>
 		</form>
 	</c:forEach>

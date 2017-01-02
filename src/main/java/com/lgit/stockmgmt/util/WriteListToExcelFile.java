@@ -91,9 +91,9 @@ public class WriteListToExcelFile {
 			row.createCell(6).setCellValue(item.getPartMemo()); // G
 			row.createCell(7).setCellValue(item.getPartCost()); // H
 			row.createCell(8).setCellValue(item.getPartStock()); // I
-			row.createCell(9).setCellValue(item.getPartLocation()); // J
-			row.createCell(10).setCellValue("");// K
-
+			row.createCell(9).setCellValue(item.getPartLocation()); // J			
+			row.createCell(10).setCellValue(item.getPartMsllevel());// K
+			row.createCell(11).setCellValue("");// L
 		} // for i
 
 		// lets write the excel data to file now

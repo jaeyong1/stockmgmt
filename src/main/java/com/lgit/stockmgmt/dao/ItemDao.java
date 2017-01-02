@@ -152,10 +152,10 @@ public class ItemDao {
 	public List<ShipReqItem> queryShipReqItemForShipper(Map<String, String> paramMap) {
 		return sqlSession.selectList("queryShipReqListItemsForShipper", paramMap);
 	}
+
 	public List<ShipReqItem> queryShipReqItemForAdminShipper(Map<String, String> paramMap) {
 		return sqlSession.selectList("queryShipReqListItemsForAdminShipper", paramMap);
 	}
-
 
 	public int updateShipReqState_ShipId(Map<String, String> paramMap2) {
 		return sqlSession.update("updateShipReqState_ShipId", paramMap2);
@@ -169,12 +169,25 @@ public class ItemDao {
 		return sqlSession.selectList("queryProjectItemsByID", paramMap);
 	}
 
+	public List<ProjectItem> queryMyProjectItems4shipper(Map<String, String> paramMap) {
+		return sqlSession.selectList("queryProjectItemsByID4shipper", paramMap);
+	}
+
 	public List<PartsItem> queryMyPartsItemsById(Map<String, String> paramMap) {
 		return sqlSession.selectList("selectPartsItemListByID", paramMap);
 	}
 
+	public List<PartsItem> queryMyPartsItemsById4Shipper(Map<String, String> paramMap) {
+		return sqlSession.selectList("selectPartsItemListByID4Shipper", paramMap);
+	}
+
 	public List<UserItem> queryShipperUserItems() {
 		return sqlSession.selectList("selectShipperUserItem");
+
+	}
+
+	public List<UserItem> queryDevUserItems() {
+		return sqlSession.selectList("selectDevUserItem");
 
 	}
 
@@ -215,6 +228,10 @@ public class ItemDao {
 
 	public List<PartsItem> queryPart_PartsProjectAndParts(Map<String, String> paramMap) {
 		return sqlSession.selectList("queryPartsProjectAndParts_TBPart", paramMap);
+	}
+
+	public List<PartsItem> queryPart_PartsProjectAndParts4Shipper(Map<String, String> paramMap) {
+		return sqlSession.selectList("queryPartsProjectAndParts4Shipper_TBPart", paramMap);
 	}
 
 	public List<PartsItem> queryMyPartsItemsByPartName(Map<String, String> paramMap) {
@@ -265,6 +282,5 @@ public class ItemDao {
 	public String queryItemlistAmountbyItemlistId(Map<String, String> paramMap) {
 		return sqlSession.selectOne("queryItemlistAmountbyItemlistId", paramMap);
 	}
-
 
 }

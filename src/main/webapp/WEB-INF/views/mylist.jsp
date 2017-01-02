@@ -141,6 +141,14 @@
 		//2.  /mylistexport/otherslist
 
 	}
+
+	function showExcelImportWindow() {
+		window.open("/shippartsimport${requestedURL}", 'window',
+				'width=650,height=450');
+		// 자동생성 경로.. 
+		// 1. /shippartsimport/mylist
+		// 2. /shippartsimport/otherslist
+	}
 </script>
 <!-- Excel download -->
 
@@ -163,10 +171,18 @@
 
 			 -->
 
-		<input type="button" class="btn btn-info btn-xs" value="출고요청준비"
+		<!-- 화면입력 담기 -->
+		<input type="button" class="btn btn-info btn-xs" value="화면입력값 출고담기"
 			name="submitbtn" OnClick="javascript:addAllCart()">
+
+
+		<!-- Excel Upload -->
+		<input type="button" value="Excel Upload로 출고담기" name="submitbtn2"
+			class="btn btn-info btn-xs"
+			OnClick="javascript:showExcelImportWindow();">
+
 		<!-- Excel download -->
-		<input type="button" value="Excel download" name="submitbtn1"
+		<input type="button" value="재고 Excel download" name="submitbtn1"
 			class="btn btn-info btn-xs"
 			OnClick="javascript:showExcelExportWindow();">
 	</p>
@@ -187,16 +203,17 @@
 		<th width="172"><center>
 				<p>&nbsp;Project Code</p>
 			</center></th>
-		<th width="100">
-			<center>
-				<p>부서</p>
-			</center>
-		</th>
 		<th width="130">
 			<center>
 				<p>개발담당자</p>
 			</center>
 		</th>
+		<th width="100">
+			<center>
+				<p>부서</p>
+			</center>
+		</th>
+
 		<th width="130">
 			<center>
 				<p>출고담당자</p>
@@ -219,27 +236,33 @@
 		</th>
 		<th width="90">
 			<center>
-				<p>재고</p>
-			</center>
-		</th>
-		<th width="90">
-			<center>
-				<p>출고요청량</p>
-			</center>
-		</th>
-		<th width="90">
-			<center>
 				<p>단가</p>
 			</center>
 		</th>
+		<th width="90">
+			<center>
+				<p>재고</p>
+			</center>
+		</th>
+
+
 		<th width="67">
 			<center>
 				<p>위치</p>
 			</center>
 		</th>
-		<th width="67">
+		<th width="70">
 			<center>
-				<p>MSL Level</p>
+				<p>
+					MSL<br>Level
+				</p>
+			</center>
+		</th>
+		<th width="70">
+			<center>
+				<p>
+					출고<br>요청량
+				</p>
 			</center>
 		</th>
 	</tr>
@@ -269,16 +292,17 @@
 						<p>${i.partProjectCode}</p>
 					</center>
 				</td>
-				<td width="85">
-					<center>
-						<p>${i.userTeamname}</p>
-					</center>
-				</td>
 				<td width="129">
 					<center>
 						<p>${i.userOwnerName}</p>
 					</center>
 				</td>
+				<td width="85">
+					<center>
+						<p>${i.userTeamname}</p>
+					</center>
+				</td>
+
 				<td width="117">
 					<center>
 						<p>${i.userShipperName}</p>
@@ -302,11 +326,27 @@
 				</td>
 				<td width="90">
 					<center>
+						<p>${i.partCost}</p>
+					</center>
+				</td>
+				<td width="90">
+					<center>
 						<p>${i.partStock}</p>
 					</center>
 				</td>
 
-				<td width="140">
+
+				<td width="67">
+					<center>
+						<p>${i.partLocation}</p>
+					</center>
+				</td>
+				<td width="70">
+					<center>
+						<p>${i.partMsllevel}</p>
+					</center>
+				</td>
+				<td width="70">
 					<p>
 						<input type="text" name="reqnum[]" value="0" size="4"
 							onchange="changedValue(this, '${status.index}')">
@@ -315,32 +355,27 @@
 							name="submitbtn" OnClick="javascript:addCart('${status.index}');">  -->
 					</p>
 				</td>
-
-
-				</td>
-				<td width="90">
-					<center>
-						<p>${i.partCost}</p>
-					</center>
-				</td>
-				<td width="67">
-					<center>
-						<p>${i.partLocation}</p>
-					</center>
-				</td>
-				<td width="67">
-					<center>
-						<p>${i.partMsllevel}</p>
-					</center>
-				</td>
 			</tr>
 		</form>
 	</c:forEach>
 
 </table>
 <p align="right">
-	<input type="button" class="btn btn-info btn-xs" value="출고요청준비"
+
+	<!-- 화면입력 담기 -->
+	<input type="button" class="btn btn-info btn-xs" value="화면입력값 출고담기"
 		name="submitbtn" OnClick="javascript:addAllCart()">
+
+
+	<!-- Excel Upload -->
+	<input type="button" value="Excel Upload로 출고담기" name="submitbtn2"
+		class="btn btn-info btn-xs"
+		OnClick="javascript:showExcelImportWindow();">
+
+	<!-- Excel download -->
+	<input type="button" value="재고 Excel download" name="submitbtn1"
+		class="btn btn-info btn-xs"
+		OnClick="javascript:showExcelExportWindow();">
 </p>
 <!-- 
 	*****************************

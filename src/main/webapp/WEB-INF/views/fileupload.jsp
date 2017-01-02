@@ -5,7 +5,9 @@
 <center>
 	<h3>파일업로드</h3>
 </center>
-
+<b>'Excel download'를 통해 받은 파일양식을 사용해 주세요.</b>
+<p>
+<p>
 <script language="javascript">
 	function aaa() {
 		var nm = document.forms["formaaa"].elements["file1"].value;

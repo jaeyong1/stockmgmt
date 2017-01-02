@@ -34,7 +34,7 @@ public class ReadExcelFileToList {
 		}
 
 		if (lst.get(0).trim().equals("프로젝트코드") && lst.get(1).trim().equals("개발담당자") && lst.get(2).trim().equals("부서")
-				&& lst.get(3).trim().equals("시작담당자")) {
+				&& lst.get(3).trim().equals("출고담당자")) {
 			return true;
 		}
 
@@ -121,7 +121,19 @@ public class ReadExcelFileToList {
 					item.setPartProjectCode(lststr.get(0).toString());
 					item.setPartName(lststr.get(4).toString());
 					item.setPartDesc(lststr.get(5).toString());
-					item.setPartMemo(lststr.get(6).toString());// maker					
+					item.setPartMemo(lststr.get(6).toString());// maker
+
+					if (isNum(lststr.get(7).toString())) {
+						String str = lststr.get(7).trim().replaceAll(",", "").toString();
+						float _f = Float.valueOf(str);
+						item.setPartCost(_f);
+					} else {
+						System.out.println("[exception] setPartLocation parsing failed!!");
+						String err = "Error: 숫자변환에 실패했습니다." + numRows + "라인, 엑셀값:" + lststr.get(7).toString();
+						System.out.println(err);
+						errorlog.add(err);
+						item.setPartCost(Float.valueOf(0));
+					}
 
 					if (isNum(lststr.get(8).toString())) {
 						String str = lststr.get(8).trim().replaceAll(",", "").toString();
@@ -137,15 +149,7 @@ public class ReadExcelFileToList {
 					}
 					item.setPartLocation(lststr.get(9).toString());
 
-					if (isNum(lststr.get(7).toString())) {
-						item.setPartCost(Float.valueOf(lststr.get(7).toString()));
-					} else {
-						System.out.println("[exception] setPartLocation parsing failed!!");
-						String err = "Error: 숫자변환에 실패했습니다." + numRows + "라인, 엑셀값:" + lststr.get(7).toString();
-						System.out.println(err);
-						errorlog.add(err);
-						item.setPartCost(Float.valueOf(0));
-					}
+					item.setPartMsllevel(lststr.get(10).toString());
 
 					partsItems.add(item);
 
@@ -166,7 +170,7 @@ public class ReadExcelFileToList {
 
 	}
 
-	//파츠정보조회/등록 
+	// 파츠정보조회/등록
 	public static List<PartsItem> readExcelPartsData(String fileName, List<String> errorlog) {
 		List<PartsItem> partsItems = new ArrayList<PartsItem>();
 
@@ -251,10 +255,12 @@ public class ReadExcelFileToList {
 						item.setPartStock(0);
 
 					}
-					item.setPartLocation(lststr.get(5).toString()); //F:Location
+					item.setPartLocation(lststr.get(5).toString()); // F:Location
 
-					if (isNum(lststr.get(6).toString())) {   //G:단가
-						item.setPartCost(Float.valueOf(lststr.get(6).toString()));
+					if (isNum(lststr.get(6).toString())) { // G:단가
+						String str = lststr.get(6).trim().replaceAll(",", "").toString();
+						float _f = Float.valueOf(str);
+						item.setPartCost(_f);
 					} else {
 						System.out.println("[exception] setPartLocation parsing failed!!");
 						String err = "Error: 숫자변환에 실패했습니다. " + numRows + "라인,엑셀값:" + lststr.get(6).toString();
@@ -263,8 +269,9 @@ public class ReadExcelFileToList {
 						item.setPartCost(Float.valueOf(0));
 					}
 
-					item.setPartMsllevel(lststr.get(7).toString()); //H:MSL level
-					
+					item.setPartMsllevel(lststr.get(7).toString()); // H:MSL
+																	// level
+
 					partsItems.add(item);
 
 					// process lststr [end]
@@ -356,10 +363,10 @@ public class ReadExcelFileToList {
 					// 한줄 다 읽었으니, 처리하기..
 				System.out.println("[" + numRows + "] " + lststr.toString());
 
-				// 사용자가 값 안넣은 경우 0 처리
-				if (lststr.size() >= 11) {
-					if (lststr.get(10).toString().equals("")) {
-						lststr.set(10, "0");
+				// 사용자가 출고요청 값 안넣은 경우 0 처리
+				if (lststr.size() >= 12) {
+					if (lststr.get(11).toString().equals("")) {
+						lststr.set(11, "0");
 					}
 				}
 
@@ -372,24 +379,23 @@ public class ReadExcelFileToList {
 				} else if (xlsDataLine) {
 					// process lststr [start]
 					System.out.println(">process line");
-					System.out.println(lststr.get(10).toString().trim());
-					if (!lststr.get(10).toString().trim().equals("") && !lststr.get(10).toString().trim().equals("0")) {
+					System.out.println(lststr.get(11).toString().trim());
+					if (!lststr.get(11).toString().trim().equals("") && !lststr.get(11).toString().trim().equals("0")) {
 						String[] item = new String[4];
 						item[0] = lststr.get(0).toString(); // 프로젝트코드 A열(프로젝트코드)
-						item[3] = lststr.get(1).toString(); // 프로젝트코드 B열(개발담당자)
-						item[1] = lststr.get(4).toString(); // 프로젝트코드
-															// E열(LGITP/N)
+						item[3] = lststr.get(1).toString(); // B열(개발담당자)
+						item[1] = lststr.get(4).toString(); // E열(LGITP/N)
 
-						if (isNum(lststr.get(10).toString())) {
-							String str = lststr.get(10).trim().replaceAll(",", "").toString();
+						if (isNum(lststr.get(11).toString())) {
+							String str = lststr.get(11).trim().replaceAll(",", "").toString();
 							int _n = Integer.valueOf(str);
-							item[2] = String.valueOf(_n); // 프로젝트코드 K열
+							item[2] = String.valueOf(_n); // L열(출고요청수량)
 						} else {
 							System.out.println("[exception] setPartStock parsing failed!!");
-							String err = "Error: 숫자변환에 실패했습니다. " + numRows + "라인, 엑셀값:" + lststr.get(10).toString();
+							String err = "Error: 숫자변환에 실패했습니다. " + numRows + "라인, 엑셀값:" + lststr.get(11).toString();
 							System.out.println(err);
 							errorlog.add(err);
-							item[2] = "0"; // 프로젝트코드 K열
+							item[2] = "0"; // L열(출고요청수량)
 						}
 
 						xlsitems.add(item);

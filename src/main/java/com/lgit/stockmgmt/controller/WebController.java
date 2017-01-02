@@ -453,8 +453,7 @@ public class WebController {
 			items = itemService.getMyItemsByOwnerName(loginUser.getUserName());
 		} else if (loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt()) {
 			items = itemService.getShipperItemsByShipperName(loginUser.getUserName());
-		} else
-		{
+		} else {
 			items = new ArrayList<JoinDBItem>();
 		}
 
@@ -539,7 +538,7 @@ public class WebController {
 	 */
 
 	/*
-	 * /addmyproject 프로젝트 생성
+	 * /myproject 개발담당자 - DB관리 - 프로젝트관리
 	 */
 	@RequestMapping(value = "/myproject", method = RequestMethod.GET)
 	public String showMyProject2(Model model, HttpServletRequest request) {
@@ -554,7 +553,7 @@ public class WebController {
 
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
-			System.out.println("/shipreqlist process. no session info.  ");
+			System.out.println("/myproject process. no session info.  ");
 			return "login";
 		} else {
 			// update bagde counter(cart items)
@@ -565,7 +564,7 @@ public class WebController {
 			loginUser.setCartItems(cartItemsCounter1);
 			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
-		System.out.println("[" + loginUser.getUserId() + "] /shipreqlist process");
+		System.out.println("[" + loginUser.getUserId() + "] /myproject process");
 
 		final int rowsPer1Page = 15;
 
@@ -590,6 +589,58 @@ public class WebController {
 		return "myproject"; /* myproject.jsp */
 	}
 
+	/*
+	 * /myproject4ship 출고담당자 - DB관리 - 프로젝트관리
+	 */
+	@RequestMapping(value = "/myproject4ship", method = RequestMethod.GET)
+	public String showMyProject4ship2(Model model, HttpServletRequest request) {
+		return showMyProject4ship("0", model, request);
+	}
+
+	@RequestMapping(value = "/myproject4ship/{seq}", method = RequestMethod.GET)
+	public String showMyProject4ship(@PathVariable String seq, Model model, HttpServletRequest request) {
+		if (seq.equalsIgnoreCase("") || seq.equalsIgnoreCase("-1")) {
+			seq = "0";
+		}
+
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/myproject4ship process. no session info.  ");
+			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
+		}
+		System.out.println("[" + loginUser.getUserId() + "] /myproject4ship process");
+
+		final int rowsPer1Page = 15;
+
+		// Get List
+		// List<ProjectItem> items = itemService.getProjectItems();
+		List<ProjectItem> items = itemService.getMyProjectItems4shipper(loginUser.getUserId());
+		System.out.println("/myproject4ship process");
+
+		// Choose current page data
+		PagedListHolder<ProjectItem> paging = new PagedListHolder<ProjectItem>(items);
+		paging.setPageSize(rowsPer1Page);
+		paging.setPage(Integer.parseInt(seq));
+		model.addAttribute("items", paging.getPageList());
+
+		// Add Page number information
+		model.addAttribute("pageNum", paging.getPageCount());
+		model.addAttribute("start", paging.getFirstLinkedPage());
+		model.addAttribute("end", paging.getLastLinkedPage());
+		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
+		// 인덱스..
+
+		return "myproject4ship"; /* myproject.jsp */
+	}
+
 	@RequestMapping(value = "/addmyproject", method = RequestMethod.POST)
 	public String addMyProject(ProjectItem item, Model model, HttpServletRequest request) {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
@@ -610,7 +661,7 @@ public class WebController {
 		// Get data from Webbrowser
 		item.setProjectCode(request.getParameter("project-Code"));
 		item.setProjectName(request.getParameter("project-Name"));
-		item.setProjectOwnerId(loginUser.getUserId());
+		item.setProjectOwnerId(request.getParameter("project-Owner-Id"));
 		item.setProjectShipperId(request.getParameter("project-shipper-Id"));
 		System.out.println("[" + loginUser.getUserId() + "]" + item.toString());
 
@@ -626,7 +677,14 @@ public class WebController {
 			model.addAttribute("reqresult", item.getProjectCode() + " is added");
 		}
 		// Get DB List
-		return showMyProject1("0", model, request);
+		// return showMyProject1("0", model, request);
+		if (loginUser.getUserLevel() == EUserLevel.Lv2_DEV.getLevelInt()) {
+			return showMyProject1("0", model, request);
+		} else // lv3. lv6
+		{
+			return showMyProject4ship("0", model, request);
+		}
+
 	}
 
 	/*
@@ -634,6 +692,20 @@ public class WebController {
 	 */
 	@RequestMapping(value = "/reqmyprojectmodify", method = RequestMethod.POST)
 	public String modifyMyProject(ProjectItem item, Model model, HttpServletRequest request) {
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/reqmyprojectmodify process. no session info.  ");
+			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
+		}
+
 		// Get data from Webbrowser
 		item.setProjectCode(request.getParameter("project-Code"));
 		item.setProjectName(request.getParameter("project-Name"));
@@ -655,7 +727,13 @@ public class WebController {
 		System.out.println("/reqmyprojectmodify processed.. Req ID:" + item.getProjectCode());
 
 		// Get DB List
-		return showMyProject1("0", model, request);
+		// return showMyProject1("0", model, request);
+		if (loginUser.getUserLevel() == EUserLevel.Lv2_DEV.getLevelInt()) {
+			return showMyProject1("0", model, request);
+		} else // lv3. lv6
+		{
+			return showMyProject4ship("0", model, request);
+		}
 	}
 
 	/*
@@ -664,6 +742,20 @@ public class WebController {
 	 */
 	@RequestMapping(value = "/reqmyprojectremove", method = RequestMethod.POST)
 	public String removeMyProject(ProjectItem item, Model model, HttpServletRequest request) {
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/reqmyprojectremove process. no session info.  ");
+			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
+		}
+
 		// Get data from Webbrowser
 		item.setProjectCode(request.getParameter("project-Code"));
 
@@ -673,7 +765,13 @@ public class WebController {
 		System.out.println("/reqmyprojectremove processed.. Req ID:" + item.getProjectCode());
 
 		// Get DB List
-		return showMyProject1("0", model, request);
+		// return showMyProject1("0", model, request);
+		if (loginUser.getUserLevel() == EUserLevel.Lv2_DEV.getLevelInt()) {
+			return showMyProject1("0", model, request);
+		} else // lv3. lv6
+		{
+			return showMyProject4ship("0", model, request);
+		}
 	}
 
 	// =================================================
@@ -708,7 +806,16 @@ public class WebController {
 		item.setPartMsllevel(request.getParameter("part-Msllevel"));
 
 		// isvalid projectcode
-		List<ProjectItem> lstPrj = itemService.getMyProjectItems(loginUser.getUserId());
+		List<ProjectItem> lstPrj;
+		if (loginUser.getUserLevel() == EUserLevel.Lv2_DEV.getLevelInt()) {
+			lstPrj = itemService.getMyProjectItems(loginUser.getUserId());
+		} else if ((loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt())
+				|| ((loginUser.getUserLevel() == EUserLevel.Lv6_SHIPPERADMIN.getLevelInt()))) {
+			lstPrj = itemService.getMyProjectItems4shipper(loginUser.getUserId());
+		} else {
+			// dummy
+			lstPrj = itemService.getMyProjectItems(loginUser.getUserId());
+		}
 		boolean prjFinded = false;
 		for (ProjectItem prj : lstPrj) {
 			if (prj.getProjectCode().equals(item.getPartProjectCode())) {
@@ -725,7 +832,15 @@ public class WebController {
 			model.addAttribute("reqresult", "[항목생성실패] " + item.getPartProjectCode() + "는 나의 프로젝트 Code가 아닙니다.");
 		}
 
-		return showMyParts1("0", model, request);
+		// return showMyParts1("0", model, request);
+		if (loginUser.getUserLevel() == EUserLevel.Lv2_DEV.getLevelInt()) {
+			// lv2. dev
+			return showMyParts1("0", model, request);
+		} else // lv3. lv6 shipper
+		{
+			return showMyParts4ship("0", model, request);
+		}
+
 	}
 
 	/*
@@ -755,6 +870,14 @@ public class WebController {
 			loginUser.setCartItems(cartItemsCounter1);
 			loginUser.setCartItemsOthers(cartItemsCounter2);
 		}
+
+		// SPECIAL CODE . for share web page.. fowarding..
+		if ((loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt())
+				|| (loginUser.getUserLevel() == EUserLevel.Lv6_SHIPPERADMIN.getLevelInt())) {
+			System.out.println("redirect to /myparts4ship");
+			return showMyParts4ship(seq, model, request);
+		}
+
 		System.out.println(
 				"[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /myparts process. req pagenum:" + seq);
 
@@ -782,10 +905,77 @@ public class WebController {
 	}
 
 	/*
+	 * /myparts4ship 출고담당자 - DB관린 - 파츠관리
+	 */
+	@RequestMapping(value = "/myparts4ship", method = RequestMethod.GET)
+	public String showMyParts4ship2(Model model, HttpServletRequest request) {
+		return showMyParts4ship("0", model, request);
+	}
+
+	@RequestMapping(value = "/myparts4ship/{seq}", method = RequestMethod.GET)
+	public String showMyParts4ship(@PathVariable String seq, Model model, HttpServletRequest request) {
+		if (seq.equalsIgnoreCase("") || seq.equalsIgnoreCase("-1")) {
+			seq = "0";
+		}
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/myparts4ship process. no session info. return login.jsp ");
+			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
+		}
+		System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName()
+				+ "] /myparts4ship process. req pagenum:" + seq);
+
+		final int rowsPer1Page = 15;
+
+		/////////////////// List View
+		List<PartsItem> items = itemService.getMyItemsByID4Shipper(loginUser.getUserId());
+		System.out.println("/myparts4ship process");
+		// model.addAttribute("items", items);
+
+		// Choose current page data
+		PagedListHolder<PartsItem> paging = new PagedListHolder<PartsItem>(items);
+		paging.setPageSize(rowsPer1Page);
+		paging.setPage(Integer.parseInt(seq));
+		model.addAttribute("items", paging.getPageList());
+
+		// Add Page number information
+		model.addAttribute("pageNum", paging.getPageCount());
+		model.addAttribute("start", paging.getFirstLinkedPage());
+		model.addAttribute("end", paging.getLastLinkedPage());
+		// System.out.println(paging.getFirstElementOnPage());//현 페이지 첫번째게시물의 DB
+		// 인덱스..
+
+		return "myparts"; /* adminparts.jsp */
+	}
+
+	/*
 	 * /reqmypartsmodify 파츠 수정
 	 */
 	@RequestMapping(value = "/reqmypartsmodify", method = RequestMethod.POST)
 	public String modifyMyParts(PartsItem item, Model model, HttpServletRequest request) {
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/reqmypartsmodify process. no session info. return login.jsp ");
+			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
+		}
 
 		// Get data from Webbrowser
 		item.setPartId(Integer.valueOf(request.getParameter("part-Id")));
@@ -805,7 +995,14 @@ public class WebController {
 		System.out.println("/reqmypartsmodify processed.. Req:" + item.getPartName());
 
 		// Get DB List
-		return showMyParts1("0", model, request);
+		// return showMyParts1("0", model, request);
+		if (loginUser.getUserLevel() == EUserLevel.Lv2_DEV.getLevelInt()) {
+			// lv2. dev
+			return showMyParts1("0", model, request);
+		} else // lv3. lv6 shipper
+		{
+			return showMyParts4ship("0", model, request);
+		}
 	}
 
 	/*
@@ -813,6 +1010,21 @@ public class WebController {
 	 */
 	@RequestMapping(value = "/reqmypartsremove", method = RequestMethod.POST)
 	public String removeMyParts(PartsItem item, Model model, HttpServletRequest request) {
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/reqmypartsremove process. no session info. return login.jsp ");
+			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
+		}
+
 		// Get data from Webbrowser
 		item.setPartId(Integer.valueOf(request.getParameter("part-Id")));
 		item.setPartName(request.getParameter("part-Name"));
@@ -820,10 +1032,17 @@ public class WebController {
 		// Change DB query
 		itemService.removePartsItem(item);
 		model.addAttribute("reqresult", item.getPartName() + " is removed");
-		System.out.println("/admin/reqprojectremove processed.. Req ID:" + item.getPartName());
+		System.out.println("/reqmypartsremove processed.. Req ID:" + item.getPartName());
 
 		// Get DB List
-		return showMyParts1("0", model, request);
+		// return showMyParts1("0", model, request);
+		if (loginUser.getUserLevel() == EUserLevel.Lv2_DEV.getLevelInt()) {
+			// lv2. dev
+			return showMyParts1("0", model, request);
+		} else // lv3. lv6 shipper
+		{
+			return showMyParts4ship("0", model, request);
+		}
 	}
 
 	/*
@@ -854,7 +1073,40 @@ public class WebController {
 		System.out.println("/shipperlist process");
 		model.addAttribute("items", items);
 
-		return "popup-shipperlist"; /* popup-shipperlist.jsp */
+		model.addAttribute("title", "가입되어있는 시작담당자(출고담당자) 리스트");
+		return "popup-userlist"; /* popup-shipperlist.jsp */
+	}
+
+	/*
+	 * /devuserlist 개발담당자리스트
+	 */
+	@RequestMapping(value = "/devuserlist", method = RequestMethod.GET)
+	public String showDevuserUser(Model model, HttpServletRequest request) {
+
+		// session 확인
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/shipperlist process. no session info. return login.jsp ");
+			return "login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
+		}
+		System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] /devuserlist process. ");
+
+		///////////////////
+		// Query DB List
+		List<UserItem> items = itemService.getDevUserItems();
+		System.out.println("/devuserlist process");
+		model.addAttribute("items", items);
+
+		model.addAttribute("title", "가입되어있는 개발담당자 리스트");
+		return "popup-userlist"; /* popup-shipperlist.jsp */
 	}
 
 	/*

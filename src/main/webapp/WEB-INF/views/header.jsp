@@ -112,7 +112,7 @@ var rolekor ="";
 
 					<c:choose>
 						<c:when test="${ (6 == sessionScope.userLoginInfo.userLevel) }">
-							<li><a href="/shipreqlist_admin">출고요청 전체조회</a></li>
+							<li><a href="/shipreqlist_admin">출고요청 전체조회(관리자용)</a></li>
 						</c:when>
 					</c:choose>
 
@@ -128,6 +128,17 @@ var rolekor ="";
 									<li role="separator" class="divider"></li>
 								</c:when>
 							</c:choose>
+
+							<c:choose>
+								<c:when
+									test="${(3 == sessionScope.userLoginInfo.userLevel) || (6 == sessionScope.userLoginInfo.userLevel) }">
+
+									<li><a href="/myproject4ship">Project 관리</a></li>
+									<li><a href="/myparts4ship">Parts 관리</a></li>
+									<li role="separator" class="divider"></li>
+								</c:when>
+							</c:choose>
+
 
 							<li><a href="/helppage">도움말</a></li>
 							<c:choose>

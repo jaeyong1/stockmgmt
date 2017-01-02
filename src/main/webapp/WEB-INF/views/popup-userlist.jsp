@@ -10,7 +10,7 @@
 
 <h5>
 	<center>
-		<b>가입되어있는 시작담당자(출고담당자) 리스트</b>
+		<b>${title}</b>
 	</center>
 </h5><br>
 <table border="1">
