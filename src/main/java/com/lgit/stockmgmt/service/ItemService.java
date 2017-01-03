@@ -1043,4 +1043,16 @@ public class ItemService {
 		return 0;
 	}
 
+	public String getUserEmailById(String srchId) {
+		String pw = "";
+		List<UserItem> userItems = getUserItems();
+		for (UserItem userItem : userItems) {
+			if (userItem.getUserId().equals(srchId))
+			{
+				pw = userItem.getUserEmail();
+			}
+		}
+		return pw;
+	}
+
 }

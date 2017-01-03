@@ -9,10 +9,15 @@ package com.lgit.stockmgmt.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.mail.Message.RecipientType;
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +33,7 @@ import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ProjectItem;
 import com.lgit.stockmgmt.domain.UserItem;
 import com.lgit.stockmgmt.service.ItemService;
+import com.lgit.stockmgmt.service.MailService;
 
 @Controller
 public class WebController {
@@ -58,6 +64,12 @@ public class WebController {
 	private ItemService itemService;
 
 	/*
+	 * Mail Service 연결
+	 */
+	@Autowired
+	private MailService mailService;
+
+	/*
 	 * /stocklist 재고 조회 화면
 	 */
 	@RequestMapping(value = "/stocklist", method = RequestMethod.GET)
@@ -69,6 +81,8 @@ public class WebController {
 		model.addAttribute("items", items);
 		return "stocklist"; /* stocklist.jsp */
 	}
+
+	// @Autowired private JavaMailSender javaMailSender;
 
 	/*
 	 * 
@@ -363,8 +377,19 @@ public class WebController {
 		if (ip == null) {
 			ip = req.getRemoteAddr();
 		}
+		// logging system
 		itemService.addUserLog(userdata.getUserId(), ip, "관리자메뉴에서 비밀번호 초기화됨");
 
+		// mail noti
+		String rcvAddr = itemService.getUserEmailById(userdata.getUserId());
+		System.out.println("메일발송 : " + rcvAddr);
+		try {
+			if (!rcvAddr.equals("")) {
+				mailService.adminResetMail(rcvAddr, userdata.getUserPassword());
+			}
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
 		// Get DB List
 		return showAdminUser("0", model); /* adminuser.jsp */
 	}
@@ -1205,6 +1230,15 @@ public class WebController {
 		String r = itemService.getPartsItemsRow();
 		model.addAttribute("errormsg", err + "(" + r + ")");
 		return "dbcheck";
+	}
+
+	/*
+	 * mail check 페이지
+	 */
+	@RequestMapping("/mailcheck")
+	public String doMailCheck(Model model) {
+		System.out.println("[mailcheck]");
+		return mailService.doMailCheck("jaeyong1@naver.com", model);
 	}
 
 }
