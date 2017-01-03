@@ -30,6 +30,16 @@
 
 	}
 
+	//키워드 검색 
+	function searchparts(pagenum) {
+		var kw = document.forms["formserch"].elements["srchword"].value;
+		console.log("검색 : " + kw);
+		document.forms["formserch"].elements["seq"].value = pagenum;
+		document.forms["formserch"].method = "post";
+		document.forms["formserch"].action = "${requestedURL}" + "/" + pagenum;
+		document.forms["formserch"].submit();
+	}
+
 	function addAllCart() {
 		console.log("addAllCart");
 
@@ -159,17 +169,6 @@
 
 <form name="formSearchType">
 	<p align="right">
-		<!--  not use anymore-->
-		<!-- 
-		&nbsp;<select name="srchtype" size="1">
-			<option selected value="projcode">프로젝트Code</option>
-			<option value="shipperid">출고담당자이름</option>
-			<option value="devid">개발담당자이름</option>
-			<option value="lgitpn">LGIT P/N</option>
-		</select> <input type="text" name="srchword"> <input type="submit"
-			name="btnsrch" value="검색">
-
-			 -->
 
 		<!-- 화면입력 담기 -->
 		<input type="button" class="btn btn-info btn-xs" value="화면입력값 출고담기"
@@ -399,7 +398,10 @@
 		​
 
 		<c:forEach var="i" begin="${start }" end="${end }">
-			<li id="page${i }"><a href="/mylist/${i}">${i}</a></li>
+			<li id="page${i }">
+				<!-- <a href="/mylist/${i}"> --> <a
+				href="javascript:searchparts(${i})"> ${i}</a>
+			</li>
 		</c:forEach>
 		<!-- end페이지 번호가 5, 10 인데 전체 페이지 갯수가 end페이지 보다 크면 다음 페이징 바로가기 표시  (">>")​ .-->
 		​
@@ -416,6 +418,38 @@
 	</ul>
 </div>
 
+<p align="center">
+<form name="formserch">
+	<p align="center">
+		&nbsp;<select name="srchtype" size="1">
 
+			<c:choose>
+				<c:when test="${srchtype == 'lgitpn' }">
+					<option value="lgitpn" selected="selected">LGIT P/N</option>
+				</c:when>
+				<c:otherwise>
+					<option value="lgitpn">LGIT P/N</option>
+				</c:otherwise>
+			</c:choose>
+			<c:choose>
+				<c:when test="${srchtype == 'desc' }">
+					<option value="desc" selected="selected">Desc</option>
+				</c:when>
+				<c:otherwise>
+					<option value="desc">Desc</option>
+				</c:otherwise>
+			</c:choose>
+
+		</select> <input type="text" name="srchword" value='${srchword}'> <input
+			type="button" class="btn btn-info btn-xs" value="검색" name="srchbtn"
+			OnClick="javascript:searchparts(0)">
+
+		<!-- 같이가야하는 정보 -->
+		<input type=hidden name=requestedURL value='${requestedURL}'>
+		<input type=hidden name=seq value='${seq}'>
+
+	</p>
+</form>
+</p>
 
 <%@ include file="footer.jsp"%>

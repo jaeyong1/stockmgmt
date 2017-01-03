@@ -109,7 +109,7 @@ var rolekor ="";
 
 						</c:when>
 					</c:choose>
-
+					
 					<c:choose>
 						<c:when test="${ (6 == sessionScope.userLoginInfo.userLevel) }">
 							<li><a href="/shipreqlist_admin">출고요청 전체조회(관리자용)</a></li>

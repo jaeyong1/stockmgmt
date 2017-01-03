@@ -418,12 +418,12 @@ public class WebController {
 	/*
 	 * /mylist 내 자재정보
 	 */
-	@RequestMapping(value = "/mylist", method = RequestMethod.GET)
+	@RequestMapping(value = "/mylist", method = { RequestMethod.GET, RequestMethod.POST })
 	public String myListProcess2(Model model, HttpServletRequest request) {
 		return myListProcess("0", model, request);
 	}
 
-	@RequestMapping(value = "/mylist/{seq}", method = RequestMethod.GET)
+	@RequestMapping(value = "/mylist/{seq}", method = { RequestMethod.GET, RequestMethod.POST })
 	public String myListProcess(@PathVariable String seq, Model model, HttpServletRequest request) {
 		if (seq.equalsIgnoreCase("") || seq.equalsIgnoreCase("-1")) {
 			seq = "0";
@@ -457,6 +457,21 @@ public class WebController {
 			items = new ArrayList<JoinDBItem>();
 		}
 
+		// Get data from Web browser & filtering
+		String seachKeyword = request.getParameter("srchword");
+		if (!(seachKeyword == null) && !(seachKeyword.equals(""))) {
+			// get others parameter
+			String srchtype = request.getParameter("srchtype");
+
+			///////// Search Item
+			System.out.println("Search keyword : " + seachKeyword);
+			items = itemFilter(items, srchtype, seachKeyword);
+
+			// send search info
+			model.addAttribute("srchword", seachKeyword); // for next page
+			model.addAttribute("srchtype", srchtype);// for next page
+		}
+
 		// Choose current page data
 		PagedListHolder<JoinDBItem> paging = new PagedListHolder<JoinDBItem>(items);
 		paging.setPageSize(rowsPer1Page);
@@ -478,14 +493,38 @@ public class WebController {
 	}
 
 	/*
+	 * 검색어 필터
+	 */
+	private List<JoinDBItem> itemFilter(List<JoinDBItem> fullItems, String searchType, String seachKeyword) {
+		List<JoinDBItem> filteredItems = new ArrayList<JoinDBItem>();
+
+		for (JoinDBItem item : fullItems) {
+			// filter type 1
+			if (searchType.equals("lgitpn") && item.getPartName().toLowerCase().contains(seachKeyword.toLowerCase())) {
+				// System.out.println("finded/type1/" + seachKeyword);
+				filteredItems.add(item);
+			}
+
+			// filter type 2
+			if (searchType.equals("desc") && item.getPartDesc().toLowerCase().contains(seachKeyword.toLowerCase())) {
+				// System.out.println("finded/type2" + seachKeyword);
+				filteredItems.add(item);
+			}
+
+		}
+
+		return filteredItems;
+	}
+
+	/*
 	 * /otherslist 파트너 재고정보
 	 */
-	@RequestMapping(value = "/otherslist", method = RequestMethod.GET)
+	@RequestMapping(value = "/otherslist", method = { RequestMethod.GET, RequestMethod.POST })
 	public String othersListProcess2(Model model, HttpServletRequest request) {
 		return othersListProcess("0", model, request);
 	}
 
-	@RequestMapping(value = "/otherslist/{seq}", method = RequestMethod.GET)
+	@RequestMapping(value = "/otherslist/{seq}", method = { RequestMethod.GET, RequestMethod.POST })
 	public String othersListProcess(@PathVariable String seq, Model model, HttpServletRequest request) {
 		if (seq.equalsIgnoreCase("") || seq.equalsIgnoreCase("-1")) {
 			seq = "0";
@@ -511,6 +550,21 @@ public class WebController {
 
 		/////////////////// List View
 		List<JoinDBItem> items = itemService.getOthersItemsByOwnerName(loginUser.getUserName());
+
+		// Get data from Web browser & filtering
+		String seachKeyword = request.getParameter("srchword");
+		if (!(seachKeyword == null) && !(seachKeyword.equals(""))) {
+			// get others parameter
+			String srchtype = request.getParameter("srchtype");
+
+			///////// Search Item
+			System.out.println("Search keyword : " + seachKeyword);
+			items = itemFilter(items, srchtype, seachKeyword);
+
+			// send search info
+			model.addAttribute("srchword", seachKeyword); // for next page
+			model.addAttribute("srchtype", srchtype);// for next page
+		}
 
 		// Choose current page data
 		PagedListHolder<JoinDBItem> paging = new PagedListHolder<JoinDBItem>(items);
@@ -1152,4 +1206,5 @@ public class WebController {
 		model.addAttribute("errormsg", err + "(" + r + ")");
 		return "dbcheck";
 	}
+
 }
