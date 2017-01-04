@@ -40,10 +40,14 @@ public class MailConfig {
 
 	private Properties getMailProperties() {
 		Properties properties = new Properties();
-		properties.setProperty("mail.transport.protocol", "smtp");
-		properties.setProperty("mail.smtp.ssl.trust", "smtp.gmail.com");
-		properties.setProperty("mail.smtp.auth", "true");
-		properties.setProperty("mail.smtp.starttls.enable", "true");
+		if (host.equals("smtp.gmail.com")) {
+			properties.setProperty("mail.transport.protocol", "smtp");// gmail
+			properties.setProperty("mail.smtp.ssl.trust", "smtp.gmail.com");// gmail
+			properties.setProperty("mail.smtp.auth", "true");// gmail
+			properties.setProperty("mail.smtp.starttls.enable", "true");// gmail
+		} else if (host.contains("cafe24.com")) {
+			properties.setProperty("mail.smtp.auth", "true");// cafe24
+		}
 
 		return properties;
 	}

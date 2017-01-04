@@ -22,6 +22,7 @@ import com.lgit.stockmgmt.domain.ShipReqItem;
 import com.lgit.stockmgmt.domain.ShipReqPartsItem;
 import com.lgit.stockmgmt.domain.UserItem;
 import com.lgit.stockmgmt.service.ItemService;
+import com.lgit.stockmgmt.service.MailService;
 
 @Controller
 public class ShipController {
@@ -30,6 +31,12 @@ public class ShipController {
 	 */
 	@Autowired
 	private ItemService itemService;
+
+	/*
+	 * Mail Service 연결
+	 */
+	@Autowired
+	private MailService mailService;
 
 	// ================================= 출고 장바구니 관련
 	// =================================
@@ -808,9 +815,11 @@ public class ShipController {
 			shipreqdata.setShipRejectCause(request.getParameter("ship-RejectCause"));
 
 			// Change DB query
+			// (notify mail inside..)
 			itemService.stateMove1to2(shipreqdata, shipreqdata.getShipRequestorId());
 			model.addAttribute("reqresult", shipreqdata.getShipId() + "'s data is added");
 			System.out.println("/shipreqprocess/state2 processed..");
+			
 
 			// Get DB List
 			return "redirect:../shipreqlist";
@@ -930,6 +939,11 @@ public class ShipController {
 					shipreqdata.getShipRejectCause(), shipreqdata.getShipDeliveredDateMethod());
 			// model.addAttribute("reqresult", shipreqdata.getShipId() + "'s
 			// data is added");
+			
+			// notify mail
+			mailService.notiMail3to4(shipreqdata.getShipId());// DB 지우기전 출고자에게 노티
+
+			
 			System.out.println("[" + loginUser.getUserId() + "] /shipreqprocess/state4 processed..");
 
 			// Get DB List

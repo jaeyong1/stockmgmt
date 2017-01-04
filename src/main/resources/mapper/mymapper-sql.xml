@@ -955,8 +955,8 @@
 		t2.project_owner_id =
 		#{UserId};
 	</select>
-	
-	
+
+
 
 	<!-- tb_parts 에서 내(출고담당자) 자재중에 ProjectCode&PartName검색결과 -->
 	<select id="queryPartsProjectAndParts4Shipper_TBPart" resultMap="PartsItemMap"
@@ -984,7 +984,7 @@
 		t2.project_shipper_id =
 		#{UserId};
 	</select>
-	
+
 	<!-- tb_parts 에서 내 자재중에 PartName으로 PartID 검색 -->
 	<select id="queryMyPartsIDByPartName_TBPart" resultMap="PartsItemMap"
 		parameterType="String">
@@ -1143,6 +1143,50 @@
 		FROM
 		`tb_user_log`
 		ORDER BY `log_id` DESC
+	</select>
+
+
+	<!-- ShipperId로 개발자 email 리턴 -->
+	<select id="queryOwnerEmailbyShipId" parameterType="String"
+		resultType="string">
+		SELECT
+		user_email as ownerEmail
+		FROM
+		tb_shipreq
+		INNER JOIN (tb_project, tb_user)
+		WHERE
+		tb_shipreq.`ship_project_code` = tb_project.`project_code`
+		AND tb_project.`project_owner_id` = tb_user.`user_id`
+		AND tb_shipreq.`ship_id` = #{shipId};
+	</select>
+	
+		<!-- ShipperId로 개발자 이름 리턴 -->
+	<select id="queryOwnerNamebyShipId" parameterType="String"
+		resultType="string">
+		SELECT
+		user_name as ownerName
+		FROM
+		tb_shipreq
+		INNER JOIN (tb_project, tb_user)
+		WHERE
+		tb_shipreq.`ship_project_code` = tb_project.`project_code`
+		AND tb_project.`project_owner_id` = tb_user.`user_id`
+		AND tb_shipreq.`ship_id` = #{shipId};
+	</select>
+	
+
+	<!-- ShipperId로 출고자 email 리턴 -->
+	<select id="queryShipperEmailbyShipId" parameterType="String"
+		resultType="string">
+		SELECT
+		user_email as shipperEmail
+		FROM
+		tb_shipreq
+		INNER JOIN (tb_project, tb_user)
+		WHERE
+		tb_shipreq.`ship_project_code` = tb_project.`project_code`
+		AND tb_project.`project_shipper_id` = tb_user.`user_id`
+		AND tb_shipreq.`ship_id` = #{shipId};
 	</select>
 
 </mapper>

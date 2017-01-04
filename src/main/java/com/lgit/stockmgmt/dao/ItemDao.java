@@ -283,4 +283,15 @@ public class ItemDao {
 		return sqlSession.selectOne("queryItemlistAmountbyItemlistId", paramMap);
 	}
 
+	public String queryOwnerEmailbyShipId(Map<String, String> paramMap) {
+		return sqlSession.selectOne("queryOwnerEmailbyShipId", paramMap);
+	}
+	public String queryShipperEmailbyShipId(Map<String, String> paramMap) {
+		return sqlSession.selectOne("queryShipperEmailbyShipId", paramMap);
+	}
+
+	public String queryOwnerNamebyShipId(Map<String, String> paramMap) {
+		return sqlSession.selectOne("queryOwnerNamebyShipId", paramMap);
+	}
+	
 }

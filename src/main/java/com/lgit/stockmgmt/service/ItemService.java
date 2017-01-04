@@ -28,6 +28,12 @@ public class ItemService {
 	@Autowired
 	private ItemDao itemDao;
 
+	/*
+	 * Mail Service 연결
+	 */
+	@Autowired
+	private MailService mailService;
+
 	public List<Item> getItems() {
 		return itemDao.queryItems();
 	}
@@ -202,6 +208,19 @@ public class ItemService {
 		return list.get(0).getUserName();
 	}
 
+	public String getUserEmailbyID(String logingUserId) {
+		// TODO Auto-generated method stub
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("logingUserId", logingUserId);
+
+		List<UserItem> list = itemDao.queryUserItemsbyID(paramMap);
+		if (list.size() == 0) {
+			System.out.println("[ItemService] no user data");
+			return null;
+		}
+		return list.get(0).getUserEmail();
+	}
+
 	public String getTeamNamebyID(String logingUserId) {
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("logingUserId", logingUserId);
@@ -212,6 +231,24 @@ public class ItemService {
 			return null;
 		}
 		return list.get(0).getUserTeamname();
+	}
+
+	public String getOwnerEmailbyShipId(int shipid) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("shipId", String.valueOf(shipid));
+		return itemDao.queryOwnerEmailbyShipId(paramMap);
+	}
+
+	public String getOwnerNamebyShipId(int shipid) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("shipId", String.valueOf(shipid));
+		return itemDao.queryOwnerNamebyShipId(paramMap);
+	}
+
+	public String getShipperEmailbyShipId(int shipid) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("shipId", String.valueOf(shipid));
+		return itemDao.queryShipperEmailbyShipId(paramMap);
 	}
 
 	public int stateMove1to3(ShipReqItem shipreqdata, String UserId) {
@@ -245,6 +282,9 @@ public class ItemService {
 
 		paramMap2.put("NewShipId", String.valueOf(partsShipreqId));
 		itemDao.updateShipParts_ShipId(paramMap2);
+
+		// notify mail
+		mailService.notiMail1to3(partsShipreqId, UserId);// DB 지우기전 출고자에게 노티
 
 		return 0;
 
@@ -295,6 +335,11 @@ public class ItemService {
 		paramMap2.put("NewShipId", String.valueOf(partsShipreqId));
 		itemDao.updateShipParts_ShipId(paramMap2);
 
+		// notify mail
+		mailService.notiMail1to2(shipreqdata.getShipCoworkerUserid(), UserId);// DB
+																				// 지우기전
+																				// 출고자에게
+																				// 노티
 		return 0;
 
 	}
@@ -330,8 +375,8 @@ public class ItemService {
 		paramMap2.put("newShipStateId", String.valueOf(shipStateId));
 		paramMap2.put("shipRejectCause", shipRejectCause);
 		paramMap2.put("shipDeliveredDateMethod", shipDeliveredDateMethod);
-		return itemDao.updateShipReqState_ShipId(paramMap2);
-
+		int r = itemDao.updateShipReqState_ShipId(paramMap2);
+		return r;
 	}
 
 	public int stateMove4to6(int shipId, int shipStateId, String shipRejectCause, String shipDeliveredDateMethod) {
@@ -360,7 +405,14 @@ public class ItemService {
 		paramMap2.put("newShipStateId", String.valueOf(shipStateId));
 		paramMap2.put("shipRejectCause", shipRejectCause);
 		paramMap2.put("shipDeliveredDateMethod", shipDeliveredDateMethod);
-		return itemDao.updateShipReqState_ShipId(paramMap2);
+
+		// db update
+		int r = itemDao.updateShipReqState_ShipId(paramMap2);
+
+		// notify mail
+		mailService.notiMail4to6(shipId, shipRejectCause);
+
+		return r;
 
 	}
 
@@ -372,6 +424,11 @@ public class ItemService {
 		paramMap2.put("newShipStateId", String.valueOf(shipStateId));
 		paramMap2.put("shipRejectCause", shipRejectCause);
 		paramMap2.put("shipDeliveredDateMethod", shipDeliveredDateMethod);
+
+		// notify mail
+		mailService.notiMail4to5(shipId, shipDeliveredDateMethod);// DB 지우기전
+																	// 출고자에게 노티
+
 		return itemDao.updateShipReqState_ShipId(paramMap2);
 	}
 
@@ -497,6 +554,9 @@ public class ItemService {
 		paramMap2.put("newShipStateId", String.valueOf(shipStateId));
 		paramMap2.put("shipRejectCause", shipRejectCause);
 		paramMap2.put("shipDeliveredDateMethod", shipDeliveredDateMethod);
+
+		// notify mail
+		mailService.notiMail2to3(shipId);// DB 지우기전 출고자에게 노티
 
 		return itemDao.updateShipReqState_ShipId(paramMap2);
 
@@ -1047,8 +1107,7 @@ public class ItemService {
 		String pw = "";
 		List<UserItem> userItems = getUserItems();
 		for (UserItem userItem : userItems) {
-			if (userItem.getUserId().equals(srchId))
-			{
+			if (userItem.getUserId().equals(srchId)) {
 				pw = userItem.getUserEmail();
 			}
 		}

@@ -15,6 +15,13 @@
 
 	//State 4 -> 5
 	function shipperAccept() {
+		if (!document.forms["formshipreq"].elements["ship-DeliveredDateMethod"].value) {
+			alert("처리방법(결과)를 기입해 주세요. ex)요청일에 맞춰 출고했음.");
+			document.forms["formshipreq"].elements["ship-DeliveredDateMethod"]
+					.focus();
+			return;
+		}
+
 		alert("출고완료로 변경됩니다.");
 
 		document.forms["formshipreq"].method = "post";
@@ -26,6 +33,12 @@
 	//State 4 -> 6
 	//State 2 -> 6
 	function shipperRej() {
+		if (!document.forms["formshipreq"].elements["ship-RejectCause"].value) {
+			alert("반려사유를 기입해 주세요. ex)OOO한 사유로 요청을 반려함.");
+			document.forms["formshipreq"].elements["ship-RejectCause"].focus();
+			return;
+		}
+
 		var response = confirm("반려상태로 변경됩니다.\n계속할까요?");
 		if (response) {
 			//do yes task
@@ -474,7 +487,7 @@
 <!-- state 3 > 1 (개발자 back to cart)-->
 <c:choose>
 	<c:when
-		test="${(2 == sessionScope.userLoginInfo.userLevel) && (3== reqshipinfo.shipStateId) }">
+		test="${(2 == sessionScope.userLoginInfo.userLevel) && (3== reqshipinfo.shipStateId) && (reqshipinfo.shipRequestorId== sessionScope.userLoginInfo.userId) }">
 		<input type="button" value="요청되돌리기" name="submitbtn3"
 			class="btn btn-primary btn-md" OnClick="javascript:myBackToCart();">&nbsp;&nbsp;
 	</c:when>
@@ -483,7 +496,7 @@
 <!-- state 3 > 6 (개발자 self reject)-->
 <c:choose>
 	<c:when
-		test="${(2 == sessionScope.userLoginInfo.userLevel) && (3== reqshipinfo.shipStateId) }">
+		test="${(2 == sessionScope.userLoginInfo.userLevel) && (3== reqshipinfo.shipStateId) && (reqshipinfo.shipRequestorId== sessionScope.userLoginInfo.userId)}">
 		<input type="button" value="요청반려" name="submitbtn3"
 			class="btn btn-primary btn-md" OnClick="javascript:selfRej();">&nbsp;&nbsp;
 	</c:when>
