@@ -878,9 +878,11 @@ public class WebController {
 		item.setPartProjectCode(request.getParameter("part-Project-Code"));
 		item.setPartName(request.getParameter("part-Name"));
 		item.setPartDesc(request.getParameter("part-Desc"));
-		item.setPartLocation(request.getParameter("part-Location"));
-		item.setPartCost(Float.valueOf(request.getParameter("part-Cost")));
-		item.setPartStock(Integer.valueOf(request.getParameter("part-Stock")));
+		item.setPartLocation(request.getParameter("part-Location"));		
+		String _strf = request.getParameter("part-Cost").trim().replaceAll(",", "").toString();		
+		item.setPartCost(Float.valueOf(_strf));
+		String _stri = request.getParameter("part-Stock").trim().replaceAll(",", "").toString();
+		item.setPartStock(Integer.valueOf(_stri));
 		item.setPartMemo(request.getParameter("part-Memo"));
 		item.setPartMsllevel(request.getParameter("part-Msllevel"));
 
@@ -1061,9 +1063,11 @@ public class WebController {
 		item.setPartProjectCode(request.getParameter("part-Project-Code"));
 		item.setPartName(request.getParameter("part-Name"));
 		item.setPartDesc(request.getParameter("part-Desc"));
-		item.setPartLocation(request.getParameter("part-Location"));
-		item.setPartCost(Float.valueOf(request.getParameter("part-Cost")));
-		item.setPartStock(Integer.valueOf(request.getParameter("part-Stock")));
+		item.setPartLocation(request.getParameter("part-Location"));		
+		String _strf = request.getParameter("part-Cost").trim().replaceAll(",", "").toString();		
+		item.setPartCost(Float.valueOf(_strf));
+		String _stri = request.getParameter("part-Stock").trim().replaceAll(",", "").toString();
+		item.setPartStock(Integer.valueOf(_stri));		
 		item.setPartMemo(request.getParameter("part-Memo"));
 		item.setPartMsllevel(request.getParameter("part-Msllevel"));
 		System.out.println("reqmypartsmodify msl:" + item.getPartMsllevel());

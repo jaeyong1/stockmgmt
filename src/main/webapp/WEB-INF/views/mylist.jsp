@@ -359,6 +359,7 @@
 	</c:forEach>
 
 </table>
+
 <p align="right">
 
 	<!-- 화면입력 담기 -->
