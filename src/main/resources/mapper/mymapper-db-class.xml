@@ -103,4 +103,13 @@
 		<result property="logAction" column="log_action" />
 	</resultMap>
 
+	<resultMap id="SecureUserItemMap" type="com.lgit.stockmgmt.domain.SecureUserItem">
+		<result property="userId" column="usersec_id" />
+		<result property="lastLoginedDate" column="usersec_lastlogined_date" />
+		<result property="lastPwChangedDate" column="usersec_lastpwchanged_date" />
+		<result property="pwErrorCount" column="usersec_pwerror_count" />
+		<result property="isLocked" column="usersec_islocked" />
+		<result property="isReseted" column="usersec_isreseted" />
+	</resultMap>
+
 </mapper>

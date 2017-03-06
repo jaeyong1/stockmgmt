@@ -174,7 +174,26 @@
 		#{userId} LIMIT 1 ;
 	</update>
 
-
+	<!-- *************************** SECURE USER  *************************** -->
+    <!-- tb_user 전체를 받아옴 -->
+	<select id="selectUserItemList" resultMap="SecureUserItemMap">
+		SELECT
+		*
+		FROM
+		tb_user_secure;
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	<!-- *************************** PROJECT *************************** -->
 
 	<!-- tb_project 전체를 받아옴 -->
