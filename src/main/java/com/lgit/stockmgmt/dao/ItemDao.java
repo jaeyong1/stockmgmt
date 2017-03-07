@@ -16,6 +16,7 @@ import com.lgit.stockmgmt.domain.JoinDBItem;
 import com.lgit.stockmgmt.domain.LogUserItem;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ProjectItem;
+import com.lgit.stockmgmt.domain.SecureUserItem;
 import com.lgit.stockmgmt.domain.ShipReqItem;
 import com.lgit.stockmgmt.domain.ShipReqPartsItem;
 import com.lgit.stockmgmt.domain.UserItem;
@@ -286,6 +287,7 @@ public class ItemDao {
 	public String queryOwnerEmailbyShipId(Map<String, String> paramMap) {
 		return sqlSession.selectOne("queryOwnerEmailbyShipId", paramMap);
 	}
+
 	public String queryShipperEmailbyShipId(Map<String, String> paramMap) {
 		return sqlSession.selectOne("queryShipperEmailbyShipId", paramMap);
 	}
@@ -293,5 +295,21 @@ public class ItemDao {
 	public String queryOwnerNamebyShipId(Map<String, String> paramMap) {
 		return sqlSession.selectOne("queryOwnerNamebyShipId", paramMap);
 	}
-	
+
+	public List<SecureUserItem> querySecureuserItem() {
+		return sqlSession.selectList("querySecureuserItems");
+	}
+
+	public List<SecureUserItem> querySecureuserItemById(Map<String, String> paramMap) {
+		return sqlSession.selectList("querySecureuserItemById", paramMap);
+	}
+
+	public int insertSecureUserItem(SecureUserItem userdata) {
+		return sqlSession.insert("insertSecureUserItem", userdata);
+	}
+
+	public int updateSecureUserItem(SecureUserItem userdata) {
+		return sqlSession.update("updateSecureUserItem", userdata);		
+	}
+
 }

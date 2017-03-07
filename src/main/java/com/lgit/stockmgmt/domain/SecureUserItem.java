@@ -6,6 +6,9 @@
 
 package com.lgit.stockmgmt.domain;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 public class SecureUserItem {
 
 	private String userId;
@@ -73,6 +76,25 @@ public class SecureUserItem {
 		this.userId = userId;
 		this.lastLoginedDate = lastLoginedDate;
 		this.lastPwChangedDate = lastPwChangedDate;
+		this.pwErrorCount = pwErrorCount;
+		this.isLocked = isLocked;
+		this.isReseted = isReseted;
+	}
+
+	public SecureUserItem(String userId, java.sql.Date lastLoginedDate, java.sql.Date lastPwChangedDate,
+			Integer pwErrorCount, Integer isLocked, Integer isReseted) {
+		super();
+		this.userId = userId;
+
+		DateFormat df1 = new SimpleDateFormat("dd/MM/yyyy");
+		String text1 = df1.format(lastLoginedDate);
+
+		this.lastLoginedDate = text1;
+
+		DateFormat df2 = new SimpleDateFormat("dd/MM/yyyy");
+		String text2 = df2.format(lastLoginedDate);
+
+		this.lastPwChangedDate = text2;
 		this.pwErrorCount = pwErrorCount;
 		this.isLocked = isLocked;
 		this.isReseted = isReseted;

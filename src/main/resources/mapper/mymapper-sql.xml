@@ -174,26 +174,75 @@
 		#{userId} LIMIT 1 ;
 	</update>
 
-	<!-- *************************** SECURE USER  *************************** -->
-    <!-- tb_user 전체를 받아옴 -->
-	<select id="selectUserItemList" resultMap="SecureUserItemMap">
+	<!-- *************************** SECURE USER *************************** -->
+	<!-- tb_user 전체를 받아옴 -->
+	<select id="querySecureuserItems" resultMap="SecureUserItemMap">
 		SELECT
 		*
 		FROM
 		tb_user_secure;
 	</select>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	<select id="querySecureuserItemById" parameterType="String"
+		resultMap="SecureUserItemMap">
+		SELECT *
+		FROM `tb_user_secure`
+		WHERE
+		CONVERT(`tb_user_secure`.`usersec_id` USING utf8) = #{userId}
+		LIMIT 0 ,
+		30 ;
+	</select>
+
+	<insert id="insertSecureUserItem">
+		INSERT INTO tb_user_secure(
+		`usersec_id` ,
+		`usersec_lastlogined_date`,
+		`usersec_lastpwchanged_date` ,
+		`usersec_pwerror_count`,
+		`usersec_islocked`,
+		`usersec_isreseted`
+		)
+		VALUES
+		(
+		#{userId},
+		#{lastLoginedDate},
+		#{lastPwChangedDate},
+		#{pwErrorCount},
+		#{isLocked},
+		#{isReseted}
+		);
+	</insert>
+
+
+	<!-- tb_user_secure 업데이트 -->
+	<update id="updateSecureUserItem">
+		UPDATE tb_user_secure
+		SET
+		`usersec_lastlogined_date`
+		=#{lastLoginedDate},
+		`usersec_lastpwchanged_date`=
+		#{lastPwChangedDate},
+		`usersec_pwerror_count`= #{pwErrorCount},
+		`usersec_islocked` = #{isLocked},
+		`usersec_isreseted`= #{isReseted}
+		WHERE
+		CONVERT(
+		`tb_user_secure`.`usersec_id`
+		USING utf8
+		) =
+		#{userId}
+		LIMIT
+		1 ;
+	</update>
+
+
+
+
+
+
+
+
+
 	<!-- *************************** PROJECT *************************** -->
 
 	<!-- tb_project 전체를 받아옴 -->
@@ -1172,27 +1221,33 @@
 		user_email as ownerEmail
 		FROM
 		tb_shipreq
-		INNER JOIN (tb_project, tb_user)
+		INNER JOIN
+		(tb_project, tb_user)
 		WHERE
-		tb_shipreq.`ship_project_code` = tb_project.`project_code`
-		AND tb_project.`project_owner_id` = tb_user.`user_id`
+		tb_shipreq.`ship_project_code` =
+		tb_project.`project_code`
+		AND tb_project.`project_owner_id` =
+		tb_user.`user_id`
 		AND tb_shipreq.`ship_id` = #{shipId};
 	</select>
-	
-		<!-- ShipperId로 개발자 이름 리턴 -->
+
+	<!-- ShipperId로 개발자 이름 리턴 -->
 	<select id="queryOwnerNamebyShipId" parameterType="String"
 		resultType="string">
 		SELECT
 		user_name as ownerName
 		FROM
 		tb_shipreq
-		INNER JOIN (tb_project, tb_user)
+		INNER JOIN
+		(tb_project, tb_user)
 		WHERE
-		tb_shipreq.`ship_project_code` = tb_project.`project_code`
-		AND tb_project.`project_owner_id` = tb_user.`user_id`
+		tb_shipreq.`ship_project_code` =
+		tb_project.`project_code`
+		AND tb_project.`project_owner_id` =
+		tb_user.`user_id`
 		AND tb_shipreq.`ship_id` = #{shipId};
 	</select>
-	
+
 
 	<!-- ShipperId로 출고자 email 리턴 -->
 	<select id="queryShipperEmailbyShipId" parameterType="String"
@@ -1201,10 +1256,13 @@
 		user_email as shipperEmail
 		FROM
 		tb_shipreq
-		INNER JOIN (tb_project, tb_user)
+		INNER JOIN
+		(tb_project, tb_user)
 		WHERE
-		tb_shipreq.`ship_project_code` = tb_project.`project_code`
-		AND tb_project.`project_shipper_id` = tb_user.`user_id`
+		tb_shipreq.`ship_project_code` =
+		tb_project.`project_code`
+		AND tb_project.`project_shipper_id` =
+		tb_user.`user_id`
 		AND tb_shipreq.`ship_id` = #{shipId};
 	</select>
 

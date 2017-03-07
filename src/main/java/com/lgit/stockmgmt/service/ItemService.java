@@ -2,6 +2,8 @@ package com.lgit.stockmgmt.service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import com.lgit.stockmgmt.domain.JoinDBItem;
 import com.lgit.stockmgmt.domain.LogUserItem;
 import com.lgit.stockmgmt.domain.PartsItem;
 import com.lgit.stockmgmt.domain.ProjectItem;
+import com.lgit.stockmgmt.domain.SecureUserItem;
 import com.lgit.stockmgmt.domain.ShipReqItem;
 import com.lgit.stockmgmt.domain.ShipReqPartsItem;
 import com.lgit.stockmgmt.domain.UserItem;
@@ -1112,6 +1115,46 @@ public class ItemService {
 			}
 		}
 		return pw;
+	}
+
+	// Basic function - get item
+	public SecureUserItem getSecureUserById(UserItem loginUser) {
+		List<SecureUserItem> secuserItems;
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("userId", loginUser.getUserId());
+		secuserItems = itemDao.querySecureuserItemById(paramMap);
+		// secuserItems = itemDao.querySecureuserItem();
+
+		System.out.println("sec len : " + secuserItems.size());
+		// if none
+		if (secuserItems.size() == 0) {
+			// make new item with init value
+			System.out.println("make new secure login info for " + loginUser.getUserId());
+			LocalDateTime ldt = LocalDateTime.now(); // today
+			String today = ldt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			SecureUserItem userinfo = new SecureUserItem(loginUser.getUserId(), today, today, 0, 0, 0);
+			itemDao.insertSecureUserItem(userinfo);
+			return userinfo;
+		}
+		return secuserItems.get(0);
+	}
+
+	// Basic function - update
+	public void updateSecureUserById(SecureUserItem secureuser) {
+		itemDao.updateSecureUserItem(secureuser);
+	}
+
+	public void updateLoginedSecureInfoById(UserItem loginUser) {
+		SecureUserItem userinfo = getSecureUserById(loginUser);
+
+		LocalDateTime ldt = LocalDateTime.now();
+		String today = ldt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+		userinfo.setLastLoginedDate(today);
+		userinfo.setPwErrorCount(0);
+
+		updateSecureUserById(userinfo);
+
 	}
 
 }

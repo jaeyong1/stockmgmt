@@ -2,6 +2,8 @@ package com.lgit.stockmgmt.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,7 @@ import com.lgit.stockmgmt.domain.EShipState;
 import com.lgit.stockmgmt.domain.EUserLevel;
 import com.lgit.stockmgmt.domain.LogUserItem;
 import com.lgit.stockmgmt.domain.PartsItem;
+import com.lgit.stockmgmt.domain.SecureUserItem;
 import com.lgit.stockmgmt.domain.ShipReqItem;
 import com.lgit.stockmgmt.domain.UserItem;
 import com.lgit.stockmgmt.service.ItemService;
@@ -81,6 +84,47 @@ public class LoginController {
 		mav.setViewName("redirect:login");
 
 		UserItem loginUser = itemService.findByUserIdAndPassword(reqID, reqPW);
+		SecureUserItem secUserInfo = null;
+
+		// secure check[start]
+		if (loginUser != null) {
+			secUserInfo = itemService.getSecureUserById(loginUser);
+			
+			// User ID is Locked...
+			if (secUserInfo.getIsLocked() == 1) {
+				response.setContentType("text/html; charset=UTF-8");
+				loginUser = null;
+				PrintWriter out;
+				try {
+					out = response.getWriter();
+					out.println("<script>alert('로그인 ID 잠김.. 관리자에게 문의하세요..'); history.go(-1);</script>");
+					out.flush();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+			else if (secUserInfo.getIsReseted() == 1) {
+				
+			}
+			/*
+			 else if (secUserInfo.getIsReseted() == 1) {
+				// +3개월
+				LocalDateTime time4 = LocalDateTime.now().plusMonths(3);
+				time4.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+			}
+			*/
+
+			else {
+				// lastlogined_date,  pw error reset
+				System.out.println("secure login info ok. update latest login date");
+				itemService.updateLoginedSecureInfoById(loginUser);
+			}
+
+		}
+		// secure check[end]
 
 		if (loginUser == null) {
 			response.setContentType("text/html; charset=UTF-8");
@@ -98,14 +142,14 @@ public class LoginController {
 		}
 		if (loginUser != null) {
 			session.setAttribute("userLoginInfo", loginUser);
-		}
 
-		if ((loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt()) || (loginUser.getUserLevel() == EUserLevel.Lv6_SHIPPERADMIN.getLevelInt())) {
-			mav.setViewName("redirect:shipreqlist");
-		} else {
-			mav.setViewName("redirect:mylist");
+			if ((loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt())
+					|| (loginUser.getUserLevel() == EUserLevel.Lv6_SHIPPERADMIN.getLevelInt())) {
+				mav.setViewName("redirect:shipreqlist");
+			} else {
+				mav.setViewName("redirect:mylist");
+			}
 		}
-
 		return mav;
 	}
 
