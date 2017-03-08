@@ -2,6 +2,7 @@ package com.lgit.stockmgmt.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ import com.lgit.stockmgmt.service.ItemService;
 
 @Controller
 public class LoginController {
+	static LocalDate securedbLatestCheckedDate = LocalDate.now().minusDays(1);
+
 	/*
 	 * Controller - Service 연결
 	 */
@@ -86,10 +89,20 @@ public class LoginController {
 		UserItem loginUser = itemService.findByUserIdAndPassword(reqID, reqPW);
 		SecureUserItem secUserInfo = null;
 
+		// once in a day
+		LocalDate today = LocalDate.now();
+		if (!securedbLatestCheckedDate.isEqual(today)) {
+			System.out.println("It's first time to login in this day" + today);
+			itemService.refreshSecureDbEveryDay(today);
+			securedbLatestCheckedDate = today;
+		}
+
 		// secure check[start]
 		if (loginUser != null) {
 			secUserInfo = itemService.getSecureUserById(loginUser);
-			
+			LocalDate pwnotify = LocalDate.parse(secUserInfo.getLastPwChangedDate()).plusMonths(2).plusWeeks(2);
+			LocalDate pwexpire = LocalDate.parse(secUserInfo.getLastPwChangedDate()).plusMonths(3);
+			String strPwExpire = pwexpire.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 			// User ID is Locked...
 			if (secUserInfo.getIsLocked() == 1) {
 				response.setContentType("text/html; charset=UTF-8");
@@ -97,30 +110,42 @@ public class LoginController {
 				PrintWriter out;
 				try {
 					out = response.getWriter();
-					out.println("<script>alert('로그인 ID 잠김.. 관리자에게 문의하세요..'); history.go(-1);</script>");
+					out.println("<script>alert('로그인 ID 잠김.. 관리자에게 문의하세요..'); history.go(-1); </script>");
 					out.flush();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				return mav;
 
-			}
-			else if (secUserInfo.getIsReseted() == 1) {
-				
+			} else if (pwnotify.isBefore(today)) {
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out;
+				try {
+					out = response.getWriter();
+					out.println("<script>alert('패스워드 변경해야 합니다. LGIT 보안정책으로 2달반마다 패스워드를 변경해야하며, " + strPwExpire
+							+ " 이후에는 로그인을 시도할 수 없으므로 미리 변경해주시기 바랍니다. 아래 Change Password 메뉴를 사용해 주세요'); history.go(-1); </script>");
+					out.flush();
+				} catch (IOException e) {
+
+					e.printStackTrace();
+				}
+
+			} else if (secUserInfo.getIsReseted() == 1) {
+
 			}
 			/*
-			 else if (secUserInfo.getIsReseted() == 1) {
-				// +3개월
-				LocalDateTime time4 = LocalDateTime.now().plusMonths(3);
-				time4.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-			}
-			*/
+			 * else if (secUserInfo.getIsReseted() == 1) { // +3개월 LocalDateTime
+			 * time4 = LocalDateTime.now().plusMonths(3);
+			 * time4.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			 * 
+			 * }
+			 */
 
 			else {
-				// lastlogined_date,  pw error reset
+				// lastlogined_date, pw error reset
 				System.out.println("secure login info ok. update latest login date");
-				itemService.updateLoginedSecureInfoById(loginUser);
+				itemService.updateLoginedSecureInfoById(secUserInfo);
 			}
 
 		}

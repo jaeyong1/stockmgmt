@@ -2,6 +2,7 @@ package com.lgit.stockmgmt.service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -1144,16 +1145,39 @@ public class ItemService {
 		itemDao.updateSecureUserItem(secureuser);
 	}
 
-	public void updateLoginedSecureInfoById(UserItem loginUser) {
-		SecureUserItem userinfo = getSecureUserById(loginUser);
+	public void updateLoginedSecureInfoById(SecureUserItem secUserInfo) {
 
 		LocalDateTime ldt = LocalDateTime.now();
 		String today = ldt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-		userinfo.setLastLoginedDate(today);
-		userinfo.setPwErrorCount(0);
+		secUserInfo.setLastLoginedDate(today);
+		secUserInfo.setPwErrorCount(0);
 
-		updateSecureUserById(userinfo);
+		updateSecureUserById(secUserInfo);
+
+	}
+
+	public void refreshSecureDbEveryDay(LocalDate today) {
+		System.out.println("refreshSecureDbEveryDay. once in a day");
+		LocalDate threeMonthAgo = LocalDate.now().minusMonths(3);
+		List<SecureUserItem> secuserItems;
+		secuserItems = itemDao.querySecureuserItem();
+
+		for (SecureUserItem item : secuserItems) {
+			if (item.getIsLocked() == 1) {
+				continue;
+			}
+
+			LocalDate lastlogined = LocalDate.parse(item.getLastLoginedDate());
+			if (lastlogined.isBefore(threeMonthAgo)) {
+				// set locked
+				item.setIsLocked(1);
+				System.out.println(item.getUserId() + " set to lock. update DB.");
+				addUserLog("system", "system", item.getUserId() + " set Locked. 최근 접속일로부터 3개월 지남");
+				updateSecureUserById(item);
+			}
+
+		}
 
 	}
 
