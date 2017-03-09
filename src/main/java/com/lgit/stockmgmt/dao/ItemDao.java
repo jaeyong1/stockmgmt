@@ -101,8 +101,13 @@ public class ItemDao {
 		return sqlSession.delete("deletePartsItem", item);
 	}
 
-	public List<UserItem> queryUserItems(Map<String, String> paramMap) {
+	public List<UserItem> queryUserItemsByIDPW(Map<String, String> paramMap) {
 		return sqlSession.selectList("selectUserItemListForLogin", paramMap);
+
+	}
+
+	public List<UserItem> queryUserItemsByID(Map<String, String> paramMap) {
+		return sqlSession.selectList("selectUserItemListByID", paramMap);
 
 	}
 
@@ -309,7 +314,17 @@ public class ItemDao {
 	}
 
 	public int updateSecureUserItem(SecureUserItem userdata) {
-		return sqlSession.update("updateSecureUserItem", userdata);		
+		return sqlSession.update("updateSecureUserItem", userdata);
+	}
+
+	public int updatePWErrorCount(Map<String, String> paramMap) {
+		return sqlSession.update("updatePWErrorCount", paramMap);
+
+	}
+
+	public void deleteSecureUserItem(SecureUserItem shippartsdata) {
+		sqlSession.delete("deleteSecureUserItem", shippartsdata);
+
 	}
 
 }

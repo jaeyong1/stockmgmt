@@ -11,8 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.lgit.stockmgmt.dao.ItemDao;
 import com.lgit.stockmgmt.domain.EUserLevel;
@@ -117,7 +121,23 @@ public class ItemService {
 		paramMap.put("logingUserId", logingUserId);
 		paramMap.put("loginUserPassword", loginUserPassword);
 
-		List<UserItem> list = itemDao.queryUserItems(paramMap);
+		List<UserItem> list = itemDao.queryUserItemsByIDPW(paramMap);
+		if (list.size() == 0) {
+			// no user DB data
+			System.out.println("[ItemService] no user data");
+			return null;
+		} else
+
+			System.out.println("[ItemService] finded user. login ID" + list.get(0).getUserId());
+		return list.get(0);
+
+	}
+
+	public UserItem findByUserId(String logingUserId) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("logingUserId", logingUserId);
+
+		List<UserItem> list = itemDao.queryUserItemsByID(paramMap);
 		if (list.size() == 0) {
 			// no user DB data
 			System.out.println("[ItemService] no user data");
@@ -1145,6 +1165,10 @@ public class ItemService {
 		itemDao.updateSecureUserItem(secureuser);
 	}
 
+	public void removeSecureUser(SecureUserItem secureuser) {
+		itemDao.deleteSecureUserItem(secureuser);
+	}
+
 	public void updateLoginedSecureInfoById(SecureUserItem secUserInfo) {
 
 		LocalDateTime ldt = LocalDateTime.now();
@@ -1179,6 +1203,36 @@ public class ItemService {
 
 		}
 
+	}
+
+	public int increasePWErrorCount(UserItem loginUser) {
+
+		SecureUserItem secuser = getSecureUserById(loginUser);
+		int pcnt = secuser.getPwErrorCount() + 1;
+		int needblock = 0;
+
+		// 5번이상 틀리면 블럭시킴..
+		if (pcnt > 5) {
+			needblock = 1;
+		}
+		secuser.setPwErrorCount(pcnt);
+		secuser.setIsLocked(needblock);
+		updateSecureUserById(secuser);
+
+		// add user operation log
+		HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+				.getRequest();
+		String ip = req.getHeader("X-FORWARDED-FOR");
+		if (ip == null) {
+			ip = req.getRemoteAddr();
+		}
+		addUserLog(loginUser.getUserId(), ip, "가" + pcnt + "번째 패스워드 잘못입력.. set block=" + needblock);
+		return pcnt;
+	}
+
+	public void resetSecureUserById(String userId) {
+		SecureUserItem secuser = new SecureUserItem(userId, "", "", 0, 0, 0);
+		removeSecureUser(secuser);
 	}
 
 }

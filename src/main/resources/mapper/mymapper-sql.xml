@@ -122,8 +122,6 @@
 		= #{loginUserPassword}
 	</select>
 
-
-
 	<!-- tb_user 전체 row -->
 	<select id="queryUserItemsRow" resultType="string">
 		select count(*) as cnt
@@ -193,6 +191,15 @@
 		30 ;
 	</select>
 
+
+	<delete id="deleteSecureUserItem">
+		DELETE FROM
+		tb_user_secure
+		WHERE
+		CONVERT(`tb_user_secure`.`usersec_id` USING utf8) = #{userId};
+	</delete>
+
+
 	<insert id="insertSecureUserItem">
 		INSERT INTO tb_user_secure(
 		`usersec_id` ,
@@ -235,6 +242,19 @@
 		1 ;
 	</update>
 
+	<!-- 에러실패 증가 -->
+	<update id="updatePWErrorCount" parameterType="String">
+		UPDATE
+		tb_user_secure
+		SET
+		`usersec_pwerror_count` = `usersec_pwerror_count` + 1
+		WHERE
+		CONVERT(
+		`tb_user_secure`.`usersec_id`
+		USING utf8
+		) =
+		#{userId};
+	</update>
 
 
 
@@ -898,7 +918,6 @@
 		= #{part_id};
 	</update>
 
-
 	<!-- parts 재고 값 수정 -->
 	<update id="updateStockToTBPart" parameterType="String">
 		UPDATE
@@ -1133,6 +1152,7 @@
 		t2.project_shipper_id = #{UserId};
 	</select>
 
+
 	<delete id="deleteMyShipReqItemList">
 		DELETE FROM
 		tb_shipreq_itemlist
@@ -1265,5 +1285,6 @@
 		tb_user.`user_id`
 		AND tb_shipreq.`ship_id` = #{shipId};
 	</select>
+
 
 </mapper>

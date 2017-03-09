@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.util.SystemOutLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
@@ -81,13 +82,38 @@ public class LoginController {
 			HttpServletResponse response) {
 		String reqID = request.getParameter("login-id"); // <html.input>name='login-id'
 		String reqPW = request.getParameter("login-pw");
+		SecureUserItem secUserInfo = null;
 
 		System.out.println("/loginProcess  try(" + reqID + " / " + reqPW + ")");
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:login");
 
-		UserItem loginUser = itemService.findByUserIdAndPassword(reqID, reqPW);
-		SecureUserItem secUserInfo = null;
+		// UserItem loginUser =
+		// itemService.findByUserIdAndPassword(reqID,reqPW);
+
+		UserItem loginUser = itemService.findByUserId(reqID);
+		if (loginUser != null) {
+			// Check the password
+			if (!loginUser.getUserPassword().equals(reqPW)) {
+				int failcnt = itemService.increasePWErrorCount(loginUser);
+
+				System.out.println("wrong password " + failcnt);
+				loginUser = null;
+
+				response.setContentType("text/html; charset=UTF-8");
+				loginUser = null;
+				PrintWriter out;
+				try {
+					out = response.getWriter();
+					out.println("<script>alert('로그인 실패" + failcnt +"번째. 5번 실패시 ID차단됩니다.'); history.go(-1); </script>");
+					out.flush();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return mav;
+			}
+		}
 
 		// once in a day
 		LocalDate today = LocalDate.now();
@@ -132,6 +158,16 @@ public class LoginController {
 				}
 
 			} else if (secUserInfo.getIsReseted() == 1) {
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out;
+				try {
+					out = response.getWriter();
+					out.println("<script>alert('패스워드 초기화후에는 패스워드 변경해야 합니다. 아래 Change Password 메뉴에서 관리자로 부터 받은 비밀번호를 사용하여 변경해 주세요'); history.go(-1); </script>");
+					out.flush();
+				} catch (IOException e) {
+
+					e.printStackTrace();
+				}
 
 			}
 			/*
@@ -291,6 +327,9 @@ public class LoginController {
 		if (ip == null) {
 			ip = req.getRemoteAddr();
 		}
+		
+		//secure data reset
+		itemService.resetSecureUserById(userdata.getUserId());
 		itemService.addUserLog(userdata.getUserId(), ip, "비밀번호 직접변경");
 
 		return "closememoveto_nologin";
