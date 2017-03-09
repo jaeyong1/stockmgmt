@@ -74,26 +74,32 @@ var rolekor ="";
 		</c:when>
 		<c:otherwise>
 			<!-- Not LOGIN status -->
-			<form class="form-signin" name="formlogin">
+			<form class="form-signin" name="formlogin" autocomplete='off'>
 				<h2 class="form-signin-heading">LGIT 자재관리시스템</h2>
+				<!--자동완성방지용 더미폼-->
+				<input type="password" id="user_pwd_fake" name="user_pwd_fake"
+					autocomplete="off" style="display: none;">
+				<!--더미폼 끝-->
 				<!-- <label for="inputEmail" class="sr-only">Email address</label> -->
 
 				<input type="text" id="login-id" name='login-id'
 					class="form-control" placeholder="LG Innotek ID" required autofocus>
 				<label for="inputPassword" class="sr-only">Password</label> <input
-					type="password" id="login-pw" name='login-pw' class="form-control"
-					placeholder="Password" required>
+					type="password" id="login-pw" name='login-pw' autocomplete='off'
+					class="form-control" placeholder="Password" required>
 
 				<button class="btn btn-lg btn-primary btn-block"
 					OnClick="javascript:jsLogin();">Log-in</button>
 				<button type="button" class="btn btn-default btn-block"
 					onclick="location.href='idregi/' ">ID Registration</button>
-				<button type="button" class="btn btn-default btn-block"   OnClick="javascript:chgePW();"> Change
-					Password</button>
+				<button type="button" class="btn btn-default btn-block"
+					OnClick="javascript:chgePW();">Change Password</button>
+
 			</form>
 		</c:otherwise>
 	</c:choose>
 	<!-- FOOTER -->
+
 </body>
 
 </html>
