@@ -31,7 +31,36 @@
 				return;
 			}
 
-		
+			function checkpasswordrule() {
+				var id = document.forms["newuserform"].elements["user-Id"].value;
+				var pw = document.forms["newuserform"].elements["user-Password"].value;
+				var pwvalid = true;
+
+				//1.
+				if (pw.length < 10) {
+					pwvalid = false;
+				}
+				//2.
+				var chk = 0;
+				if (pw.search(/[0-9]/g) != -1)
+					chk++;
+				if (pw.search(/[a-z]/ig) != -1)
+					chk++;
+				if (pw.search(/[!@#$%^&*()?_~]/g) != -1)
+					chk++;
+				if (chk < 3) {
+					pwvalid = false;
+				}
+				//3.
+				if (id == pw) {
+					pwvalid = false;
+				}
+
+				if (pwvalid == false) {
+					alert("패스워드를 확인해 주세요..\n 1) 최소길이 10자 이상 사용하게 하는 기능\n 2) 영문, 숫자, 특수문자(!@#$%^&*()?_~)를 조합하여 사용\n 3) ID와 같은 패스워드 금지");
+				}
+				return pwvalid;
+			}
 
 			if (!document.forms["newuserform"].elements["user-Password"].value) {
 				alert("비빌번호를 기입해주세요");
@@ -41,7 +70,13 @@
 
 			if (!document.forms["newuserform"].elements["user-Password2"].value) {
 				alert("새 비빌번호를 기입해주세요");
-				document.forms["newuserform"].elements["user-Password2"].focus();
+				document.forms["newuserform"].elements["user-Password2"]
+						.focus();
+				return;
+			}
+
+			var pwvalid = checkpasswordrule();
+			if (pwvalid == false) {
 				return;
 			}
 
@@ -57,7 +92,6 @@
 				//do no task
 			}
 		}
-
 	</script>
 
 
@@ -120,7 +154,7 @@
 				</div>
 				<div class="modal-body">
 					<p>
-						- 비밀번호를 잊어버렸을경우에는, 관리자가 찾아줄 수는 없고 기본값으로 바꿔줄 수 있습니다.<br> 
+						- 비밀번호를 잊어버렸을경우에는, 관리자가 찾아줄 수는 없고 기본값으로 바꿔줄 수 있습니다.<br>
 					<p>
 					<p>- 관리운영자 : jaeyong1.park@lginnotek.com</p>
 				</div>

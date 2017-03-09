@@ -32,8 +32,39 @@
 					.log("lv:"
 							+ document.forms["newuserform"].elements["user-Level"].value);
 		}
+		function checkpasswordrule() {
+			var id = document.forms["newuserform"].elements["user-Id"].value;
+			var pw = document.forms["newuserform"].elements["user-Password"].value;
+			var pwvalid = true;
+
+			//1.
+			if (pw.length < 10) {
+				pwvalid = false;
+			}
+			//2.
+			var chk = 0;
+			if (pw.search(/[0-9]/g) != -1)
+				chk++;
+			if (pw.search(/[a-z]/ig) != -1)
+				chk++;
+			if (pw.search(/[!@#$%^&*()?_~]/g) != -1)
+				chk++;
+			if (chk < 3) {
+				pwvalid = false;
+			}
+			//3.
+			if (id == pw) {
+				pwvalid = false;
+			}
+
+			if (pwvalid == false) {
+				alert("패스워드를 확인해 주세요..\n 1) 최소길이 10자 이상 사용하게 하는 기능\n 2) 영문, 숫자, 특수문자(!@#$%^&*()?_~)를 조합하여 사용\n 3) ID와 같은 패스워드 금지");
+			}
+			return pwvalid;
+		}
 
 		function newUser() {
+			
 			if (!document.forms["newuserform"].elements["user-Id"].value) {
 				alert("Id를 기입해주세요");
 				document.forms["newuserform"].elements["user-Id"].focus();
@@ -70,7 +101,11 @@
 						.focus();
 				return;
 			}
-
+			
+			var pwvalid = checkpasswordrule();
+			if (pwvalid == false) {
+				return;
+			}
 			//newuserform		
 			var nm = document.forms["newuserform"].elements["user-Id"].value;
 			var response = confirm(nm + "로 등록하시겠습니까?")
@@ -200,8 +235,8 @@
 						&nbsp;&nbsp;잘모를경우 "ADMIN"이라 써놓고 관리자에게 연락주세요.
 					<p>
 						- <b>시작담당자(출고담당자)</b>는 출고업무를 위해서는 프로젝트를 할당 받아야 합니다. <br>
-						&nbsp;&nbsp;프로젝트가 할당안되어 있으면 출고요청업무도 없습니다.
-						&nbsp;&nbsp;개발담당자가 프로젝트 관리메뉴에서 시작담당자를 지정합니다.
+						&nbsp;&nbsp;프로젝트가 할당안되어 있으면 출고요청업무도 없습니다. &nbsp;&nbsp;개발담당자가 프로젝트
+						관리메뉴에서 시작담당자를 지정합니다.
 					<p>
 					<p>- 관리운영자 : jaeyong1.park@lginnotek.com</p>
 				</div>
