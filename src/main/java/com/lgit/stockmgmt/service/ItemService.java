@@ -1,5 +1,6 @@
 package com.lgit.stockmgmt.service;
 
+import java.security.GeneralSecurityException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -1215,7 +1216,20 @@ public class ItemService {
 		}
 		addUserLog(loginUser.getUserId(), ip, "로그인 성공");
 	}
-
+	
+	
+	public void LogRSAKeyGenFailure(Exception e, String shortmsg) {
+		// add user operation log
+		HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+				.getRequest();
+		String ip = req.getHeader("X-FORWARDED-FOR");
+		if (ip == null) {
+			ip = req.getRemoteAddr();
+		}
+		addUserLog("비회원", ip, "로그인용 RSA key 문제." + shortmsg + ". exception info(" + e.getMessage() +")");
+	}
+	
+	
 	public void excelExportLoging(UserItem loginUser, String requrl) {
 		String sReqURL = "";
 		if (requrl.equals("mylist")) {

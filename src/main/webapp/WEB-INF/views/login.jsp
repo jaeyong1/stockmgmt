@@ -5,6 +5,14 @@
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<!-- javascript lib load -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/rsa/jsbn.js"></script>
+<script src="/js/rsa/prng4.js"></script>
+<script src="/js/rsa/rng.js"></script>
+<script src="/js/rsa/rsa.js"></script>
+
 <script language="javascript">
 var rolekor ="";
 	$(function() {			

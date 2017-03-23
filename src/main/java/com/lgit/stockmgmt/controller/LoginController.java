@@ -28,10 +28,21 @@ import com.lgit.stockmgmt.domain.EShipState;
 import com.lgit.stockmgmt.domain.EUserLevel;
 import com.lgit.stockmgmt.domain.LogUserItem;
 import com.lgit.stockmgmt.domain.PartsItem;
+import com.lgit.stockmgmt.domain.RSA;
 import com.lgit.stockmgmt.domain.SecureUserItem;
 import com.lgit.stockmgmt.domain.ShipReqItem;
 import com.lgit.stockmgmt.domain.UserItem;
 import com.lgit.stockmgmt.service.ItemService;
+import com.lgit.stockmgmt.util.RSAUtil;
+
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.RSAPublicKeySpec;
 
 @Controller
 public class LoginController {
@@ -43,6 +54,7 @@ public class LoginController {
 	@Autowired
 	private ItemService itemService;
 
+	
 	/*
 	 * 
 	 * ================================= Login =================================
@@ -62,10 +74,26 @@ public class LoginController {
 	}
 
 	// 로그인 화면
-	@RequestMapping("login")
-	public String login() {
+	@RequestMapping(value = "login", method = RequestMethod.GET)
+	public String login(HttpSession session, Model model) {
 		System.out.println("/login");
-		return "login";
+		RSAUtil rsaUtil = new RSAUtil();
+
+		// 참고자료 : http://devguna.com/26
+		// 참고자료 : http://vip00112.tistory.com/40
+		 // RSA 키 생성
+	    PrivateKey key = (PrivateKey) session.getAttribute("RSAprivateKey");
+	    if (key != null) { // 기존 key 파기
+	        session.removeAttribute("RSAprivateKey");
+	    }
+	    RSA rsa = rsaUtil.createRSA();
+	    model.addAttribute("modulus", rsa.getModulus());
+	    model.addAttribute("exponent", rsa.getExponent());
+	    session.setAttribute("RSAprivateKey", rsa.getPrivateKey());
+	    return "login";
+
+
+
 	}
 
 	// 로그아웃
@@ -105,7 +133,7 @@ public class LoginController {
 				PrintWriter out;
 				try {
 					out = response.getWriter();
-					out.println("<script>alert('로그인 실패" + failcnt +"번째. 5번 실패시 ID차단됩니다.'); history.go(-1); </script>");
+					out.println("<script>alert('로그인 실패" + failcnt + "번째. 5번 실패시 ID차단됩니다.'); history.go(-1); </script>");
 					out.flush();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -162,7 +190,8 @@ public class LoginController {
 				PrintWriter out;
 				try {
 					out = response.getWriter();
-					out.println("<script>alert('패스워드 초기화후에는 패스워드 변경해야 합니다. 아래 Change Password 메뉴에서 관리자로 부터 받은 비밀번호를 사용하여 변경해 주세요'); history.go(-1); </script>");
+					out.println(
+							"<script>alert('패스워드 초기화후에는 패스워드 변경해야 합니다. 아래 Change Password 메뉴에서 관리자로 부터 받은 비밀번호를 사용하여 변경해 주세요'); history.go(-1); </script>");
 					out.flush();
 				} catch (IOException e) {
 
@@ -201,14 +230,14 @@ public class LoginController {
 			}
 
 		}
-		
-		//login OK
+
+		// login OK
 		if (loginUser != null) {
 			session.setAttribute("userLoginInfo", loginUser);
 
-			//save login info
+			// save login info
 			itemService.loginProcessSuccessLog(loginUser);
-			
+
 			if ((loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt())
 					|| (loginUser.getUserLevel() == EUserLevel.Lv6_SHIPPERADMIN.getLevelInt())) {
 				mav.setViewName("redirect:shipreqlist");
@@ -332,8 +361,8 @@ public class LoginController {
 		if (ip == null) {
 			ip = req.getRemoteAddr();
 		}
-		
-		//secure data reset
+
+		// secure data reset
 		itemService.resetSecureUserById(userdata.getUserId());
 		itemService.addUserLog(userdata.getUserId(), ip, "비밀번호 직접변경");
 
