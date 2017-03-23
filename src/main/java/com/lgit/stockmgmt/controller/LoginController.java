@@ -201,9 +201,14 @@ public class LoginController {
 			}
 
 		}
+		
+		//login OK
 		if (loginUser != null) {
 			session.setAttribute("userLoginInfo", loginUser);
 
+			//save login info
+			itemService.loginProcessSuccessLog(loginUser);
+			
 			if ((loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt())
 					|| (loginUser.getUserLevel() == EUserLevel.Lv6_SHIPPERADMIN.getLevelInt())) {
 				mav.setViewName("redirect:shipreqlist");

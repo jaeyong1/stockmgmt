@@ -438,6 +438,8 @@ public class ExcelController {
 		WriteListToExcelFile.writeMyStockListToFile(templatefile, exportFileName, items, errorlog);
 
 		model.addAttribute("requestedURL", exporturl);
+		itemService.excelExportLoging(loginUser, requrl);
+		
 		return "filedownload";/* fileupload.jsp */
 	}
 

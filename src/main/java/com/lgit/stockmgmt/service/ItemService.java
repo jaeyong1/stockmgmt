@@ -1205,6 +1205,39 @@ public class ItemService {
 
 	}
 
+	public void loginProcessSuccessLog(UserItem loginUser) {
+		// add user operation log
+		HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+				.getRequest();
+		String ip = req.getHeader("X-FORWARDED-FOR");
+		if (ip == null) {
+			ip = req.getRemoteAddr();
+		}
+		addUserLog(loginUser.getUserId(), ip, "로그인 성공");
+	}
+
+	public void excelExportLoging(UserItem loginUser, String requrl) {
+		String sReqURL = "";
+		if (requrl.equals("mylist")) {
+			sReqURL = "나의자재";
+		} else if (requrl.equals("otherslist")) {
+			sReqURL = "파트너자재";
+		} else if (requrl.equals("myinventorycontrol")) {
+			sReqURL = "재물조사";
+		} else {
+			sReqURL = "(알수없음)";
+		}
+
+		// add user operation log
+		HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+				.getRequest();
+		String ip = req.getHeader("X-FORWARDED-FOR");
+		if (ip == null) {
+			ip = req.getRemoteAddr();
+		}
+		addUserLog(loginUser.getUserId(), ip, sReqURL + " 다운로드용 엑셀파일 생성, 다운로드 창 연결");
+	}
+
 	public int increasePWErrorCount(UserItem loginUser) {
 
 		SecureUserItem secuser = getSecureUserById(loginUser);
@@ -1226,7 +1259,7 @@ public class ItemService {
 		if (ip == null) {
 			ip = req.getRemoteAddr();
 		}
-		addUserLog(loginUser.getUserId(), ip, "가" + pcnt + "번째 패스워드 잘못입력.. set block=" + needblock);
+		addUserLog(loginUser.getUserId(), ip, pcnt + "번째 패스워드 잘못입력.. set block=" + needblock);
 		return pcnt;
 	}
 
