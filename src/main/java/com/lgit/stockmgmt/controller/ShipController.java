@@ -58,7 +58,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/shipparts process. no session info. return login.jsp ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
@@ -190,7 +190,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/reqshippartsadd process. no session info. return login.jsp ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
@@ -294,7 +294,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/reqothersshippartsadd process. no session info. return login.jsp ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
@@ -415,7 +415,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/shipothersparts process. no session info. return login.jsp ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
@@ -464,7 +464,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/shipreq process. no session info. return login.jsp ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
@@ -535,7 +535,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/shipothersreq process. no session info. return login.jsp ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
@@ -619,7 +619,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/shipreqlist process. no session info.  ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
@@ -681,7 +681,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/shipreqlist process. no session info.  ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
@@ -738,7 +738,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/shipreqlist process. no session info.  ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
@@ -782,7 +782,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/shipreqprocess/state2 process. no session info. return login.jsp ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
@@ -840,7 +840,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/shipreqprocess/state3 process. no session info. return login.jsp ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
@@ -911,7 +911,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/shipreqprocess/state4 process. no session info. return login.jsp ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
@@ -965,7 +965,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/shipreqprocess/state5 process. no session info. return login.jsp ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
@@ -1012,7 +1012,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/shipreqprocess/state6 reject process. no session info. return login.jsp ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
@@ -1094,7 +1094,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/myconfirmshipreqlist process. no session info.  ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
@@ -1141,7 +1141,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/shipparts_removeall process. no session info.  ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
@@ -1177,7 +1177,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/shipothersparts_removeall process. no session info.  ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
@@ -1216,7 +1216,7 @@ public class ShipController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/shipreqprocess/state1 process. no session info. return login.jsp ");
-			return "login";
+			return "redirect:login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());

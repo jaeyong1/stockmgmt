@@ -54,7 +54,6 @@ public class LoginController {
 	@Autowired
 	private ItemService itemService;
 
-	
 	/*
 	 * 
 	 * ================================= Login =================================
@@ -81,18 +80,18 @@ public class LoginController {
 
 		// 참고자료 : http://devguna.com/26
 		// 참고자료 : http://vip00112.tistory.com/40
-		 // RSA 키 생성
-	    PrivateKey key = (PrivateKey) session.getAttribute("RSAprivateKey");
-	    if (key != null) { // 기존 key 파기
-	        session.removeAttribute("RSAprivateKey");
-	    }
-	    RSA rsa = rsaUtil.createRSA();
-	    model.addAttribute("modulus", rsa.getModulus());
-	    model.addAttribute("exponent", rsa.getExponent());
-	    session.setAttribute("RSAprivateKey", rsa.getPrivateKey());
-	    return "login";
+		// RSA 키 생성
+		PrivateKey key = (PrivateKey) session.getAttribute("RSAprivateKey");
+		if (key != null) { // 기존 key 파기
+			session.removeAttribute("RSAprivateKey");
+		}
+		RSA rsa = rsaUtil.createRSA();
+		model.addAttribute("modulus", rsa.getModulus());
+		model.addAttribute("exponent", rsa.getExponent());
 
-
+		System.out.println("[rsa] modulus : " + rsa.getModulus() + ", exponent : " + rsa.getExponent());
+		session.setAttribute("RSAprivateKey", rsa.getPrivateKey());
+		return "login";
 
 	}
 
@@ -101,7 +100,7 @@ public class LoginController {
 	public String logout(HttpSession session) {
 		session.setAttribute("userLoginInfo", null);
 		System.out.println("/logout");
-		return "redirect:login";
+		return "redirect:/login";
 	}
 
 	// 로그인 처리
@@ -285,7 +284,7 @@ public class LoginController {
 		itemService.addUserLog(userdata.getUserId(), ip, "신규회원가입");
 
 		// Get DB List
-		return "redirect:login";
+		return "redirect:/login";
 	}
 
 	// 비밀번호 변경
@@ -390,7 +389,7 @@ public class LoginController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/logview process. no session info. return login.jsp ");
-			return "login";
+			return "redirect:/login";
 		} else {
 			// update bagde counter(cart items)
 			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
