@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lgit.stockmgmt.domain.EShipState;
 import com.lgit.stockmgmt.domain.EUserLevel;
@@ -106,14 +107,45 @@ public class LoginController {
 	// 로그인 처리
 	@RequestMapping(value = "loginProcess", method = RequestMethod.POST)
 	public ModelAndView loginProcess(UserItem user, HttpSession session, HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response, RedirectAttributes ra) {
+		PrivateKey key = (PrivateKey) session.getAttribute("RSAprivateKey");
+
 		String reqID = request.getParameter("login-id"); // <html.input>name='login-id'
 		String reqPW = request.getParameter("login-pw");
 		SecureUserItem secUserInfo = null;
 
 		System.out.println("/loginProcess  try(" + reqID + " / " + reqPW + ")");
+
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:login");
+
+		// 개인키 취득
+		if (key == null) {
+			PrintWriter out;
+			try {
+				out = response.getWriter();
+				out.println("<script>alert('비정상적인 접근입니다.'); history.go(-1); </script>");
+				out.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return mav;
+		}
+		// session에 저장된 개인키 초기화
+		session.removeAttribute("RSAprivateKey");
+
+		// 아이디/비밀번호 복호화
+		try {
+			RSAUtil rsaUtil = new RSAUtil();
+			reqID = rsaUtil.getDecryptText(key, reqID);
+			reqPW = rsaUtil.getDecryptText(key, reqPW);
+			System.out.println("decryted : " + reqID + " / " + reqPW);
+
+		} catch (Exception e) {
+			ra.addFlashAttribute("resultMsg", "비정상 적인 접근 입니다.");
+			return mav;
+		}
 
 		// UserItem loginUser =
 		// itemService.findByUserIdAndPassword(reqID,reqPW);

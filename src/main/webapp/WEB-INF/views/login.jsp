@@ -20,21 +20,8 @@
  
     // Server로부터 받은 공개키 입력
     var rsa = new RSAKey();
+    console.log("Server로부터 받은 공개키 처리");
     rsa.setPublic("${modulus}", "${exponent}");
- 
-    $("#loginForm").submit(function(e) {
-        // 실제 유저 입력 form은 event 취소
-        // javascript가 작동되지 않는 환경에서는 유저 입력 form이 submit 됨
-        // -> Server 측에서 검증되므로 로그인 불가
-        e.preventDefault();
- 
-        // 아이디/비밀번호 암호화 후 hidden form으로 submit
-        var email = $(this).find("#email").val();
-        var password = $(this).find("#password").val();
-        $email.val(rsa.encrypt(email)); // 아이디 암호화
-        $password.val(rsa.encrypt(password)); // 비밀번호 암호화
-        $("#hiddenForm").submit();
-    });
 </script>
 
 
@@ -60,9 +47,17 @@ var rolekor ="";
 	}
 	
 	function jsLogin() {
+		
+        // 아이디/비밀번호 암호화 후 hidden form으로 submit        
 		var id = document.forms["formlogin"].elements["login-id"].value;
 		var pw = document.forms["formlogin"].elements["login-pw"].value;
-		//console.log(id + "/" + pw);
+		document.forms["formlogin"].elements["login-id"].type = "password";
+		
+		//RSA 암호화진행
+		document.forms["formlogin"].elements["login-id"].value = rsa.encrypt(id);
+		document.forms["formlogin"].elements["login-pw"].value = rsa.encrypt(pw);		
+		
+		console.log(rsa.encrypt(id)+ "/" + rsa.encrypt(pw));
 		document.forms["formlogin"].method = "post";
 		document.forms["formlogin"].action = "/loginProcess";
 		document.forms["formlogin"].submit();
@@ -110,9 +105,10 @@ var rolekor ="";
 			<form class="form-signin" name="formlogin" autocomplete='off'>
 				<h2 class="form-signin-heading">LGIT 자재관리시스템</h2>
 				<!--자동완성방지용 더미폼-->
-				<input type="password" id="user_pwd_fake" name="user_pwd_fake"
+				<!--  <input type="password" id="user_pwd_fake" name="user_pwd_fake"
 					autocomplete="off" style="display: none;">
 				<!--더미폼 끝-->
+				
 				<!-- <label for="inputEmail" class="sr-only">Email address</label> -->
 
 				<input type="text" id="login-id" name='login-id'
@@ -129,6 +125,14 @@ var rolekor ="";
 					OnClick="javascript:chgePW();">Change Password</button>
 
 			</form>
+
+
+			<!-- 실제 서버로 전송되는 form -->
+			<form action="/loginProcess" method="post" id="myhiddenForm">
+				<input type="hidden" name="login-id" /> <input type="hidden"
+					name="login-pw" />
+			</form>
+
 		</c:otherwise>
 	</c:choose>
 	<!-- FOOTER -->
