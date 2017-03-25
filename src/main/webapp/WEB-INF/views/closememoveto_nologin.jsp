@@ -24,7 +24,7 @@
 <!-- <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
 <link href="/bootstrap/css/cerulean/bootstrap.min.css" rel="stylesheet">
 
-<body>
+<body oncontextmenu='return false'>
 
 
 	<div class="container">

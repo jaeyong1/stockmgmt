@@ -68,6 +68,7 @@ var rolekor ="";
 	}
 </script>
 
+
 <!DOCTYPE html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=euc-kr">
@@ -82,7 +83,9 @@ var rolekor ="";
 <link href="/css/login.css" rel="stylesheet">
 </head>
 
-<body>
+<body oncontextmenu='return false'>
+
+
 	<!--  HEADER  -->
 	<c:choose>
 		<c:when test="${not empty sessionScope.userLoginInfo}">
@@ -108,7 +111,7 @@ var rolekor ="";
 				<!--  <input type="password" id="user_pwd_fake" name="user_pwd_fake"
 					autocomplete="off" style="display: none;">
 				<!--더미폼 끝-->
-				
+
 				<!-- <label for="inputEmail" class="sr-only">Email address</label> -->
 
 				<input type="text" id="login-id" name='login-id'

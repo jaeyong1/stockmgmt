@@ -10,7 +10,7 @@
 </head>
 
 <body bgcolor="white" text="black" link="blue" vlink="purple"
-	alink="red">
+	alink="red" oncontextmenu='return false'>
 	<p align="center">재고 조회</p>
 	<form name="form2">
 		<p align="right">

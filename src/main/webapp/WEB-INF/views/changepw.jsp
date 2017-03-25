@@ -21,7 +21,7 @@
 <link href="/css/login.css" rel="stylesheet">
 </head>
 
-<body>
+<body oncontextmenu='return false'>
 	<!--  HEADER  -->
 	<script language="javascript">
 		function changePW() {

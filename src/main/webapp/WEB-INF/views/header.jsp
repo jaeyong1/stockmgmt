@@ -53,7 +53,7 @@ var rolekor ="";
 </head>
 
 
-<body>
+<body oncontextmenu='return false'>
 
 	<!-- Static navbar -->
 	<nav class="navbar navbar-default navbar-static-top">

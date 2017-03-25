@@ -5,7 +5,7 @@
 <head>
 <title>Insert title here</title>
 </head>
-<body>
+<body oncontextmenu='return false'>
 
 
 	<div class="content-inner" style="padding-top: 15px;">
