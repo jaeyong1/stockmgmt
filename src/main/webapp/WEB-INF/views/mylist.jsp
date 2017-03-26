@@ -30,10 +30,29 @@
 
 	}
 
+	//검색 키워드 검증 : < > ( ) # & 는 불가능하도록
+	function keywordValid(kw) {
+		if ( (kw.indexOf("<") == -1)
+				&& (kw.indexOf(">") == -1)
+				&& (kw.indexOf("(") == -1)
+				&& (kw.indexOf(")") == -1)
+				&& (kw.indexOf("#") == -1)
+				&& (kw.indexOf("&") == -1)
+			)				
+		{
+			return true;
+		}
+		return false;
+	}
+
 	//키워드 검색 
 	function searchparts(pagenum) {
 		var kw = document.forms["formserch"].elements["srchword"].value;
 		console.log("검색 : " + kw);
+		if (keywordValid(kw) == false) {
+			alert("다음항목은 검색어로 사용이 불가능합니다. < > ( ) # &");
+			return;
+		}
 		document.forms["formserch"].elements["seq"].value = pagenum;
 		document.forms["formserch"].method = "post";
 		document.forms["formserch"].action = "${requestedURL}" + "/" + pagenum;
@@ -420,7 +439,7 @@
 </div>
 
 <p align="center">
-<form name="formserch">
+<form name="formserch" onsubmit="return false;">
 	<p align="center">
 		&nbsp;<select name="srchtype" size="1">
 
