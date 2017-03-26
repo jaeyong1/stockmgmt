@@ -478,4 +478,22 @@ public class LoginController {
 		}
 	}
 
+	@RequestMapping(value = "/gensha256", method = RequestMethod.GET)
+	public String gensha256FormShow(Model model, HttpServletRequest request) {
+		System.out.println("/gensha256 show");
+		return "gensha256";
+	}
+
+	@RequestMapping(value = "/gensha256", method = RequestMethod.POST)
+	public String gensha256Process(Model model, HttpServletRequest request) {
+		String reqPlainText = request.getParameter("plaintext");
+		String genCiperText = genSHA256(reqPlainText);
+		System.out.println("/gensha256 process.\n Plain Text : " + reqPlainText + ", Ciper Text : " + genCiperText);
+
+		model.addAttribute("reqPlainText", reqPlainText);
+		model.addAttribute("genCiperText", genCiperText);
+
+		return "gensha256";
+	}
+
 }
