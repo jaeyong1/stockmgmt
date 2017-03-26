@@ -146,7 +146,7 @@ public class LoginController {
 			System.out.println("decryted : " + reqID + " / " + reqPW);
 
 		} catch (Exception e) {
-			ra.addFlashAttribute("resultMsg", "비정상 적인 접근 입니다.");
+			ra.addFlashAttribute("resultMsg", "[Warning] Wrong Access.. Close this windows and try login again");
 			return mav;
 		}
 
@@ -156,7 +156,7 @@ public class LoginController {
 		UserItem loginUser = itemService.findByUserId(reqID);
 		if (loginUser != null) {
 			// Check the password
-			if (!loginUser.getUserPassword().equals(reqPW)) {
+			if (!loginUser.getUserPassword().equals(genSHA256(reqPW))) {
 				int failcnt = itemService.increasePWErrorCount(loginUser);
 
 				System.out.println("wrong password " + failcnt);
@@ -301,7 +301,9 @@ public class LoginController {
 		userdata.setUserId(request.getParameter("user-Id"));
 		userdata.setUserName(request.getParameter("user-Name"));
 		userdata.setUserEmail(request.getParameter("user-Email"));
-		userdata.setUserPassword(request.getParameter("user-Password"));
+		String tempPW = request.getParameter("user-Password");
+		String cipheredPW = genSHA256(tempPW); //generate pw SHA256
+		userdata.setUserPassword(cipheredPW);
 		userdata.setUserTeamname(request.getParameter("user-Teamname"));
 		userdata.setUserLevel(Integer.valueOf(request.getParameter("user-Level")));
 
@@ -345,7 +347,7 @@ public class LoginController {
 		for (UserItem p : items) {
 			if (p.getUserId().equals(reqUserId)) {
 				findedId = true;
-				if (p.getUserPassword().equals(reqUserOldPw)) {
+				if (p.getUserPassword().equals(genSHA256(reqUserOldPw))) {
 					validUser = true;
 					System.out.println("ID&PW찾음");
 				} else {
@@ -377,7 +379,7 @@ public class LoginController {
 
 		// Get data from Webbrowser
 		userdata.setUserId(request.getParameter("user-Id"));
-		userdata.setUserPassword(request.getParameter("user-Password2"));
+		userdata.setUserPassword(genSHA256(request.getParameter("user-Password2")));
 
 		// Change DB query
 		itemService.changeUserPassword(userdata);

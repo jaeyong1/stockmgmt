@@ -362,8 +362,9 @@ public class WebController {
 	@RequestMapping(value = "/admin/reqresetpassword", method = RequestMethod.POST)
 	public String adminResetPassword(UserItem userdata, Model model, HttpServletRequest request) {
 		// Get data from Webbrowser
+		String defaultPassword = "defaultPassWord123";		
 		userdata.setUserId(request.getParameter("user-Id"));
-		userdata.setUserPassword("defaultPassWord123");
+		userdata.setUserPassword(LoginController.genSHA256(defaultPassword));
 
 		// Change DB query
 		itemService.changeUserPassword(userdata);
@@ -385,7 +386,7 @@ public class WebController {
 		System.out.println("메일발송 : " + rcvAddr);
 		try {
 			if (!rcvAddr.equals("")) {
-				mailService.adminResetMail(rcvAddr, userdata.getUserPassword());
+				mailService.adminResetMail(rcvAddr, defaultPassword);
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());
@@ -878,8 +879,8 @@ public class WebController {
 		item.setPartProjectCode(request.getParameter("part-Project-Code"));
 		item.setPartName(request.getParameter("part-Name"));
 		item.setPartDesc(request.getParameter("part-Desc"));
-		item.setPartLocation(request.getParameter("part-Location"));		
-		String _strf = request.getParameter("part-Cost").trim().replaceAll(",", "").toString();		
+		item.setPartLocation(request.getParameter("part-Location"));
+		String _strf = request.getParameter("part-Cost").trim().replaceAll(",", "").toString();
 		item.setPartCost(Float.valueOf(_strf));
 		String _stri = request.getParameter("part-Stock").trim().replaceAll(",", "").toString();
 		item.setPartStock(Integer.valueOf(_stri));
@@ -941,7 +942,7 @@ public class WebController {
 		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
 		if (loginUser == null) {
 			System.out.println("/myparts process. no session info. redirect to /login");
-			//return "redirect:/login";
+			// return "redirect:/login";
 			return "redirect:/login";
 		} else {
 			// update bagde counter(cart items)
@@ -1064,11 +1065,11 @@ public class WebController {
 		item.setPartProjectCode(request.getParameter("part-Project-Code"));
 		item.setPartName(request.getParameter("part-Name"));
 		item.setPartDesc(request.getParameter("part-Desc"));
-		item.setPartLocation(request.getParameter("part-Location"));		
-		String _strf = request.getParameter("part-Cost").trim().replaceAll(",", "").toString();		
+		item.setPartLocation(request.getParameter("part-Location"));
+		String _strf = request.getParameter("part-Cost").trim().replaceAll(",", "").toString();
 		item.setPartCost(Float.valueOf(_strf));
 		String _stri = request.getParameter("part-Stock").trim().replaceAll(",", "").toString();
-		item.setPartStock(Integer.valueOf(_stri));		
+		item.setPartStock(Integer.valueOf(_stri));
 		item.setPartMemo(request.getParameter("part-Memo"));
 		item.setPartMsllevel(request.getParameter("part-Msllevel"));
 		System.out.println("reqmypartsmodify msl:" + item.getPartMsllevel());
