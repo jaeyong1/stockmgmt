@@ -6,6 +6,7 @@
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
 <script language="javascript">
 var rolekor ="";
 	$(function() {			
@@ -45,6 +46,7 @@ var rolekor ="";
 <!-- <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
 <link href="/bootstrap/css/cerulean/bootstrap.min.css" rel="stylesheet">
 
+
 <!DOCTYPE html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=euc-kr">
@@ -54,6 +56,12 @@ var rolekor ="";
 
 
 <body oncontextmenu='return false'>
+
+	<!-- 자동로그아웃 타이머  -->
+	<script src="/js/logouttimer.js"></script>
+
+
+
 
 	<!-- Static navbar -->
 	<nav class="navbar navbar-default navbar-static-top">
@@ -109,7 +117,7 @@ var rolekor ="";
 
 						</c:when>
 					</c:choose>
-					
+
 					<c:choose>
 						<c:when test="${ (6 == sessionScope.userLoginInfo.userLevel) }">
 							<li><a href="/shipreqlist_admin">출고요청 전체조회(관리자용)</a></li>
@@ -156,15 +164,30 @@ var rolekor ="";
 							<li><a href="/logview">회원정보로그뷰</a></li>
 						</c:when>
 					</c:choose>
+
 				</ul>
-
-
 
 				<ul class="nav navbar-nav navbar-right">
 					<li><c:choose>
 							<c:when test="${not empty sessionScope.userLoginInfo}">
-								<c:out value="${sessionScope.userLoginInfo.userName}" />님 로그인중
-								<div id="userinfo"></div>
+
+								<table>
+						
+									<tr>
+										<td align="right"><small>
+												<c:out value="${sessionScope.userLoginInfo.userName}" />
+												님 로그인중 </small>
+											</td>
+									</tr>
+												<tr>
+										<td align="right"><small><span id="timer"></span>&nbsp;<a href="javascript:refreshTimer();"><img src="/img/timer3.jpg">&nbsp;</a>
+										</small>
+											</td>
+									</tr><!-- 접속권한:<div id="userinfo"> -->											
+								</table>
+
+
+
 							</c:when>
 						</c:choose></li>
 					<li class="active"><c:choose>
