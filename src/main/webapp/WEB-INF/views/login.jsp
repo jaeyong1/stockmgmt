@@ -105,7 +105,7 @@ var rolekor ="";
 		</c:when>
 		<c:otherwise>
 			<!-- Not LOGIN status -->
-			<form class="form-signin" name="formlogin" autocomplete='off'>
+			<form class="form-signin" name="formlogin" autocomplete='off' onSubmit="return false;" >
 				<h2 class="form-signin-heading">LGIT 자재관리시스템</h2>
 				<!--자동완성방지용 더미폼-->
 				<!--  <input type="password" id="user_pwd_fake" name="user_pwd_fake"
@@ -129,12 +129,6 @@ var rolekor ="";
 
 			</form>
 
-
-			<!-- 실제 서버로 전송되는 form -->
-			<form action="/loginProcess" method="post" id="myhiddenForm">
-				<input type="hidden" name="login-id" /> <input type="hidden"
-					name="login-pw" />
-			</form>
 
 		</c:otherwise>
 	</c:choose>

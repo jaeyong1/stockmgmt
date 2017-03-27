@@ -111,48 +111,52 @@ public class LoginController {
 	@RequestMapping(value = "loginProcess", method = RequestMethod.POST)
 	public ModelAndView loginProcess(UserItem user, HttpSession session, HttpServletRequest request,
 			HttpServletResponse response, RedirectAttributes ra) {
+System.out.println("-a1");		
 		PrivateKey key = (PrivateKey) session.getAttribute("RSAprivateKey");
-
+System.out.println("-a2");
 		String reqID = request.getParameter("login-id"); // <html.input>name='login-id'
 		String reqPW = request.getParameter("login-pw");
 		SecureUserItem secUserInfo = null;
-
+System.out.println("-a3");
 		System.out.println("/loginProcess  try(" + reqID + " / " + reqPW + ")");
 
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("redirect:login");
-
+		//mav.setViewName("redirect:login");
+System.out.println("-a4");
 		// 개인키 취득
 		if (key == null) {
 			PrintWriter out;
 			try {
 				out = response.getWriter();
-				out.println("<script>alert('비정상적인 접근입니다.'); history.go(-1); </script>");
+				out.println("<script>alert('비정상적인 접근입니다.'); location.href='/login'; </script>");
 				out.flush();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+System.out.println("-a5");
 				e.printStackTrace();
 			}
+System.out.println("-a6");			
 			return mav;
 		}
 		// session에 저장된 개인키 초기화
 		session.removeAttribute("RSAprivateKey");
-
+System.out.println("-a7");
 		// 아이디/비밀번호 복호화
 		try {
 			RSAUtil rsaUtil = new RSAUtil();
 			reqID = rsaUtil.getDecryptText(key, reqID);
 			reqPW = rsaUtil.getDecryptText(key, reqPW);
 			System.out.println("decryted : " + reqID + " / " + reqPW);
+System.out.println("-a8");			
 
 		} catch (Exception e) {
+System.out.println("-a9");
 			ra.addFlashAttribute("resultMsg", "[Warning] Wrong Access.. Close this windows and try login again");
 			return mav;
 		}
 
 		// UserItem loginUser =
 		// itemService.findByUserIdAndPassword(reqID,reqPW);
-
+System.out.println("-a10");
 		UserItem loginUser = itemService.findByUserId(reqID);
 		if (loginUser != null) {
 			// Check the password
@@ -167,12 +171,12 @@ public class LoginController {
 				PrintWriter out;
 				try {
 					out = response.getWriter();
-					out.println("<script>alert('로그인 실패" + failcnt + "번째. 5번 실패시 ID차단됩니다.'); history.go(-1); </script>");
+					out.println("<script>alert('로그인 실패" + failcnt + "번째. 5번 실패시 ID차단됩니다.'); location.href='/login'; </script>");
 					out.flush();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
+				}				
 				return mav;
 			}
 		}
@@ -198,7 +202,7 @@ public class LoginController {
 				PrintWriter out;
 				try {
 					out = response.getWriter();
-					out.println("<script>alert('로그인 ID 잠김.. 관리자에게 문의하세요..'); history.go(-1); </script>");
+					out.println("<script>alert('로그인 ID 잠김.. 관리자에게 문의하세요..'); location.href='/login'; </script>");
 					out.flush();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -212,7 +216,7 @@ public class LoginController {
 				try {
 					out = response.getWriter();
 					out.println("<script>alert('패스워드 변경해야 합니다. LGIT 보안정책으로 2달반마다 패스워드를 변경해야하며, " + strPwExpire
-							+ " 이후에는 로그인을 시도할 수 없으므로 미리 변경해주시기 바랍니다. 아래 Change Password 메뉴를 사용해 주세요'); history.go(-1); </script>");
+							+ " 이후에는 로그인을 시도할 수 없으므로 미리 변경해주시기 바랍니다. 아래 Change Password 메뉴를 사용해 주세요'); location.href='/login'; </script>");
 					out.flush();
 				} catch (IOException e) {
 
@@ -220,15 +224,16 @@ public class LoginController {
 				}
 
 			} else if (secUserInfo.getIsReseted() == 1) {
+System.out.println("-F6");				
 				response.setContentType("text/html; charset=UTF-8");
 				PrintWriter out;
 				try {
 					out = response.getWriter();
 					out.println(
-							"<script>alert('패스워드 초기화후에는 패스워드 변경해야 합니다. 아래 Change Password 메뉴에서 관리자로 부터 받은 비밀번호를 사용하여 변경해 주세요'); history.go(-1); </script>");
+							"<script>alert('패스워드 초기화후에는 패스워드 변경해야 합니다. 아래 Change Password 메뉴에서 관리자로 부터 받은 비밀번호를 사용하여 변경해 주세요'); location.href='/login'; </script>");
 					out.flush();
 				} catch (IOException e) {
-
+System.out.println("-F5");
 					e.printStackTrace();
 				}
 
@@ -242,6 +247,7 @@ public class LoginController {
 			 */
 
 			else {
+System.out.println("-F4");				
 				// lastlogined_date, pw error reset
 				System.out.println("secure login info ok. update latest login date");
 				itemService.updateLoginedSecureInfoById(secUserInfo);
@@ -249,14 +255,14 @@ public class LoginController {
 
 		}
 		// secure check[end]
-
+System.out.println("-F3");
 		if (loginUser == null) {
 			response.setContentType("text/html; charset=UTF-8");
 
 			PrintWriter out;
 			try {
 				out = response.getWriter();
-				out.println("<script>alert('로그인 실패..'); history.go(-1);</script>");
+				out.println("<script>alert('로그인 실패..'); location.href='/login';</script>");
 				out.flush();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -264,7 +270,7 @@ public class LoginController {
 			}
 
 		}
-
+System.out.println("-F2");	
 		// login OK
 		if (loginUser != null) {
 			session.setAttribute("userLoginInfo", loginUser);
@@ -275,10 +281,14 @@ public class LoginController {
 			if ((loginUser.getUserLevel() == EUserLevel.Lv3_SHIPPER.getLevelInt())
 					|| (loginUser.getUserLevel() == EUserLevel.Lv6_SHIPPERADMIN.getLevelInt())) {
 				mav.setViewName("redirect:shipreqlist");
+				return mav;
 			} else {
 				mav.setViewName("redirect:mylist");
+				return mav;
 			}
 		}
+System.out.println("-F1");	
+		mav.setViewName("redirect:login");
 		return mav;
 	}
 
