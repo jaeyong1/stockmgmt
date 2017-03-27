@@ -32,14 +32,17 @@
 
 	//검색 키워드 검증 : < > ( ) # & 는 불가능하도록
 	function keywordValid(kw) {
-		if ( (kw.indexOf("<") == -1)
-				&& (kw.indexOf(">") == -1)
-				&& (kw.indexOf("(") == -1)
-				&& (kw.indexOf(")") == -1)
-				&& (kw.indexOf("#") == -1)
-				&& (kw.indexOf("&") == -1)
-			)				
-		{
+		if ((kw.indexOf("<") == -1) && (kw.indexOf(">") == -1)
+				&& (kw.indexOf("(") == -1) && (kw.indexOf(")") == -1)
+				&& (kw.indexOf("#") == -1) && (kw.indexOf("&") == -1)
+				&& (kw.indexOf("#") == -1) && (kw.indexOf("sp_") == -1)
+				&& (kw.indexOf("#") == -1) && (kw.indexOf("xp_") == -1)
+				&& (kw.indexOf("#") == -1) && (kw.indexOf("'") == -1)
+				&& (kw.indexOf("#") == -1) && (kw.indexOf("\"") == -1)
+				&& (kw.indexOf("#") == -1) && (kw.indexOf("@") == -1)
+				&& (kw.indexOf("#") == -1) && (kw.indexOf("--") == -1)
+				&& (kw.indexOf("#") == -1) && (kw.indexOf("+") == -1)
+				) {
 			return true;
 		}
 		return false;
@@ -50,7 +53,7 @@
 		var kw = document.forms["formserch"].elements["srchword"].value;
 		console.log("검색 : " + kw);
 		if (keywordValid(kw) == false) {
-			alert("다음항목은 검색어로 사용이 불가능합니다. < > ( ) # &");
+			alert("다음항목은 검색어로 사용이 불가능합니다. < > ( ) # & ' \" @ -- +");
 			return;
 		}
 		document.forms["formserch"].elements["seq"].value = pagenum;
@@ -186,8 +189,42 @@
 	<h3>${PageTitleInfoFromerver}</h3>
 </center>
 
-<form name="formSearchType">
+<p align="right">
+<form name="formserch" onsubmit="return false;">
 	<p align="right">
+		&nbsp;<select name="srchtype" size="1">
+
+			<c:choose>
+				<c:when test="${srchtype == 'lgitpn' }">
+					<option value="lgitpn" selected="selected">LGIT P/N</option>
+				</c:when>
+				<c:otherwise>
+					<option value="lgitpn">LGIT P/N</option>
+				</c:otherwise>
+			</c:choose>
+			<c:choose>
+				<c:when test="${srchtype == 'desc' }">
+					<option value="desc" selected="selected">Desc</option>
+				</c:when>
+				<c:otherwise>
+					<option value="desc">Desc</option>
+				</c:otherwise>
+			</c:choose>
+
+		</select> <input type="text" name="srchword" value='${srchword}'> <input
+			type="button" class="btn btn-info btn-xs" value="검색" name="srchbtn"
+			OnClick="javascript:searchparts(0)">
+
+		<!-- 같이가야하는 정보 -->
+		<input type=hidden name=requestedURL value='${requestedURL}'>
+		<input type=hidden name=seq value='${seq}'>
+
+	</p>
+</form>
+</p>
+
+<form name="formSearchType">
+	<p align="left">
 
 		<!-- 화면입력 담기 -->
 		<input type="button" class="btn btn-info btn-xs" value="화면입력값 출고담기"
@@ -379,7 +416,7 @@
 
 </table>
 
-<p align="right">
+<p align="left">
 
 	<!-- 화면입력 담기 -->
 	<input type="button" class="btn btn-info btn-xs" value="화면입력값 출고담기"
@@ -401,75 +438,42 @@
 	페이지 표시
 	*****************************
 	 -->
+<center>
+	<div class="col-xs-8">
+		<ul class="pagination pagination-sm" style="margin-top: 0px;">
+			<!-- 시작페이지가 1부터면 이전 표시("<<") ​ 안함 -->
+			<c:if test="${start-1 ==0 }">
 
-<div class="col-xs-8">
-	<ul class="pagination pagination-sm" style="margin-top: 0px;">
-		<!-- 시작페이지가 1부터면 이전 표시("<<") ​ 안함 -->
-		<c:if test="${start-1 ==0 }">
+			</c:if>
+			<!-- 시작페이지가 1이 아니면 << 이전 표시.  링크는 시작페이지가 6부터 10까지일 경우 5페이지를 가르킴 -->
+			​
 
-		</c:if>
-		<!-- 시작페이지가 1이 아니면 << 이전 표시.  링크는 시작페이지가 6부터 10까지일 경우 5페이지를 가르킴 -->
-		​
+			<c:if test="${start-1!=0}">
+				<li><a href="/mylist/${start-1}">&laquo;</a></li>
+			</c:if>
+			<!-- 5개씩 페이지 표시-->
+			​
 
-		<c:if test="${start-1!=0}">
-			<li><a href="/mylist/${start-1}">&laquo;</a></li>
-		</c:if>
-		<!-- 5개씩 페이지 표시-->
-		​
+			<c:forEach var="i" begin="${start }" end="${end }">
+				<li id="page${i }">
+					<!-- <a href="/mylist/${i}"> --> <a
+					href="javascript:searchparts(${i})"> ${i}</a>
+				</li>
+			</c:forEach>
+			<!-- end페이지 번호가 5, 10 인데 전체 페이지 갯수가 end페이지 보다 크면 다음 페이징 바로가기 표시  (">>")​ .-->
+			​
 
-		<c:forEach var="i" begin="${start }" end="${end }">
-			<li id="page${i }">
-				<!-- <a href="/mylist/${i}"> --> <a
-				href="javascript:searchparts(${i})"> ${i}</a>
-			</li>
-		</c:forEach>
-		<!-- end페이지 번호가 5, 10 인데 전체 페이지 갯수가 end페이지 보다 크면 다음 페이징 바로가기 표시  (">>")​ .-->
-		​
+			<c:if test="${end % 5 == 0 && pageNum > end}">
+				<li><a href="/mylist/${end+1}">&raquo;</a></li>
+			</c:if>
+			<!-- 마지막 페이지 번호와 전체 페이지 번호가 같으면서 5개 단위가 아니면 다음바로가기 표시 않함 -->
+			​​
 
-		<c:if test="${end % 5 == 0 && pageNum > end}">
-			<li><a href="/mylist/${end+1}">&raquo;</a></li>
-		</c:if>
-		<!-- 마지막 페이지 번호와 전체 페이지 번호가 같으면서 5개 단위가 아니면 다음바로가기 표시 않함 -->
-		​​
+			<c:if test="${end % 5 != 0 && end == pageNum }">
 
-		<c:if test="${end % 5 != 0 && end == pageNum }">
-
-		</c:if>
-	</ul>
-</div>
-
-<p align="center">
-<form name="formserch" onsubmit="return false;">
-	<p align="center">
-		&nbsp;<select name="srchtype" size="1">
-
-			<c:choose>
-				<c:when test="${srchtype == 'lgitpn' }">
-					<option value="lgitpn" selected="selected">LGIT P/N</option>
-				</c:when>
-				<c:otherwise>
-					<option value="lgitpn">LGIT P/N</option>
-				</c:otherwise>
-			</c:choose>
-			<c:choose>
-				<c:when test="${srchtype == 'desc' }">
-					<option value="desc" selected="selected">Desc</option>
-				</c:when>
-				<c:otherwise>
-					<option value="desc">Desc</option>
-				</c:otherwise>
-			</c:choose>
-
-		</select> <input type="text" name="srchword" value='${srchword}'> <input
-			type="button" class="btn btn-info btn-xs" value="검색" name="srchbtn"
-			OnClick="javascript:searchparts(0)">
-
-		<!-- 같이가야하는 정보 -->
-		<input type=hidden name=requestedURL value='${requestedURL}'>
-		<input type=hidden name=seq value='${seq}'>
-
-	</p>
-</form>
-</p>
+			</c:if>
+		</ul>
+	</div>
+</center>
 
 <%@ include file="footer.jsp"%>
