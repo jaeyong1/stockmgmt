@@ -99,6 +99,12 @@ public class ItemService {
 
 	}
 
+	public int removeAllPartsOfProject(ProjectItem item) {
+		return itemDao.deleteAllPartsOfProjectItem(item);
+
+	}
+	
+
 	public String getPartsItemsRow() {
 		return itemDao.queryPartsItemsRow();
 	}

@@ -62,13 +62,28 @@
 	}
 	function removeItem(id) {
 		var nm = document.forms["form" + id].elements["project-Code"].value;
-		var response = confirm(nm + "데이터 삭제할까요?")
+		var response = confirm(nm + " 프로젝트를 삭제할까요?")
 		if (response) {
 			var response1 = confirm("프로젝트 삭제는 이에 속한 파츠정보와, 관련된 출고요청 정보도 모두 잃게 됩니다. 그래도 데이터 삭제할까요?")
 			if (response1) {
 				//do yes task
 				document.forms["form" + id].method = "post";
 				document.forms["form" + id].action = "reqmyprojectremove"
+				document.forms["form" + id].submit();
+			}
+		} else {
+			//do no task
+		}
+	}
+	function removeAllItemsOfProject(id) {
+		var nm = document.forms["form" + id].elements["project-Code"].value;
+		var response = confirm(nm + "에 속한 모든 파츠 정보를 삭제할까요?")
+		if (response) {
+			var response1 = confirm("삭제된 정보는 복구되지 않습니다. 정말 프로젝트에 속한 모든 파츠정보를 삭제할까요?")
+			if (response1) {
+				//do yes task
+				document.forms["form" + id].method = "post";
+				document.forms["form" + id].action = "reqmyprojectremoveallparts"
 				document.forms["form" + id].submit();
 			}
 		} else {
@@ -221,9 +236,12 @@
 						<input type="button" value="수정" name="submitbtn"
 							class="btn btn-primary btn-xs"
 							OnClick="javascript:modifyCheck2('${status.index}');"> <input
-							type="button" value="삭제" class="btn btn-warning btn-xs"
+							type="button" value="프로젝트삭제" class="btn btn-warning btn-xs"
 							name="submitbtn2"
-							OnClick="javascript:removeItem('${status.index}');">
+							OnClick="javascript:removeItem('${status.index}');"> <input
+							type="button" value="파츠비우기" class="btn btn-danger btn-xs"
+							name="submitbtn3"
+							OnClick="javascript:removeAllItemsOfProject('${status.index}');">
 					</center>
 					</p>
 

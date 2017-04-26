@@ -854,6 +854,45 @@ public class WebController {
 		}
 	}
 
+
+	/*
+	 * /reqmyprojectremoveallparts 프로젝트에 속한 모든파츠 제거
+	 * 
+	 */
+	@RequestMapping(value = "/reqmyprojectremoveallparts", method = RequestMethod.POST)
+	public String removeAllPartsOfMyProject(ProjectItem item, Model model, HttpServletRequest request) {
+		UserItem loginUser = (UserItem) request.getSession().getAttribute("userLoginInfo");
+		if (loginUser == null) {
+			System.out.println("/reqmyprojectremoveallparts process. no session info.  ");
+			return "redirect:/login";
+		} else {
+			// update bagde counter(cart items)
+			int cartItemsCounter1 = itemService.getShipPartsListItemsCounter1(loginUser.getUserId());
+			int cartItemsCounter2 = itemService.getShipPartsListItemsCounter2(loginUser.getUserId());
+			System.out.println("[" + loginUser.getUserId() + "/" + loginUser.getUserName() + "] cart items : "
+					+ cartItemsCounter1 + "/ " + cartItemsCounter2);
+			loginUser.setCartItems(cartItemsCounter1);
+			loginUser.setCartItemsOthers(cartItemsCounter2);
+		}
+
+		// Get data from Webbrowser
+		item.setProjectCode(request.getParameter("project-Code"));
+
+		// Change DB query
+		itemService.removeAllPartsOfProject(item);
+		model.addAttribute("reqresult", "All parts items of " +  item.getProjectCode() + " are removed");
+		System.out.println("/reqmyprojectremoveallparts processed.. Req project code:" + item.getProjectCode());
+
+		// Get DB List
+		// return showMyProject1("0", model, request);
+		if (loginUser.getUserLevel() == EUserLevel.Lv2_DEV.getLevelInt()) {
+			return showMyProject1("0", model, request);
+		} else // lv3. lv6
+		{
+			return showMyProject4ship("0", model, request);
+		}
+	}
+	
 	// =================================================
 
 	/*

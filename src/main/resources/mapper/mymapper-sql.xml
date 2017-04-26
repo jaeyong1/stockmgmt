@@ -321,6 +321,20 @@
 		#{projectCode} LIMIT 1
 		;
 	</delete>
+
+
+
+	<!-- tb_part의 해당 project 아이템들 삭제 -->
+	<delete id="deletePartsofProject">
+		DELETE FROM tb_part
+		WHERE
+		CONVERT(
+		`tb_part`.`part_project_code`
+		USING utf8
+		) =
+		#{projectCode} ;
+	</delete>
+
 	<!-- ********************************************* -->
 
 

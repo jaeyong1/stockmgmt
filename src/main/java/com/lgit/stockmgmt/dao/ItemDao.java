@@ -85,6 +85,11 @@ public class ItemDao {
 		return sqlSession.delete("deleteProjectItem", item);
 	}
 
+	public int deleteAllPartsOfProjectItem(ProjectItem item) {		
+		return sqlSession.delete("deletePartsofProject", item);
+	}
+
+	
 	public String queryPartsItemsRow() {
 		return sqlSession.selectOne("queryPartsItemsRow");
 	}
