@@ -33,7 +33,7 @@
 
 			function checkpasswordrule() {
 				var id = document.forms["newuserform"].elements["user-Id"].value;
-				var pw = document.forms["newuserform"].elements["user-Password"].value;
+				var pw = document.forms["newuserform"].elements["user-Password2"].value;
 				var pwvalid = true;
 
 				//1.
